@@ -78,7 +78,7 @@ static int player_move_aux(struct player* player, struct map* map, int x, int y)
 
 	switch (map_get_cell_type(map, x, y)) {
 	case CELL_SCENERY:
-		return 1;
+		return 0;
 		break;
 
 	case CELL_BOX:
@@ -91,7 +91,16 @@ static int player_move_aux(struct player* player, struct map* map, int x, int y)
 	case CELL_MONSTER:
 		break;
 
+	case CELL_TREE:
+		return 0;
+		break;
+
+	case CELL_STONE:
+		return 0;
+		break;
+
 	default:
+
 		break;
 	}
 
@@ -107,36 +116,81 @@ int player_move(struct player* player, struct map* map) {
 	switch (player->direction) {
 	case NORTH:
 		if (player_move_aux(player, map, x, y - 1)) {
-			player->y--;
-			move = 1;
+			if (map_get_cell_type(map,x,y-1)==CELL_BOX && map_get_cell_type(map, x, y-2)==CELL_EMPTY && y-2>=0){
+				map_set_cell_type(map,x,y-1,CELL_EMPTY);
+				map_set_cell_type(map,x,y-2,CELL_BOX);
+			}
+			if (player->y >0){
+				player->y--;
+				move = 1;
+			}
+
+			if ((map_get_cell_type(map,x,0)==CELL_BOX && y==1) || (map_get_cell_type(map,x,y-1)==CELL_BOX && map_get_cell_type(map,x,y-2)!=CELL_EMPTY)){
+				move=0;
+				player->y++;
+			}
+
 		}
 		break;
 
+
 	case SOUTH:
 		if (player_move_aux(player, map, x, y + 1)) {
-			player->y++;
-			move = 1;
+			if (map_get_cell_type(map,x,y+1)==CELL_BOX  && y+2< map_get_height(map) && map_get_cell_type(map, x, y+2)==CELL_EMPTY){
+				map_set_cell_type(map,x,y+1,CELL_EMPTY);
+				map_set_cell_type(map,x,y+2,CELL_BOX);
+			}
+			if (player->y < map_get_height(map)-1){
+				player->y++;
+				move = 1;
+			}
+			if ((map_get_cell_type(map,x,map_get_height(map) - 1)==CELL_BOX && y==map_get_height(map) - 2) || (map_get_cell_type(map,x,y+1)==CELL_BOX && map_get_cell_type(map,x,y+2)!=CELL_EMPTY)){
+				move=0;
+				player->y--;
+			}
 		}
 		break;
 
 	case WEST:
 		if (player_move_aux(player, map, x - 1, y)) {
-			player->x--;
-			move = 1;
+			if (map_get_cell_type(map,x-1,y)==CELL_BOX && x-2>=0 && map_get_cell_type(map, x-2, y)==CELL_EMPTY){
+
+				map_set_cell_type(map,x-1,y,CELL_EMPTY);
+				map_set_cell_type(map,x-2,y,CELL_BOX);
+			}
+			if (player->x > 0){
+				player->x--;
+				move = 1;
 		}
+		if ((map_get_cell_type(map,0,y)==CELL_BOX && x==1) || (map_get_cell_type(map,x-1,y)==CELL_BOX && map_get_cell_type(map,x-2,y)!=CELL_EMPTY)){
+			move=0;
+			player->x++;
+}
+}
 		break;
 
 	case EAST:
 		if (player_move_aux(player, map, x + 1, y)) {
-			player->x++;
-			move = 1;
+			if (map_get_cell_type(map,x+1,y)==CELL_BOX && x+2<map_get_width(map) && map_get_cell_type(map, x+2, y)==CELL_EMPTY){
+				map_set_cell_type(map,x+1,y,CELL_EMPTY);
+				map_set_cell_type(map,x+2,y,CELL_BOX);
+			}
+			if (player->x < map_get_width(map) - 1){
+				player->x++;
+				move = 1;
 		}
-		break;
+		if ((map_get_cell_type(map,map_get_width(map)-1,y)==CELL_BOX && x==map_get_width(map)-2) || (map_get_cell_type(map,x+1,y)==CELL_BOX && map_get_cell_type(map,x+2,y)!=CELL_EMPTY)){
+			move=0;
+			player->x--;
+		}
 	}
 
-	if (move) {
-		map_set_cell_type(map, x, y, CELL_EMPTY);
-	}
+		break;
+
+}
+	//if (move) {
+	//	map_set_cell_type(map, x, y, CELL_EMPTY);
+	//}
 	return move;
 }
 
@@ -145,4 +199,3 @@ void player_display(struct player* player) {
 	window_display_image(sprite_get_player(player->direction),
 			player->x * SIZE_BLOC, player->y * SIZE_BLOC);
 }
-
