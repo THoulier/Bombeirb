@@ -50,6 +50,8 @@ struct map* map_new(int width, int height)
 int map_is_inside(struct map* map, int x, int y)
 {
 	assert(map);
+
+
 	return 1;
 }
 
@@ -132,11 +134,11 @@ void map_display(struct map* map)
 	    y = j * SIZE_BLOC;
 
 	    unsigned char type = map->grid[CELL(i,j)];
-	    
+
 	    switch (type & 0xf0) {
-		case CELL_SCENERY:
-		  display_scenery(map, x, y, type);
-		  break;
+			case CELL_SCENERY:
+		  	display_scenery(map, x, y, type);
+		  	break;
 	    case CELL_BOX:
 	      window_display_image(sprite_get_box(), x, y);
 	      break;
@@ -150,6 +152,8 @@ void map_display(struct map* map)
 	      // pas de gestion du type de porte
 	      window_display_image(sprite_get_door_opened(), x, y);
 	      break;
+			case CELL_BOMB:
+				window_display_image(sprite_get_bomb(),x,y);
 	    }
 	  }
 	}

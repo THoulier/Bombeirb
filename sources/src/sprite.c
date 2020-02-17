@@ -7,6 +7,7 @@
 
 #include <sprite.h>
 #include <misc.h>
+#include <map.h>
 
 // Sprites general
 #define MAP_CASE        "sprite/wood_box.png"
@@ -67,6 +68,7 @@ SDL_Surface* door_opened;
 SDL_Surface* door_closed;
 SDL_Surface* stone;
 SDL_Surface* tree;
+SDL_Surface* bomb;
 
 // bonus
 #define NB_BONUS 4
@@ -116,6 +118,7 @@ static void map_load() {
 	stone = image_load(MAP_STONE);
 	door_opened = image_load(MAP_DOOR_OPENED);
 	door_closed = image_load(MAP_DOOR_CLOSED);
+	bomb = image_load(BOMB_TTL1);
 }
 
 static void map_unload() {
@@ -126,6 +129,7 @@ static void map_unload() {
 	SDL_FreeSurface(stone);
 	SDL_FreeSurface(door_opened);
 	SDL_FreeSurface(door_closed);
+	SDL_FreeSurface(bomb);
 }
 
 static void bonus_load() {
@@ -231,4 +235,9 @@ SDL_Surface* sprite_get_door_opened() {
 SDL_Surface* sprite_get_door_closed() {
 	assert(door_closed);
 	return door_closed;
+}
+
+SDL_Surface* sprite_get_bomb() {
+	assert(bomb);
+	return bomb;
 }
