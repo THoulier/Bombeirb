@@ -68,7 +68,10 @@ SDL_Surface* door_opened;
 SDL_Surface* door_closed;
 SDL_Surface* stone;
 SDL_Surface* tree;
-SDL_Surface* bomb;
+SDL_Surface* bomb1;
+SDL_Surface* bomb2;
+SDL_Surface* bomb3;
+SDL_Surface* bomb4;
 
 // bonus
 #define NB_BONUS 4
@@ -118,7 +121,10 @@ static void map_load() {
 	stone = image_load(MAP_STONE);
 	door_opened = image_load(MAP_DOOR_OPENED);
 	door_closed = image_load(MAP_DOOR_CLOSED);
-	bomb = image_load(BOMB_TTL1);
+	bomb1 = image_load(BOMB_TTL1);
+	bomb2 = image_load(BOMB_TTL2);
+	bomb3 = image_load(BOMB_TTL3);
+	bomb4 = image_load(BOMB_TTL4);
 }
 
 static void map_unload() {
@@ -129,7 +135,10 @@ static void map_unload() {
 	SDL_FreeSurface(stone);
 	SDL_FreeSurface(door_opened);
 	SDL_FreeSurface(door_closed);
-	SDL_FreeSurface(bomb);
+	SDL_FreeSurface(bomb1);
+	SDL_FreeSurface(bomb2);
+	SDL_FreeSurface(bomb3);
+	SDL_FreeSurface(bomb4);
 }
 
 static void bonus_load() {
@@ -237,7 +246,19 @@ SDL_Surface* sprite_get_door_closed() {
 	return door_closed;
 }
 
-SDL_Surface* sprite_get_bomb() {
-	assert(bomb);
-	return bomb;
+SDL_Surface* sprite_get_bomb1() {
+	assert(bomb1);
+	return bomb1;
+}
+SDL_Surface* sprite_get_bomb2() {
+	assert(bomb2);
+	return bomb2;
+}
+SDL_Surface* sprite_get_bomb3() {
+	assert(bomb3);
+	return bomb3;
+}
+SDL_Surface* sprite_get_bomb4() {
+	assert(bomb4);
+	return bomb4;
 }
