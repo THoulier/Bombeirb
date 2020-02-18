@@ -4,17 +4,18 @@
  ******************************************************************************/
 #include <assert.h>
 #include <time.h>
-
+#include <monster.h>
 #include <game.h>
 #include <misc.h>
 #include <window.h>
 #include <sprite.h>
-
+#include <bomb.h>
 struct game {
 	struct map** maps;       // the game's map
 	short levels;        // nb maps of the game
 	short level;
 	struct player* player;
+	struct monster* monster;
 };
 
 struct game*
@@ -26,10 +27,13 @@ game_new(void) {
 	game->maps[0] = map_get_static();
 	game->levels = 1;
 	game->level = 0;
-
+	game->monster=monster_init();
 	game->player = player_init(3);
+
 	// Set default location of the player
 	player_set_position(game->player, 1, 0);
+	monster_set_position(game->monster, 6,9);
+
 
 	return game;
 }
@@ -47,7 +51,10 @@ struct map* game_get_current_map(struct game* game) {
 	return game->maps[game->level];
 }
 
-
+struct monster* game_get_monster(struct game* game) {
+	assert(game);
+	return game->monster;
+}
 struct player* game_get_player(struct game* game) {
 	assert(game);
 	return game->player;
@@ -91,7 +98,7 @@ void game_display(struct game* game) {
 	game_banner_display(game);
 	map_display(game_get_current_map(game));
 	player_display(game->player);
-
+	monster_display(game->monster);
 	window_refresh();
 }
 
@@ -99,7 +106,8 @@ static short input_keyboard(struct game* game) {
 	SDL_Event event;
 	struct player* player = game_get_player(game);
 	struct map* map = game_get_current_map(game);
-
+	struct monster*monster=game_get_monster(game);
+	struct bomb * bomb = {player_get_x(player),player_get_y(player),0,0};
 
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
@@ -111,9 +119,11 @@ static short input_keyboard(struct game* game) {
 				return 1;
 			case SDLK_UP:
 				player_set_current_way(player, NORTH);
+				monster_move(monster,map);
 				player_move(player, map);
 				break;
 			case SDLK_DOWN:
+
 				player_set_current_way(player, SOUTH);
 				player_move(player, map);
 				break;
@@ -126,6 +136,7 @@ static short input_keyboard(struct game* game) {
 				player_move(player, map);
 				break;
 			case SDLK_SPACE:
+				start_bomb(map, bomb);
 				break;
 			default:
 				break;

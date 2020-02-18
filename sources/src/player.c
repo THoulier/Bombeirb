@@ -22,7 +22,7 @@ struct player* player_init(int bombs) {
 	if (!player)
 		error("Memory error");
 
-	player->direction = NORTH;
+	player->direction = SOUTH;
 	player->bombs = bombs;
 
 	return player;
@@ -91,13 +91,13 @@ static int player_move_aux(struct player* player, struct map* map, int x, int y)
 	case CELL_MONSTER:
 		break;
 
-	case CELL_TREE:
-		return 0;
-		break;
+//	case CELL_TREE:
+//		return 0;
+//		break;
 
-	case CELL_STONE:
-		return 0;
-		break;
+//	case CELL_STONE:
+//		return 0;
+	//	break;
 
 	default:
 
@@ -189,7 +189,7 @@ int player_move(struct player* player, struct map* map) {
 
 }
 	//if (move) {
-	//	map_set_cell_type(map, x, y, CELL_EMPTY);
+		//map_set_cell_type(map, x, y, CELL_EMPTY);
 	//}
 	return move;
 }

@@ -7,7 +7,6 @@
 
 #include <sprite.h>
 #include <misc.h>
-#include <map.h>
 
 // Sprites general
 #define MAP_CASE        "sprite/wood_box.png"
@@ -53,6 +52,14 @@
 #define PLAYER_RIGHT    "sprite/player_right.png"
 #define PLAYER_DOWN     "sprite/player_down.png"
 
+// Sprites of Monsters
+#define MONSTER_LEFT	"sprite/monster_left.png"
+#define MONSTER_UP		"sprite/monster_up.png"
+#define MONSTER_RIGHT	"sprite/monster_right.png"
+#define MONSTER_DOWN	"sprite/monster_down.png"
+
+
+
 // banner
 SDL_Surface* numbers[10];
 SDL_Surface* banner_life;
@@ -76,9 +83,12 @@ SDL_Surface* bomb4;
 // bonus
 #define NB_BONUS 4
 SDL_Surface* bonus[NB_BONUS + 1];
-
+//bombs
+SDL_Surface* bomb_img[4];
 // player
 SDL_Surface* player_img[4];
+//monster
+SDL_Surface* monster_img[4];
 
 static void banner_load() {
 	// numbers imgs
@@ -135,10 +145,6 @@ static void map_unload() {
 	SDL_FreeSurface(stone);
 	SDL_FreeSurface(door_opened);
 	SDL_FreeSurface(door_closed);
-	SDL_FreeSurface(bomb1);
-	SDL_FreeSurface(bomb2);
-	SDL_FreeSurface(bomb3);
-	SDL_FreeSurface(bomb4);
 }
 
 static void bonus_load() {
@@ -154,7 +160,12 @@ static void bonus_unload() {
 		if(bonus[i])
 			SDL_FreeSurface(bonus[i]);
 }
-
+static void bomb_load() {
+	bomb_img[etat1] = image_load(BOMB_TTL1);
+	bomb_img[etat2] = image_load(BOMB_TTL2);
+	bomb_img[etat3] = image_load(BOMB_TTL3);
+	bomb_img[etat4] = image_load(BOMB_TTL4);
+}
 static void player_load() {
 	player_img[WEST] = image_load(PLAYER_LEFT);
 	player_img[EAST] = image_load(PLAYER_RIGHT);
@@ -162,9 +173,19 @@ static void player_load() {
 	player_img[SOUTH] = image_load(PLAYER_DOWN);
 }
 
+static void monster_load() {
+	monster_img[WEST] = image_load(MONSTER_LEFT);
+	monster_img[EAST] = image_load(MONSTER_RIGHT);
+	monster_img[NORTH] = image_load(MONSTER_UP);
+	monster_img[SOUTH] = image_load(MONSTER_DOWN);
+}
 static void player_unload() {
 	for (int i = 0; i < 4; i++)
 		SDL_FreeSurface(player_img[i]);
+}
+static void monster_unload() {
+	for (int i = 0; i < 4; i++)
+		SDL_FreeSurface(monster_img[i]);
 }
 
 void sprite_load() {
@@ -172,6 +193,8 @@ void sprite_load() {
 	bonus_load();
 	banner_load();
 	player_load();
+	monster_load();
+	bomb_load();
 }
 
 void sprite_free() {
@@ -179,6 +202,8 @@ void sprite_free() {
 	bonus_unload();
 	banner_unload();
 	player_unload();
+	monster_load();
+	bomb_load();
 }
 
 SDL_Surface* sprite_get_number(short number) {
@@ -189,6 +214,14 @@ SDL_Surface* sprite_get_number(short number) {
 SDL_Surface* sprite_get_player(enum direction direction) {
 	assert(player_img[direction]);
 	return player_img[direction];
+}
+SDL_Surface* sprite_get_monster(enum direction direction) {
+	assert(monster_img[direction]);
+	return monster_img[direction];
+}
+SDL_Surface* sprite_get_bomb(enum etat etat) {
+	assert(bomb_img[etat]);
+	return bomb_img[etat];
 }
 
 SDL_Surface* sprite_get_banner_life() {
@@ -244,21 +277,4 @@ SDL_Surface* sprite_get_door_opened() {
 SDL_Surface* sprite_get_door_closed() {
 	assert(door_closed);
 	return door_closed;
-}
-
-SDL_Surface* sprite_get_bomb1() {
-	assert(bomb1);
-	return bomb1;
-}
-SDL_Surface* sprite_get_bomb2() {
-	assert(bomb2);
-	return bomb2;
-}
-SDL_Surface* sprite_get_bomb3() {
-	assert(bomb3);
-	return bomb3;
-}
-SDL_Surface* sprite_get_bomb4() {
-	assert(bomb4);
-	return bomb4;
 }
