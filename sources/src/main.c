@@ -9,7 +9,7 @@
 #include <window.h>
 #include <misc.h>
 
-test2
+
 
 int main(int argc, char *argv[]) {
 

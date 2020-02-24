@@ -4,27 +4,25 @@
  ******************************************************************************/
 #include <SDL/SDL_image.h>
 #include <assert.h>
-
+#include <time.h>
 #include <player.h>
 #include <sprite.h>
 #include <window.h>
 #include <misc.h>
 #include <constant.h>
+#include <monster.h>
 
-struct player {
-	int x, y;
-	enum direction direction;
-	int bombs;
-};
 
-struct player* player_init(int bombs) {
+
+struct player* player_init(int bombs, short lives) {
 	struct player* player = malloc(sizeof(*player));
 	if (!player)
 		error("Memory error");
 
 	player->direction = SOUTH;
 	player->bombs = bombs;
-
+	player->lives=lives;
+	player->contact=0;
 	return player;
 }
 
@@ -65,7 +63,16 @@ void player_inc_nb_bomb(struct player* player) {
 	assert(player);
 	player->bombs += 1;
 }
+void player_inc_nb_lives(struct player* player) {
+	assert(player);
+	player->lives += 1;
+}
+void player_dec_nb_lives(struct player* player) {
+	assert(player);
+ if(player->lives>0)
+	player->lives -= 1;
 
+	}
 void player_dec_nb_bomb(struct player* player) {
 	assert(player);
 	player->bombs -= 1;
@@ -90,16 +97,7 @@ static int player_move_aux(struct player* player, struct map* map, int x, int y)
 
 	case CELL_MONSTER:
 		break;
-
-//	case CELL_TREE:
-//		return 0;
-//		break;
-
-//	case CELL_STONE:
-//		return 0;
-	//	break;
-
-	default:
+ default:
 
 		break;
 	}
@@ -116,7 +114,8 @@ int player_move(struct player* player, struct map* map) {
 	switch (player->direction) {
 	case NORTH:
 		if (player_move_aux(player, map, x, y - 1)) {
-			if (map_get_cell_type(map,x,y-1)==CELL_BOX && map_get_cell_type(map, x, y-2)==CELL_EMPTY && y-2>=0){
+			if (map_get_cell_type(map,x,y-1)==CELL_BOX
+			&& map_get_cell_type(map, x, y-2)==CELL_EMPTY && y-2>=0){
 				map_set_cell_type(map,x,y-1,CELL_EMPTY);
 				map_set_cell_type(map,x,y-2,CELL_BOX);
 			}
@@ -125,7 +124,9 @@ int player_move(struct player* player, struct map* map) {
 				move = 1;
 			}
 
-			if ((map_get_cell_type(map,x,0)==CELL_BOX && y==1) || (map_get_cell_type(map,x,y-1)==CELL_BOX && map_get_cell_type(map,x,y-2)!=CELL_EMPTY)){
+			if ((map_get_cell_type(map,x,0)==CELL_BOX && y==1)
+			|| (map_get_cell_type(map,x,y-1)==CELL_BOX
+			&& map_get_cell_type(map,x,y-2)!=CELL_EMPTY)){
 				move=0;
 				player->y++;
 			}
@@ -136,7 +137,8 @@ int player_move(struct player* player, struct map* map) {
 
 	case SOUTH:
 		if (player_move_aux(player, map, x, y + 1)) {
-			if (map_get_cell_type(map,x,y+1)==CELL_BOX  && y+2< map_get_height(map) && map_get_cell_type(map, x, y+2)==CELL_EMPTY){
+			if (map_get_cell_type(map,x,y+1)==CELL_BOX  && y+2< map_get_height(map)
+			&& map_get_cell_type(map, x, y+2)==CELL_EMPTY){
 				map_set_cell_type(map,x,y+1,CELL_EMPTY);
 				map_set_cell_type(map,x,y+2,CELL_BOX);
 			}
@@ -144,7 +146,9 @@ int player_move(struct player* player, struct map* map) {
 				player->y++;
 				move = 1;
 			}
-			if ((map_get_cell_type(map,x,map_get_height(map) - 1)==CELL_BOX && y==map_get_height(map) - 2) || (map_get_cell_type(map,x,y+1)==CELL_BOX && map_get_cell_type(map,x,y+2)!=CELL_EMPTY)){
+			if ((map_get_cell_type(map,x,map_get_height(map) - 1)==CELL_BOX
+			&& y==map_get_height(map) - 2) || (map_get_cell_type(map,x,y+1)==CELL_BOX
+			&& map_get_cell_type(map,x,y+2)!=CELL_EMPTY)){
 				move=0;
 				player->y--;
 			}
@@ -153,7 +157,8 @@ int player_move(struct player* player, struct map* map) {
 
 	case WEST:
 		if (player_move_aux(player, map, x - 1, y)) {
-			if (map_get_cell_type(map,x-1,y)==CELL_BOX && x-2>=0 && map_get_cell_type(map, x-2, y)==CELL_EMPTY){
+			if (map_get_cell_type(map,x-1,y)==CELL_BOX && x-2>=0
+			&& map_get_cell_type(map, x-2, y)==CELL_EMPTY){
 
 				map_set_cell_type(map,x-1,y,CELL_EMPTY);
 				map_set_cell_type(map,x-2,y,CELL_BOX);
@@ -162,7 +167,9 @@ int player_move(struct player* player, struct map* map) {
 				player->x--;
 				move = 1;
 		}
-		if ((map_get_cell_type(map,0,y)==CELL_BOX && x==1) || (map_get_cell_type(map,x-1,y)==CELL_BOX && map_get_cell_type(map,x-2,y)!=CELL_EMPTY)){
+		if ((map_get_cell_type(map,0,y)==CELL_BOX && x==1)
+		|| (map_get_cell_type(map,x-1,y)==CELL_BOX
+		&& map_get_cell_type(map,x-2,y)!=CELL_EMPTY)){
 			move=0;
 			player->x++;
 }
@@ -171,7 +178,8 @@ int player_move(struct player* player, struct map* map) {
 
 	case EAST:
 		if (player_move_aux(player, map, x + 1, y)) {
-			if (map_get_cell_type(map,x+1,y)==CELL_BOX && x+2<map_get_width(map) && map_get_cell_type(map, x+2, y)==CELL_EMPTY){
+			if (map_get_cell_type(map,x+1,y)==CELL_BOX
+			&& x+2<map_get_width(map) && map_get_cell_type(map, x+2, y)==CELL_EMPTY){
 				map_set_cell_type(map,x+1,y,CELL_EMPTY);
 				map_set_cell_type(map,x+2,y,CELL_BOX);
 			}
@@ -179,7 +187,9 @@ int player_move(struct player* player, struct map* map) {
 				player->x++;
 				move = 1;
 		}
-		if ((map_get_cell_type(map,map_get_width(map)-1,y)==CELL_BOX && x==map_get_width(map)-2) || (map_get_cell_type(map,x+1,y)==CELL_BOX && map_get_cell_type(map,x+2,y)!=CELL_EMPTY)){
+		if ((map_get_cell_type(map,map_get_width(map)-1,y)==CELL_BOX
+		&& x==map_get_width(map)-2) || (map_get_cell_type(map,x+1,y)==CELL_BOX
+		&& map_get_cell_type(map,x+2,y)!=CELL_EMPTY)){
 			move=0;
 			player->x--;
 		}
@@ -188,9 +198,6 @@ int player_move(struct player* player, struct map* map) {
 		break;
 
 }
-	//if (move) {
-		//map_set_cell_type(map, x, y, CELL_EMPTY);
-	//}
 	return move;
 }
 

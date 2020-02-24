@@ -26,10 +26,11 @@ enum bonus_type {
 	BONUS_LIFE
 };
 
+
 enum scenery_type {
-	SCENERY_STONE = 1,    // 0001 
-	SCENERY_TREE  = 2,    // 0010 
-	SCENERY_PRINCESS = 4  // 0100 
+	SCENERY_STONE = 1,    // 0001
+	SCENERY_TREE  = 2,    // 0010
+	SCENERY_PRINCESS = 4  // 0100
 };
 
 enum compose_type {

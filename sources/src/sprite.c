@@ -4,7 +4,7 @@
  ******************************************************************************/
 #include <SDL/SDL_image.h>
 #include <assert.h>
-
+#include <constant.h>
 #include <sprite.h>
 #include <misc.h>
 
@@ -58,7 +58,7 @@
 #define MONSTER_RIGHT	"sprite/monster_right.png"
 #define MONSTER_DOWN	"sprite/monster_down.png"
 
-
+#define GAMEOVER "sprite/gameover.png"
 
 // banner
 SDL_Surface* numbers[10];
@@ -79,6 +79,7 @@ SDL_Surface* bomb1;
 SDL_Surface* bomb2;
 SDL_Surface* bomb3;
 SDL_Surface* bomb4;
+SDL_Surface* gameover;
 
 // bonus
 #define NB_BONUS 4
@@ -135,6 +136,7 @@ static void map_load() {
 	bomb2 = image_load(BOMB_TTL2);
 	bomb3 = image_load(BOMB_TTL3);
 	bomb4 = image_load(BOMB_TTL4);
+
 }
 
 static void map_unload() {
@@ -161,16 +163,19 @@ static void bonus_unload() {
 			SDL_FreeSurface(bonus[i]);
 }
 static void bomb_load() {
-	bomb_img[etat1] = image_load(BOMB_TTL1);
-	bomb_img[etat2] = image_load(BOMB_TTL2);
-	bomb_img[etat3] = image_load(BOMB_TTL3);
-	bomb_img[etat4] = image_load(BOMB_TTL4);
+	bomb_img[ETAT1] = image_load(BOMB_TTL1);
+	bomb_img[ETAT2] = image_load(BOMB_TTL2);
+	bomb_img[ETAT3] = image_load(BOMB_TTL3);
+	bomb_img[ETAT4] = image_load(BOMB_TTL4);
 }
 static void player_load() {
 	player_img[WEST] = image_load(PLAYER_LEFT);
 	player_img[EAST] = image_load(PLAYER_RIGHT);
 	player_img[NORTH] = image_load(PLAYER_UP);
 	player_img[SOUTH] = image_load(PLAYER_DOWN);
+}
+static void gameover_load() {
+	gameover = image_load(GAMEOVER);
 }
 
 static void monster_load() {
@@ -195,6 +200,7 @@ void sprite_load() {
 	player_load();
 	monster_load();
 	bomb_load();
+	gameover_load();
 }
 
 void sprite_free() {
@@ -202,8 +208,8 @@ void sprite_free() {
 	bonus_unload();
 	banner_unload();
 	player_unload();
-	monster_load();
-	bomb_load();
+	monster_unload();
+
 }
 
 SDL_Surface* sprite_get_number(short number) {
@@ -219,7 +225,7 @@ SDL_Surface* sprite_get_monster(enum direction direction) {
 	assert(monster_img[direction]);
 	return monster_img[direction];
 }
-SDL_Surface* sprite_get_bomb(enum etat etat) {
+SDL_Surface* sprite_get_bomb(enum etats etat) {
 	assert(bomb_img[etat]);
 	return bomb_img[etat];
 }
@@ -267,6 +273,10 @@ SDL_Surface* sprite_get_key() {
 SDL_Surface* sprite_get_stone() {
 	assert(stone);
 	return stone;
+}
+SDL_Surface* sprite_get_gameover() {
+	assert(gameover);
+	return gameover;
 }
 
 SDL_Surface* sprite_get_door_opened() {

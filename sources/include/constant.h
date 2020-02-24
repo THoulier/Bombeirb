@@ -27,5 +27,10 @@ enum direction {
 	SOUTH, // 2
 	WEST   // 3
 };
-
+enum etats{
+	ETAT1=0,
+	ETAT2,
+	ETAT3,
+	ETAT4
+};
 #endif /* CONSTANT */

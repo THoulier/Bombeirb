@@ -8,10 +8,16 @@
 #include <map.h>
 #include <constant.h>
 
-struct player;
+struct player{
+	int x, y;
+	short lives;
+  int contact ;
+	enum direction direction;
+	int bombs;
+};
 
 // Creates a new player with a given number of available bombs
-struct player* player_init(int bomb_number);
+struct player* player_init(int bomb_number, short lives);
 void   player_free(struct player* player);
 
 // Set the position of the player
@@ -32,7 +38,8 @@ void player_dec_nb_bomb(struct player * player);
 
 // Move the player according to the current direction
 int player_move(struct player* player, struct map* map);
-
+void player_inc_nb_lives(struct player* player);
+void player_dec_nb_lives(struct player* player);
 // Display the player on the screen
 void player_display(struct player* player);
 

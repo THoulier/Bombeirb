@@ -1,53 +1,34 @@
 #include <SDL/SDL_image.h>
 #include <assert.h>
-
+#include <time.h>
 #include <player.h>
 #include <constant.h>
 #include <map.h>
 #include <window.h>
+#include <sprite.h>
+#include <monster.h>
+#include <bomb.h>
 
-struct bomb{
-	int x, y , time;
-	enum etat etat;
-};
 
-void bomb_set_current_state(struct bomb *bomb , int s){
-  assert(bomb);
-  bomb->etat=s;
+struct bomb* bomb_init() {
+	struct bomb* bomb = malloc(sizeof(*bomb));
+	bomb->etat = 3;
+  bomb->time=SDL_GetTicks();
+  return bomb;
 }
 
-void start_bomb (struct map*map,struct bomb* bomb){
-
-  int x=bomb->x;
-  int y = bomb->y;
-
-  for (int i =0 ; i< 4 ; i++){
+struct bomb* start_bomb(struct bomb* bomb, struct map * map , int x , int y ){
+    bomb->x=x;
+    bomb->y=y;
     int current_time = SDL_GetTicks();
-    int timer= current_time - bomb->time ;
-    while (timer>1000){
-      bomb_set_current_state(bomb, i);
-      bomb->time= SDL_GetTicks();
-    }
+		
+    if ((current_time - bomb->time) > 1000){
+    bomb->etat--;
+    bomb->time=SDL_GetTicks();
 
+  }
+    return bomb;
 }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
