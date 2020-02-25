@@ -23,6 +23,7 @@ struct player* player_init(int bombs, short lives) {
 	player->bombs = bombs;
 	player->lives=lives;
 	player->contact=0;
+	player->key=0;
 	return player;
 }
 
@@ -95,8 +96,12 @@ static int player_move_aux(struct player* player, struct map* map, int x, int y)
 	case CELL_BONUS:
 		break;
 
-	case CELL_MONSTER:
+	case CELL_KEY:
+	map_set_cell_type(map, x, y,CELL_EMPTY);
+	player->key=1;
 		break;
+
+	 
  default:
 
 		break;

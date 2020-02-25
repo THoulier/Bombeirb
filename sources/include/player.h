@@ -14,6 +14,7 @@ struct player{
   int contact ;
 	enum direction direction;
 	int bombs;
+	int key;
 };
 
 // Creates a new player with a given number of available bombs

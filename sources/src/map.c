@@ -13,7 +13,7 @@
 #include <misc.h>
 #include <sprite.h>
 #include <window.h>
-
+#include <player.h>
 struct map {
 	int width;
 	int height;
@@ -21,6 +21,8 @@ struct map {
 };
 
 #define CELL(i,j) ( (i) + (j) * map->width)
+
+
 
 struct map* map_new(int width, int height)
 {
@@ -117,6 +119,7 @@ void display_scenery(struct map* map, int x, int  y, unsigned char type)
 	case SCENERY_TREE:
 		window_display_image(sprite_get_tree(), x, y);
 		break;
+
 	}
 }
 
@@ -148,18 +151,9 @@ void map_display(struct map* map)
 	      break;
 	    case CELL_DOOR:
 	      // pas de gestion du type de porte
-	      window_display_image(sprite_get_door_opened(), x, y);
+	      window_display_image(sprite_get_door_closed(), x, y);
 	      break;
-		/*	case CELL_MONSTER:
-		//	window_display_image(sprite_get_monster(SOUTH), x, y);
 
-		//	map_set_cell_type( map, x, y, CELL_EMPTY);
-
-			monster_display(monster);
-
-			monster_set_position(monster,x,y);
-
-			monster_move(monster,map);*/
 
 			}
 
@@ -172,16 +166,16 @@ struct map* map_get_static(void)
 	struct map* map = map_new(STATIC_MAP_WIDTH, STATIC_MAP_HEIGHT);
 
 	unsigned char themap[STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT] = {
-	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
+	  BONUS_BOMB_NB_INC, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
 	  CELL_STONE, CELL_STONE, CELL_STONE, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
 	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
 	  CELL_BOX, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
-	  CELL_MONSTER, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
+	  CELL_MONSTER, CELL_EMPTY, CELL_KEY, CELL_EMPTY, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
 	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_STONE, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
 	  CELL_EMPTY, CELL_MONSTER, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY , CELL_EMPTY, CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
 	  CELL_EMPTY, CELL_TREE, CELL_BOX, CELL_TREE, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,  CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
 	  CELL_EMPTY, CELL_TREE, CELL_TREE, CELL_TREE, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,  CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
-	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_MONSTER, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
+	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
 	  CELL_BOX, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE,  CELL_BOX_LIFE, CELL_EMPTY,
 	  CELL_BOX,  CELL_EMPTY, CELL_DOOR, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
 		};
@@ -190,4 +184,21 @@ struct map* map_get_static(void)
 		map->grid[i] = themap[i];
 
 	return map;
+}
+
+struct map* get_map (char * mapp){
+ FILE* ptr= fopen(mapp, "r");
+ int width;
+ int height;
+ fscanf(ptr,"%d:%d", &width,&height);
+ struct map * map = map_new(width,height);
+	int i, j;
+ for (i = 0; i < map_get_width(map); i++) {
+	 for (j = 0; j < map_get_height(map); j++) {
+		 map_set_cell_type(map,i, j,map_get_cell_type(map,i,j));
+	 }}
+	return map;
+
+
+
 }

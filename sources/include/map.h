@@ -5,6 +5,12 @@
 #ifndef MAP_H_
 #define MAP_H_
 
+
+
+
+
+
+
 enum cell_type {
 	CELL_EMPTY=0x00,   		//  0000 0000
 	CELL_SCENERY=0x10, 		//  0001 0000
@@ -59,7 +65,7 @@ int map_get_height(struct map* map);
 
 // Return the type of a cell
 enum cell_type map_get_cell_type(struct map* map, int x, int y);
-
+struct map* get_map (char * mapp);
 // Set the type of a cell
 void  map_set_cell_type(struct map* map, int x, int y, enum cell_type type);
 

@@ -16,26 +16,21 @@ struct bomb* bomb_init() {
   bomb->time=SDL_GetTicks();
   return bomb;
 }
+void bomb_display(struct bomb* bomb) {
+	assert(bomb);
+	window_display_image(sprite_get_bomb(bomb->etat),
+			bomb->x * SIZE_BLOC, bomb->y * SIZE_BLOC);
+}
 
 struct bomb* start_bomb(struct bomb* bomb, struct map * map , int x , int y ){
     bomb->x=x;
     bomb->y=y;
     int current_time = SDL_GetTicks();
-		
+
     if ((current_time - bomb->time) > 1000){
     bomb->etat--;
     bomb->time=SDL_GetTicks();
 
   }
     return bomb;
-}
-
-
-
-
-
-void bomb_display(struct bomb* bomb) {
-	assert(bomb);
-	window_display_image(sprite_get_bomb(bomb->etat),
-			bomb->x * SIZE_BLOC, bomb->y * SIZE_BLOC);
 }

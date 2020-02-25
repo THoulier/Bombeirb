@@ -28,9 +28,11 @@ game_new(void) {
 	struct game* game = malloc(sizeof(*game));
 	game->maps = malloc(sizeof(struct game));
 	game->maps[0] = map_get_static();
+	//game->maps[0] = get_map ("map/map_1");
 	game->levels = 1;
 	game->level = 0;
 	game->monster=monster_init();
+//game->monster=NULL;
 	game->player = player_init(5,6);
 
 	game->bomb=bomb_init();
@@ -52,6 +54,7 @@ struct map* game_get_current_map(struct game* game) {
 	assert(game);
 	return game->maps[game->level];
 }
+
 
 struct monster* game_get_monster(struct game* game) {
 	assert(game);
@@ -99,10 +102,12 @@ void game_display(struct game* game) {
 	window_clear();
 	game_banner_display(game);
 	map_display(game_get_current_map(game));
+
 	player_display(game->player);
 
 	struct monster*tmp=game->monster;
 	while (tmp!=NULL){
+		srand(time(NULL));
 		monster_move(tmp,game_get_current_map(game));
 		monster_display(tmp);
 		tmp=tmp->next;
@@ -115,8 +120,9 @@ void game_display(struct game* game) {
 					player_dec_nb_lives(game->player);
 					 game->player->contact=SDL_GetTicks();}}
 		tmp=tmp->next;}
+		free(tmp);
 
-  bomb_display(game->bomb);
+  //bomb_display(game->bomb);
 
 	window_refresh();
 }
@@ -138,10 +144,8 @@ static short input_keyboard(struct game* game) {
 			case SDLK_UP:
 				player_set_current_way(player, NORTH);
 				player_move(player, map);
-
 				break;
 			case SDLK_DOWN:
-
 				player_set_current_way(player, SOUTH);
 				player_move(player, map);
 				break;
@@ -155,12 +159,14 @@ static short input_keyboard(struct game* game) {
 				break;
 			case SDLK_SPACE:
 
-				while(player->bombs>0){
+				while(game->bomb->etat>0){
 
-				start_bomb(game->bomb,map,player->x,player->y);}
+				start_bomb(game->bomb,map,player->x,player->y);
+
+				}
 				player->bombs--;
 
-			
+
 				break;
 			default:
 				break;

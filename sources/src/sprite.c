@@ -132,10 +132,7 @@ static void map_load() {
 	stone = image_load(MAP_STONE);
 	door_opened = image_load(MAP_DOOR_OPENED);
 	door_closed = image_load(MAP_DOOR_CLOSED);
-	bomb1 = image_load(BOMB_TTL1);
-	bomb2 = image_load(BOMB_TTL2);
-	bomb3 = image_load(BOMB_TTL3);
-	bomb4 = image_load(BOMB_TTL4);
+	
 
 }
 

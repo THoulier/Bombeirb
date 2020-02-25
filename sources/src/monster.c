@@ -16,7 +16,6 @@ void monster_set_position(struct monster *monster, int x, int y) {
 	assert(monster);
 	monster->x = x;
 	monster->y = y;
-  monster->time=SDL_GetTicks();
 }
 
 void monster_set_current_way(struct monster* monster, enum direction way) {
@@ -29,6 +28,7 @@ struct monster* monster_init() {
 	struct monster* monster = malloc(sizeof(*monster));
 	monster->direction = NORTH;
 	monster->next=NULL;
+	monster->time=SDL_GetTicks();
   return monster;
 }
 
@@ -47,8 +47,14 @@ int monster_move_aux(struct monster* monster, struct map* map, int x, int y) {
 		break;
 
 	case CELL_BONUS:
+		return 0;
 		break;
-
+ case CELL_DOOR:
+ 		return 0;
+		break;
+	case CELL_KEY:
+			return 0;
+			break;
 	default:
 
 		break;
@@ -67,53 +73,41 @@ struct monster* monster_move(struct monster* monster, struct map* map) {
 int current_time = SDL_GetTicks();
 int timer= current_time - monster->time ;
 if (timer>2000){
-		srand(time(NULL));
+
 		monster->direction = rand()%4;
 		switch (monster->direction) {
 		case NORTH:
 			if (monster_move_aux(monster, map, x, y - 1) && y > 0) {
-				monster_set_current_way(monster, NORTH);
-        
+        map_set_cell_type(map,x,y,CELL_EMPTY);
         monster->y--;
-
 				monster->time=SDL_GetTicks();
-
 				break;
 			}
 			break;
 
 		case SOUTH:
 			if (monster_move_aux(monster, map, x, y + 1) && y < map_get_height(map)-1) {
-				monster_set_current_way(monster, 	SOUTH);
-
+				map_set_cell_type(map,x,y,CELL_EMPTY);
 				monster->y++;
-
         monster->time=SDL_GetTicks();
-
 				break;
 			}
 			break;
 
 		case WEST:
 			if (monster_move_aux(monster, map, x - 1, y) && x > 0) {
-				monster_set_current_way(monster, WEST);
-
+				map_set_cell_type(map,x,y,CELL_EMPTY);
 				monster->x--;
-
 				monster->time=SDL_GetTicks();
-
 				break;
 					}
 			break;
 
 		case EAST:
 			if (monster_move_aux(monster, map, x + 1, y) && x < map_get_width(map)-1) {
-				monster_set_current_way(monster,EAST);
-
+				map_set_cell_type(map,x,y,CELL_EMPTY);
 				monster->x++;
-
 				monster->time=SDL_GetTicks();
-
 				break;
 			}
 			break;
