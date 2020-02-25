@@ -11,14 +11,14 @@
 #include <sprite.h>
 #include <player.h>
 #include <bomb.h>
-
+#include <constant.h>
 struct game {
 	struct map** maps;       // the game's map
 	short levels;        // nb maps of the game
 	short level;
 	struct player* player;
 	struct monster* monster;
-	struct bomb* bomb;
+	struct bomb** bomb;
 };
 
 struct game*
@@ -27,25 +27,30 @@ game_new(void) {
 
 	struct game* game = malloc(sizeof(*game));
 	game->maps = malloc(sizeof(struct game));
+	game->bomb = malloc(game_get_player(game)->bombs*sizeof(struct game));
 	game->maps[0] = map_get_static();
 	//game->maps[0] = get_map ("map/map_1");
 	game->levels = 1;
-	game->level = 0;
-	game->monster=monster_init();
-//game->monster=NULL;
-	game->player = player_init(5,6);
 
-	game->bomb=bomb_init();
+
+	game->level = 0;
+	//game->monster=monster_init();
+	game->monster=NULL;
+	game->player = player_init(5,6);
+	int i;
+for (i =0;i<player_get_nb_bomb(game_get_player(game));i++)
+	game->bomb[i]=bomb_init();
 	game->monster=cell_monster_map(game->monster, game_get_current_map(game));
 	// Set default location of the player
 	player_set_position(game->player, 1, 0);
+
 	return game;
 }
 
 void game_free(struct game* game) {
 	assert(game);
 
-	player_free(game->player);
+player_free(game->player);
 	for (int i = 0; i < game->levels; i++)
 		map_free(game->maps[i]);
 }
@@ -107,7 +112,7 @@ void game_display(struct game* game) {
 
 	struct monster*tmp=game->monster;
 	while (tmp!=NULL){
-		srand(time(NULL));
+		//srand(time(NULL));
 		monster_move(tmp,game_get_current_map(game));
 		monster_display(tmp);
 		tmp=tmp->next;
@@ -119,6 +124,7 @@ void game_display(struct game* game) {
 			if ((current_time - game->player->contact) > 1000){
 					player_dec_nb_lives(game->player);
 					 game->player->contact=SDL_GetTicks();}}
+
 		tmp=tmp->next;}
 		free(tmp);
 
@@ -132,7 +138,6 @@ static short input_keyboard(struct game* game) {
 	struct player* player = game_get_player(game);
 	struct map* map = game_get_current_map(game);
 
-
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_QUIT:
@@ -141,6 +146,7 @@ static short input_keyboard(struct game* game) {
 			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
 				return 1;
+
 			case SDLK_UP:
 				player_set_current_way(player, NORTH);
 				player_move(player, map);
@@ -159,12 +165,16 @@ static short input_keyboard(struct game* game) {
 				break;
 			case SDLK_SPACE:
 
-				while(game->bomb->etat>0){
+			player->bombs--;
+				while(game->bomb[player->bombs]->etat>=0 && player->bombs>=0){
 
-				start_bomb(game->bomb,map,player->x,player->y);
+				start_bomb(game->bomb[player->bombs],map,player->x,player->y);
+				bomb_display(game->bomb[player->bombs]);
+				map_set_cell_type(map,player->x,player->y,CELL_EMPTY);
 
+				window_refresh();
 				}
-				player->bombs--;
+
 
 
 				break;

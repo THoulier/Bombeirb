@@ -12,6 +12,7 @@
 struct bomb{
 	int x, y, time;
 	enum etats etat;
+	
 };
 
 

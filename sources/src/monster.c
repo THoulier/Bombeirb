@@ -125,6 +125,7 @@ struct monster* cell_monster_map(struct monster* monster, struct map* map) {
 	for (i = 0; i < map_get_width(map); i++) {
 	  for (j = 0; j < map_get_height(map); j++) {
 	    if (map_get_cell_type(map, i, j) == CELL_MONSTER) {
+
 				struct monster* new_one=malloc(sizeof(*new_one));
 				new_one->x=i;
 				new_one->y=j;

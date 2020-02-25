@@ -50,6 +50,8 @@ enum compose_type {
     CELL_BOX_BOMBDEC  = CELL_BOX | BONUS_BOMB_NB_INC,
     CELL_BOX_LIFE     = CELL_BOX | BONUS_MONSTER,
     CELL_BOX_MONSTER  = CELL_BOX | BONUS_LIFE,
+
+		
 };
 
 struct map;
