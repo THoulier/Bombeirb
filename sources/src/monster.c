@@ -10,7 +10,7 @@
 
 
 
-
+test
 
 void monster_set_position(struct monster *monster, int x, int y) {
 	assert(monster);
