@@ -140,7 +140,7 @@ struct monster* cell_monster_map(struct monster* monster, struct map* map) {
 					while(tmp->next!=NULL)
 						tmp=tmp->next;
 				tmp->next=new_one;
-				monster_set_position(tmp, i, j);}
+				}
 
 	    }
 	  }

@@ -27,9 +27,13 @@ struct bomb* start_bomb(struct bomb* bomb, struct map * map , int x , int y ){
     bomb->y=y;
     int current_time = SDL_GetTicks();
 
-    if ((current_time - bomb->time) > 1000){
-    bomb->etat--;
-    bomb->time=SDL_GetTicks();
+    if ((current_time - bomb->time) > 1000 && bomb->etat>=0 ){
+			bomb_display(bomb);
+
+			window_refresh();
+			//map_set_cell_type(map,x,y,CELL_EMPTY);
+    	bomb->etat --;
+    	bomb->time=SDL_GetTicks();
 
   }
     return bomb;

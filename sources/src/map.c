@@ -137,12 +137,12 @@ void map_display(struct map* map)
 	    unsigned char type = map->grid[CELL(i,j)];
 
 	    switch (type & 0xf0) {
-		case CELL_SCENERY:
-		  display_scenery(map, x, y, type);
+			case CELL_SCENERY:
+		  	display_scenery(map, x, y, type);
 		  break;
-		case CELL_BOX:
-		window_display_image(sprite_get_box(), x, y);
-		break;
+			case CELL_BOX:
+				window_display_image(sprite_get_box(), x, y);
+			break;
 	    case CELL_BONUS:
 	      display_bonus(map, x, y, type);
 	      break;

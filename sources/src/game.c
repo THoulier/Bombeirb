@@ -112,7 +112,7 @@ void game_display(struct game* game) {
 
 	struct monster*tmp=game->monster;
 	while (tmp!=NULL){
-		//srand(time(NULL));
+		srand(time(NULL));
 		monster_move(tmp,game_get_current_map(game));
 		monster_display(tmp);
 		tmp=tmp->next;
@@ -165,15 +165,19 @@ static short input_keyboard(struct game* game) {
 				break;
 			case SDLK_SPACE:
 
-			player->bombs--;
-				while(game->bomb[player->bombs]->etat>=0 && player->bombs>=0){
+				//player->bombs--;
+				if (player->bombs>=0){
+					player->bombs--;
 
-				start_bomb(game->bomb[player->bombs],map,player->x,player->y);
-				bomb_display(game->bomb[player->bombs]);
-				map_set_cell_type(map,player->x,player->y,CELL_EMPTY);
+					while(game->bomb[player->bombs]->etat>=0){
 
-				window_refresh();
+						start_bomb(game->bomb[player->bombs],map,player->x,player->y);
+					//bomb_display(game->bomb[player->bombs]);
+						//map_set_cell_type(map,player->x,player->y,CELL_EMPTY);
+
+						//window_refresh();
 				}
+			}
 
 
 
