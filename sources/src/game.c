@@ -18,7 +18,7 @@ struct game {
 	short level;
 	struct player* player;
 	struct monster* monster;
-	struct bomb** bomb;
+	struct bomb* bomb;
 };
 
 struct game*
@@ -27,9 +27,9 @@ game_new(void) {
 
 	struct game* game = malloc(sizeof(*game));
 	game->maps = malloc(sizeof(struct game));
-	game->bomb = malloc(game_get_player(game)->bombs*sizeof(struct game));
-	game->maps[0] = map_get_static();
-	//game->maps[0] = get_map ("map/map_1");
+	//game->bomb = malloc(game_get_player(game)->bombs*sizeof(struct game));
+//	game->maps[0] = map_get_static();
+	game->maps[0] = get_map ("map/map_1");
 	game->levels = 1;
 
 
@@ -37,9 +37,11 @@ game_new(void) {
 	//game->monster=monster_init();
 	game->monster=NULL;
 	game->player = player_init(5,6);
-	int i;
-for (i =0;i<player_get_nb_bomb(game_get_player(game));i++)
-	game->bomb[i]=bomb_init();
+//	int i;
+//for (i =0;i<player_get_nb_bomb(game_get_player(game));i++)
+	//game->bomb=bomb_init();
+game->bomb=NULL;
+	game->bomb=chaine_init(game->bomb,game->player->bombs);
 	game->monster=cell_monster_map(game->monster, game_get_current_map(game));
 	// Set default location of the player
 	player_set_position(game->player, 1, 0);
@@ -112,7 +114,7 @@ void game_display(struct game* game) {
 
 	struct monster*tmp=game->monster;
 	while (tmp!=NULL){
-		srand(time(NULL));
+
 		monster_move(tmp,game_get_current_map(game));
 		monster_display(tmp);
 		tmp=tmp->next;
@@ -123,12 +125,18 @@ void game_display(struct game* game) {
 		if(game->player->x == tmp->x && game->player->y==tmp->y ){
 			if ((current_time - game->player->contact) > 1000){
 					player_dec_nb_lives(game->player);
-					 game->player->contact=SDL_GetTicks();}}
+					 game->player->contact= SDL_GetTicks();}}
 
 		tmp=tmp->next;}
 		free(tmp);
 
-  //bomb_display(game->bomb);
+
+
+if(game->bomb->clic==1){
+start_bomb(game->bomb->prev, game_get_current_map(game));
+bomb_display(game->bomb->prev);
+}
+//game->bomb=game->bomb->next;
 
 	window_refresh();
 }
@@ -166,18 +174,17 @@ static short input_keyboard(struct game* game) {
 			case SDLK_SPACE:
 
 				//player->bombs--;
-				if (player->bombs>=0){
+				if (player->bombs>=0 && game->bomb->etat>=0){
 					player->bombs--;
+					game->bomb->etat=3;
+					game->bomb->x=player->x;
+					game->bomb->y=player->y;
+					game->bomb->time=SDL_GetTicks();
 
-					while(game->bomb[player->bombs]->etat>=0){
+					game->bomb=game->bomb->next;
+					game->bomb->clic=1;
+					}
 
-						start_bomb(game->bomb[player->bombs],map,player->x,player->y);
-					//bomb_display(game->bomb[player->bombs]);
-						//map_set_cell_type(map,player->x,player->y,CELL_EMPTY);
-
-						//window_refresh();
-				}
-			}
 
 
 

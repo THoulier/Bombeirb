@@ -80,7 +80,7 @@ if (timer>2000){
 			if (monster_move_aux(monster, map, x, y - 1) && y > 0) {
         map_set_cell_type(map,x,y,CELL_EMPTY);
         monster->y--;
-				monster->time=SDL_GetTicks();
+				monster->time=current_time;
 				break;
 			}
 			break;
@@ -89,7 +89,7 @@ if (timer>2000){
 			if (monster_move_aux(monster, map, x, y + 1) && y < map_get_height(map)-1) {
 				map_set_cell_type(map,x,y,CELL_EMPTY);
 				monster->y++;
-        monster->time=SDL_GetTicks();
+        monster->time=current_time;
 				break;
 			}
 			break;
@@ -98,7 +98,7 @@ if (timer>2000){
 			if (monster_move_aux(monster, map, x - 1, y) && x > 0) {
 				map_set_cell_type(map,x,y,CELL_EMPTY);
 				monster->x--;
-				monster->time=SDL_GetTicks();
+				monster->time=current_time;
 				break;
 					}
 			break;
@@ -107,7 +107,7 @@ if (timer>2000){
 			if (monster_move_aux(monster, map, x + 1, y) && x < map_get_width(map)-1) {
 				map_set_cell_type(map,x,y,CELL_EMPTY);
 				monster->x++;
-				monster->time=SDL_GetTicks();
+				monster->time=current_time;
 				break;
 			}
 			break;
