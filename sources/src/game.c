@@ -19,6 +19,7 @@ struct game {
 	struct player* player;
 	struct monster* monster;
 	struct bomb* bomb;
+	struct listbomb *listbomb;
 };
 
 struct game*
@@ -27,21 +28,17 @@ game_new(void) {
 
 	struct game* game = malloc(sizeof(*game));
 	game->maps = malloc(sizeof(struct game));
-	//game->bomb = malloc(game_get_player(game)->bombs*sizeof(struct game));
-//	game->maps[0] = map_get_static();
-	game->maps[0] = get_map ("map/map_1");
+	//game->maps[0] = get_map ("map/map_1");
+	game->maps[0] = map_get_static();
+
+
 	game->levels = 1;
 
+	listbomb_init();
 
 	game->level = 0;
-	//game->monster=monster_init();
 	game->monster=NULL;
 	game->player = player_init(5,6);
-//	int i;
-//for (i =0;i<player_get_nb_bomb(game_get_player(game));i++)
-	//game->bomb=bomb_init();
-game->bomb=NULL;
-	game->bomb=chaine_init(game->bomb,game->player->bombs);
 	game->monster=cell_monster_map(game->monster, game_get_current_map(game));
 	// Set default location of the player
 	player_set_position(game->player, 1, 0);
@@ -105,6 +102,9 @@ void game_banner_display(struct game* game) {
 
 void game_display(struct game* game) {
 	assert(game);
+	//struct map* map = game_get_current_map(game);
+	//struct player* player = game_get_player(game);
+
 
 	window_clear();
 	game_banner_display(game);
@@ -131,12 +131,7 @@ void game_display(struct game* game) {
 		free(tmp);
 
 
-
-if(game->bomb->clic==1){
-start_bomb(game->bomb->prev, game_get_current_map(game));
-bomb_display(game->bomb->prev);
-}
-//game->bomb=game->bomb->next;
+	listbomb_refresh(game_get_player(game));
 
 	window_refresh();
 }
@@ -145,7 +140,7 @@ static short input_keyboard(struct game* game) {
 	SDL_Event event;
 	struct player* player = game_get_player(game);
 	struct map* map = game_get_current_map(game);
-
+	
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_QUIT:
@@ -173,19 +168,7 @@ static short input_keyboard(struct game* game) {
 				break;
 			case SDLK_SPACE:
 
-				//player->bombs--;
-				if (player->bombs>=0 && game->bomb->etat>=0){
-					player->bombs--;
-					game->bomb->etat=3;
-					game->bomb->x=player->x;
-					game->bomb->y=player->y;
-					game->bomb->time=SDL_GetTicks();
-
-					game->bomb=game->bomb->next;
-					game->bomb->clic=1;
-					}
-
-
+			  	player_bomb(player, map);
 
 
 				break;

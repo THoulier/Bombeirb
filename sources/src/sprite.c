@@ -39,6 +39,7 @@
 #define BOMB_TTL2       "sprite/bomb2.png"
 #define BOMB_TTL3       "sprite/bomb3.png"
 #define BOMB_TTL4       "sprite/bomb4.png"
+#define explosion       "sprite/explosion.png"
 
 // Sprites of Bonus
 #define IMG_BONUS_BOMB_RANGE_INC  "sprite/bonus_bomb_range_inc.png"
@@ -80,6 +81,9 @@ SDL_Surface* bomb2;
 SDL_Surface* bomb3;
 SDL_Surface* bomb4;
 SDL_Surface* gameover;
+SDL_Surface* explo;
+
+
 
 // bonus
 #define NB_BONUS 4
@@ -190,6 +194,10 @@ static void monster_unload() {
 		SDL_FreeSurface(monster_img[i]);
 }
 
+static void explo_load() {
+	explo = image_load(explosion);
+}
+
 void sprite_load() {
 	map_load();
 	bonus_load();
@@ -198,6 +206,7 @@ void sprite_load() {
 	monster_load();
 	bomb_load();
 	gameover_load();
+	explo_load();
 }
 
 void sprite_free() {
@@ -284,4 +293,9 @@ SDL_Surface* sprite_get_door_opened() {
 SDL_Surface* sprite_get_door_closed() {
 	assert(door_closed);
 	return door_closed;
+}
+
+SDL_Surface* sprite_get_explo() {
+	assert(explo);
+	return explo;
 }

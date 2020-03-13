@@ -10,14 +10,23 @@
 
 
 struct bomb{
-	int x, y, time ,clic;
+	int x, y, time ;
 	enum etats etat;
- struct bomb * next;
-struct bomb* prev;
+ 	struct bomb * next;
 };
 
+struct listbomb {
+  struct bomb * first;
+  struct listbomb * next;
+};
 
-void bomb_display(struct bomb* bomb);
-struct bomb* bomb_init();
-struct bomb* start_bomb(struct bomb *bomb, struct map * map );
-struct bomb *chaine_init(struct bomb * bomb, int bombs );
+struct bomb * bomb_init(int x, int y);
+void listbomb_init();
+void bomb_insertion(int x, int y);
+void bomb_sup(struct bomb*bomb);
+void listbomb_refresh( struct player *player);
+int bomb_start(struct bomb *bomb);
+void bomb_display(struct bomb*bomb);
+
+
+

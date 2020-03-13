@@ -44,4 +44,7 @@ void player_dec_nb_lives(struct player* player);
 // Display the player on the screen
 void player_display(struct player* player);
 
+void player_bomb(struct player* player, struct map* map);
+
+
 #endif /* PLAYER_H_ */

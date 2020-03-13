@@ -11,6 +11,7 @@
 #include <misc.h>
 #include <constant.h>
 #include <monster.h>
+#include <bomb.h>
 
 
 
@@ -211,3 +212,12 @@ void player_display(struct player* player) {
 	window_display_image(sprite_get_player(player->direction),
 			player->x * SIZE_BLOC, player->y * SIZE_BLOC);
 }
+
+void player_bomb(struct player* player, struct map* map) {
+	
+	if (player->bombs!=0){
+				bomb_insertion(player->x,player->y);
+				player_dec_nb_bomb(player);
+			}
+		}
+	
