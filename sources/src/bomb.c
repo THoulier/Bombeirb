@@ -61,6 +61,10 @@ void listbomb_refresh(struct player *player){
     if (bomb_start(listbomb->first)){
 			bomb_display(listbomb->first);
 			}
+    else {
+      explo_display(listbomb->first);
+    }
+    
     listbomb=listbomb->next;
 
     
@@ -113,6 +117,11 @@ void explo_display(struct bomb*bomb){
   int x=bomb->x*SIZE_BLOC;
   int y=bomb->y*SIZE_BLOC;
   window_display_image(sprite_get_explo(), x, y); 
+  window_display_image(sprite_get_explo(), x+SIZE_BLOC, y); 
+  window_display_image(sprite_get_explo(), x, y+SIZE_BLOC); 
+  window_display_image(sprite_get_explo(), x-SIZE_BLOC, y); 
+  window_display_image(sprite_get_explo(), x, y-SIZE_BLOC); 
+
 
 	
 }

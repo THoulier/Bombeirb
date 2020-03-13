@@ -27,6 +27,6 @@ void bomb_sup(struct bomb*bomb);
 void listbomb_refresh( struct player *player);
 int bomb_start(struct bomb *bomb);
 void bomb_display(struct bomb*bomb);
-
+void explo_display(struct bomb*bomb);
 
 
