@@ -151,6 +151,10 @@ void map_display(struct map* map)
 	      break;
 	    case CELL_DOOR:
 	      // pas de gestion du type de porte
+		  	window_display_image(sprite_get_door_closed(), x, y);
+
+		  	//window_display_image(sprite_get_door_opened(), x, y);
+
 			/*	if(player->key != 0){
 					window_display_image(sprite_get_door_opened(), x, y);
 				}

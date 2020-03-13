@@ -116,12 +116,14 @@ void bomb_display(struct bomb*bomb){
 void explo_display(struct bomb*bomb){ 
   int x=bomb->x*SIZE_BLOC;
   int y=bomb->y*SIZE_BLOC;
+  
+
   window_display_image(sprite_get_explo(), x, y); 
   window_display_image(sprite_get_explo(), x+SIZE_BLOC, y); 
   window_display_image(sprite_get_explo(), x, y+SIZE_BLOC); 
   window_display_image(sprite_get_explo(), x-SIZE_BLOC, y); 
   window_display_image(sprite_get_explo(), x, y-SIZE_BLOC); 
 
-
-	
-}
+  
+		
+  }

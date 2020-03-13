@@ -51,6 +51,11 @@ int player_get_y(struct player* player) {
 	return player->y;
 }
 
+int player_get_key(struct player* player) {
+	assert(player);
+	return player->key;
+}
+
 void player_set_current_way(struct player* player, enum direction way) {
 	assert(player);
 	player->direction = way;
@@ -221,3 +226,5 @@ void player_bomb(struct player* player, struct map* map) {
 			}
 		}
 	
+
+

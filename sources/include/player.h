@@ -45,6 +45,6 @@ void player_dec_nb_lives(struct player* player);
 void player_display(struct player* player);
 
 void player_bomb(struct player* player, struct map* map);
-
+int player_get_key(struct player* player);
 
 #endif /* PLAYER_H_ */

@@ -28,4 +28,5 @@ SDL_Surface* sprite_get_banner_line();
 SDL_Surface* sprite_get_banner_range();
 SDL_Surface* sprite_get_bomb(enum etats);
 SDL_Surface* sprite_get_explo();
+SDL_Surface* sprite_get_banner_key();
 #endif /* SPRITE_H_ */
