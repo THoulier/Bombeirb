@@ -31,6 +31,7 @@ enum etats{
 	ETAT1=0,
 	ETAT2,
 	ETAT3,
-	ETAT4
+	ETAT4,
+	ETAT5
 };
 #endif /* CONSTANT */

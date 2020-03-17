@@ -11,6 +11,7 @@ struct monster{
 	int x, y, time;
 	enum direction direction;
 	struct monster* next;
+	struct monster* prev;
 };
 
 
@@ -23,3 +24,4 @@ int monster_move_aux(struct monster* monster, struct map* map, int x, int y);
 struct monster* monster_move(struct monster* monster, struct map* map);
 void monster_display(struct monster* monster);
 struct monster* cell_monster_map(struct monster* monster, struct map* map);
+struct monster* kill_monster(struct monster* monster,struct monster* tmp);

@@ -19,8 +19,8 @@ enum cell_type {
 	CELL_KEY=0x40,       	//  0100 0000
 	CELL_BONUS=0x50, 		// 	0101 0000
 	CELL_MONSTER=0x60, 		// 	0110 0000
-	CELL_BOMB=0x70 	   		// 	0111 0000
-
+	CELL_BOMB=0x70,	   		// 	0111 0000
+	CELL_EXPLOSION=0x80
 };
 
 enum bonus_type {
@@ -51,7 +51,7 @@ enum compose_type {
     CELL_BOX_LIFE     = CELL_BOX | BONUS_MONSTER,
     CELL_BOX_MONSTER  = CELL_BOX | BONUS_LIFE,
 
-		
+
 };
 
 struct map;

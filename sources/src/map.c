@@ -164,7 +164,7 @@ void map_display(struct map* map)
 	      break;
 
 		case CELL_BOMB:
-		
+
 			break;
 
 

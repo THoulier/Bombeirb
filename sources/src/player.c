@@ -25,6 +25,7 @@ struct player* player_init(int bombs, short lives) {
 	player->lives=lives;
 	player->contact=0;
 	player->key=0;
+	player->bombrange=1;
 	return player;
 }
 
@@ -107,7 +108,7 @@ static int player_move_aux(struct player* player, struct map* map, int x, int y)
 	player->key=1;
 		break;
 
-	 
+
  default:
 
 		break;
@@ -219,12 +220,9 @@ void player_display(struct player* player) {
 }
 
 void player_bomb(struct player* player, struct map* map) {
-	
+
 	if (player->bombs!=0){
-				bomb_insertion(player->x,player->y);
+				bomb_insertion(player->x,player->y,map);
 				player_dec_nb_bomb(player);
 			}
 		}
-	
-
-

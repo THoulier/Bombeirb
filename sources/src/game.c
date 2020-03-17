@@ -28,16 +28,17 @@ game_new(void) {
 
 	struct game* game = malloc(sizeof(*game));
 	game->maps = malloc(sizeof(struct game));
-	//game->maps[0] = get_map ("map/map_1");
+//	game->maps[0] = get_map ("map/map_1");
 	game->maps[0] = map_get_static();
 
 
 	game->levels = 1;
-
-	listbomb_init();
+	//struct listbomb *list=NULL;
+	//listbomb_init();
 
 	game->level = 0;
 	game->monster=NULL;
+
 	game->player = player_init(5,6);
 	game->monster=cell_monster_map(game->monster, game_get_current_map(game));
 	// Set default location of the player
@@ -120,9 +121,12 @@ void game_display(struct game* game) {
 
 	struct monster*tmp=game->monster;
 	while (tmp!=NULL){
-
+if(map_get_cell_type(game_get_current_map(game),tmp->x,tmp->y)==CELL_EXPLOSION)
+game->monster=kill_monster(game->monster,tmp);
 		monster_move(tmp,game_get_current_map(game));
 		monster_display(tmp);
+
+
 		tmp=tmp->next;
 	}
 	tmp=game->monster;
@@ -137,7 +141,7 @@ void game_display(struct game* game) {
 		free(tmp);
 
 
-	listbomb_refresh(game_get_player(game));
+	listbomb_refresh(game_get_player(game),game_get_current_map(game));
 
 	window_refresh();
 }
@@ -146,7 +150,7 @@ static short input_keyboard(struct game* game) {
 	SDL_Event event;
 	struct player* player = game_get_player(game);
 	struct map* map = game_get_current_map(game);
-	
+
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_QUIT:
@@ -194,5 +198,3 @@ int game_update(struct game* game) {
 
 	return 0;
 }
-
-

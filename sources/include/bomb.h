@@ -12,7 +12,7 @@
 struct bomb{
 	int x, y, time ;
 	enum etats etat;
- 	struct bomb * next;
+ 	//struct bomb * next;
 };
 
 struct listbomb {
@@ -22,11 +22,9 @@ struct listbomb {
 
 struct bomb * bomb_init(int x, int y);
 void listbomb_init();
-void bomb_insertion(int x, int y);
+void bomb_insertion(int x, int y,struct map* map);
 void bomb_sup(struct bomb*bomb);
-void listbomb_refresh( struct player *player);
-int bomb_start(struct bomb *bomb);
+void listbomb_refresh( struct player *player,struct map *map);
+int bomb_start(struct bomb *bomb,struct map* map,struct player * player);
 void bomb_display(struct bomb*bomb);
-void explo_display(struct bomb*bomb);
-
-
+void explo_display(struct bomb*bomb,struct player *player,struct map* map);

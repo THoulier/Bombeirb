@@ -9,6 +9,24 @@
 #include <monster.h>
 
 
+struct monster* kill_monster(struct monster* monster,struct monster* tmp){
+if(monster==NULL)
+return NULL;
+else if(tmp->prev==NULL){
+			return monster->next;
+	}
+	else if (tmp->next==NULL)
+			free(tmp);
+else{
+	struct monster *tmpp=monster;
+	while(tmpp!=tmp)
+	tmpp=tmpp->next;
+tmpp->prev->next=tmpp->next;
+free(tmp);
+return tmpp;}
+
+
+}
 
 
 
@@ -79,6 +97,7 @@ if (timer>2000){
 		case NORTH:
 			if (monster_move_aux(monster, map, x, y - 1) && y > 0) {
         map_set_cell_type(map,x,y,CELL_EMPTY);
+				map_set_cell_type(map,x,y-1,CELL_MONSTER);
         monster->y--;
 				monster->time=current_time;
 				break;
@@ -88,6 +107,7 @@ if (timer>2000){
 		case SOUTH:
 			if (monster_move_aux(monster, map, x, y + 1) && y < map_get_height(map)-1) {
 				map_set_cell_type(map,x,y,CELL_EMPTY);
+				map_set_cell_type(map,x,y+1,CELL_MONSTER);
 				monster->y++;
         monster->time=current_time;
 				break;
@@ -97,6 +117,7 @@ if (timer>2000){
 		case WEST:
 			if (monster_move_aux(monster, map, x - 1, y) && x > 0) {
 				map_set_cell_type(map,x,y,CELL_EMPTY);
+				map_set_cell_type(map,x-1,y,CELL_MONSTER);
 				monster->x--;
 				monster->time=current_time;
 				break;
@@ -106,6 +127,7 @@ if (timer>2000){
 		case EAST:
 			if (monster_move_aux(monster, map, x + 1, y) && x < map_get_width(map)-1) {
 				map_set_cell_type(map,x,y,CELL_EMPTY);
+				map_set_cell_type(map,x+1,y,CELL_MONSTER);
 				monster->x++;
 				monster->time=current_time;
 				break;
@@ -132,13 +154,16 @@ struct monster* cell_monster_map(struct monster* monster, struct map* map) {
 				new_one->direction=NORTH;
 				new_one->time=SDL_GetTicks();
 				new_one->next=NULL;
+				new_one->prev=NULL;
 
 				if (monster==NULL)
 				monster=new_one;
+
 				else {
 					struct monster *tmp =monster;
 					while(tmp->next!=NULL)
 						tmp=tmp->next;
+				new_one->prev=tmp;
 				tmp->next=new_one;
 				}
 
