@@ -50,7 +50,20 @@ enum compose_type {
     CELL_BOX_BOMBDEC  = CELL_BOX | BONUS_BOMB_NB_INC,
     CELL_BOX_LIFE     = CELL_BOX | BONUS_MONSTER,
     CELL_BOX_MONSTER  = CELL_BOX | BONUS_LIFE,
-
+	//for the bonus types
+	CELL_BONUS_RANGEINC = CELL_BONUS | BONUS_BOMB_RANGE_INC  ,
+  CELL_BONUS_RANGEDEC = CELL_BONUS | BONUS_BOMB_RANGE_DEC ,
+	CELL_BONUS_BOMBINC  = CELL_BONUS | BONUS_BOMB_NB_INC  ,
+  CELL_BONUS_BOMBDEC  = CELL_BONUS | BONUS_BOMB_NB_DEC  ,
+  CELL_BONUS_LIFE     = CELL_BONUS| BONUS_LIFE  ,
+  CELL_BONUS_MONSTER  = CELL_BONUS | BONUS_MONSTER  ,
+//for keep the bonus durinf the explo
+	CELL_EXPLO_RANGEINC = CELL_EXPLOSION | BONUS_BOMB_RANGE_INC  ,
+  CELL_EXPLOSION_RANGEDEC = CELL_EXPLOSION | BONUS_BOMB_RANGE_DEC ,
+	CELL_EXPLOSION_BOMBINC  = CELL_EXPLOSION | BONUS_BOMB_NB_INC  ,
+  CELL_EXPLOSION_BOMBDEC  = CELL_EXPLOSION | BONUS_BOMB_NB_DEC  ,
+  CELL_EXPLOSION_LIFE     = CELL_EXPLOSION| BONUS_LIFE  ,
+  CELL_EXPLOSION_MONSTER  = CELL_EXPLOSION | BONUS_MONSTER  ,
 
 };
 
@@ -79,5 +92,7 @@ struct map* map_get_static();
 
 // Display the map on the screen
 void map_display(struct map* map);
+void map_set_compose_cell_type(struct map* map, int x, int y, enum compose_type type);
+enum compose_type map_get_compose_type(struct map* map,int x, int y);
 
 #endif /* MAP_H_ */

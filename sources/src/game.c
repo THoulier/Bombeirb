@@ -12,6 +12,9 @@
 #include <player.h>
 #include <bomb.h>
 #include <constant.h>
+#include <bonus.h>
+
+
 struct game {
 	struct map** maps;       // the game's map
 	short levels;        // nb maps of the game
@@ -34,7 +37,7 @@ game_new(void) {
 
 	game->levels = 1;
 	//struct listbomb *list=NULL;
-	//listbomb_init();
+	listbomb_init();
 
 	game->level = 0;
 	game->monster=NULL;
@@ -43,6 +46,7 @@ game_new(void) {
 	game->monster=cell_monster_map(game->monster, game_get_current_map(game));
 	// Set default location of the player
 	player_set_position(game->player, 1, 0);
+	map_bonus_init(game->maps[0]);
 
 	return game;
 }
@@ -121,8 +125,8 @@ void game_display(struct game* game) {
 
 	struct monster*tmp=game->monster;
 	while (tmp!=NULL){
-if(map_get_cell_type(game_get_current_map(game),tmp->x,tmp->y)==CELL_EXPLOSION)
-game->monster=kill_monster(game->monster,tmp);
+		if(map_get_cell_type(game_get_current_map(game),tmp->x,tmp->y)==CELL_EXPLOSION)
+			game->monster=kill_monster(game->monster,tmp);
 		monster_move(tmp,game_get_current_map(game));
 		monster_display(tmp);
 

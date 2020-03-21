@@ -12,6 +12,8 @@
 #include <constant.h>
 #include <monster.h>
 #include <bomb.h>
+#include <bonus.h>
+
 
 
 

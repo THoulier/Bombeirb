@@ -14,6 +14,8 @@
 #include <sprite.h>
 #include <window.h>
 #include <player.h>
+#include <bonus.h>
+
 struct map {
 	int width;
 	int height;
@@ -51,7 +53,14 @@ struct map* map_new(int width, int height)
 
 int map_is_inside(struct map* map, int x, int y)
 {
+	
 	assert(map);
+	/*if((x<map->width)&(x>=0)&(y<map->height)&(y>=0)){
+		return 1;
+	}
+	else{
+		return 0;
+	}*/
 	return 1;
 }
 
@@ -81,6 +90,18 @@ enum cell_type map_get_cell_type(struct map* map, int x, int y)
 	return map->grid[CELL(x,y)] & 0xf0;
 }
 
+enum compose_type map_get_compose_type(struct map* map,int x, int y)
+{
+	assert(map && map_is_inside(map, x, y));
+	return map->grid[CELL(x,y)];
+}
+
+void map_set_compose_cell_type(struct map* map, int x, int y, enum compose_type type)
+{
+	assert(map && map_is_inside(map, x, y));
+	map->grid[CELL(x,y)] = type;
+}
+
 void map_set_cell_type(struct map* map, int x, int y, enum cell_type type)
 {
 	assert(map && map_is_inside(map, x, y));
@@ -105,6 +126,12 @@ void display_bonus(struct map* map, int x, int y, unsigned char type)
 
 	case BONUS_BOMB_NB_INC:
 		window_display_image(sprite_get_bonus(BONUS_BOMB_NB_INC), x, y);
+		break;
+	case BONUS_LIFE:
+		window_display_image(sprite_get_bonus(BONUS_LIFE), x,y);
+		break;
+	case BONUS_MONSTER:
+		window_display_image(sprite_get_bonus(BONUS_MONSTER), x,y);
 		break;
 	}
 }
@@ -163,8 +190,9 @@ void map_display(struct map* map)
 				}*/
 	      break;
 
-		case CELL_BOMB:
-
+		case CELL_EXPLOSION:
+		
+			//window_display_image(sprite_get_explo(), x, y);
 			break;
 
 
