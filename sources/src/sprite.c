@@ -10,7 +10,7 @@
 
 // Sprites general
 #define MAP_CASE        "sprite/wood_box.png"
-#define MAP_KEY			"sprite/key.png"
+//#define MAP_KEY			"sprite/key.png"
 #define MAP_DOOR_OPENED	"sprite/door_opened.png"
 #define MAP_DOOR_CLOSED	"sprite/door_closed.png"
 
@@ -61,7 +61,6 @@
 #define MONSTER_DOWN	"sprite/monster_down.png"
 
 #define GAMEOVER "sprite/gameover.png"
-
 // banner
 SDL_Surface* numbers[10];
 SDL_Surface* banner_life;
@@ -73,7 +72,7 @@ SDL_Surface* banner_key;
 // map
 SDL_Surface* box;
 SDL_Surface* goal;
-SDL_Surface* key;
+//SDL_Surface* key;
 SDL_Surface* door_opened;
 SDL_Surface* door_closed;
 SDL_Surface* stone;
@@ -138,11 +137,10 @@ static void map_load() {
 	// Sprite loading
 	tree = image_load(MAP_TREE);
 	box = image_load(MAP_CASE);
-	key = image_load(MAP_KEY);
 	stone = image_load(MAP_STONE);
 	door_opened = image_load(MAP_DOOR_OPENED);
 	door_closed = image_load(MAP_DOOR_CLOSED);
-	
+
 
 }
 
@@ -150,7 +148,6 @@ static void map_unload() {
 	SDL_FreeSurface(tree);
 	SDL_FreeSurface(box);
 	SDL_FreeSurface(goal);
-	SDL_FreeSurface(key);
 	SDL_FreeSurface(stone);
 	SDL_FreeSurface(door_opened);
 	SDL_FreeSurface(door_closed);
@@ -162,8 +159,9 @@ static void bonus_load() {
 	bonus[BONUS_BOMB_RANGE_DEC] = image_load(IMG_BONUS_BOMB_RANGE_DEC);
 	bonus[BONUS_BOMB_NB_INC] = image_load(IMG_BONUS_BOMB_NB_INC);
 	bonus[BONUS_BOMB_NB_DEC] = image_load(IMG_BONUS_BOMB_NB_DEC);
+  bonus[BONUS_MONSTER] = image_load(MONSTER_DOWN);
 	bonus[BONUS_LIFE] = image_load(BANNER_LIFE);
-	bonus[BONUS_MONSTER]=image_load(MONSTER_DOWN);
+
 }
 
 static void bonus_unload() {
@@ -284,10 +282,6 @@ SDL_Surface* sprite_get_box() {
 	return box;
 }
 
-SDL_Surface* sprite_get_key() {
-	assert(key);
-	return key;
-}
 
 SDL_Surface* sprite_get_stone() {
 	assert(stone);

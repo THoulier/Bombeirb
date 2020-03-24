@@ -15,15 +15,7 @@
 #include <bonus.h>
 
 
-struct game {
-	struct map** maps;       // the game's map
-	short levels;        // nb maps of the game
-	short level;
-	struct player* player;
-	struct monster* monster;
-	struct bomb* bomb;
-	struct listbomb *listbomb;
-};
+
 
 struct game*
 game_new(void) {
@@ -37,7 +29,7 @@ game_new(void) {
 
 	game->levels = 1;
 	//struct listbomb *list=NULL;
-	listbomb_init();
+//	listbomb_init();
 
 	game->level = 0;
 	game->monster=NULL;
@@ -46,7 +38,7 @@ game_new(void) {
 	game->monster=cell_monster_map(game->monster, game_get_current_map(game));
 	// Set default location of the player
 	player_set_position(game->player, 1, 0);
-	map_bonus_init(game->maps[0]);
+	//map_bonus_init(game->maps[game->level]);
 
 	return game;
 }
@@ -113,8 +105,8 @@ void game_banner_display(struct game* game) {
 
 void game_display(struct game* game) {
 	assert(game);
-	//struct map* map = game_get_current_map(game);
-	//struct player* player = game_get_player(game);
+	struct map* map = game_get_current_map(game);
+	struct player* player = game_get_player(game);
 
 
 	window_clear();
@@ -137,15 +129,23 @@ void game_display(struct game* game) {
 	while (tmp!=NULL){
 		int current_time = SDL_GetTicks();
 		if(game->player->x == tmp->x && game->player->y==tmp->y ){
+
 			if ((current_time - game->player->contact) > 1000){
 					player_dec_nb_lives(game->player);
+						game->player->dmg_tmp=29;
 					 game->player->contact= SDL_GetTicks();}}
 
 		tmp=tmp->next;}
 		free(tmp);
+		int current_time = SDL_GetTicks();
+		if(map_get_cell_type(map,player->x,player->y)==CELL_EXPLOSION && player->lives>0){
+			if ((current_time - game->player->contact) > 1000){
+		player_dec_nb_lives(player);
+		game->player->dmg_tmp=29;
+	 	game->player->contact= SDL_GetTicks();}}
 
 
-	listbomb_refresh(game_get_player(game),game_get_current_map(game));
+	listbomb_refresh(player,map);
 
 	window_refresh();
 }

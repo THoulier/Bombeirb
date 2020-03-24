@@ -15,8 +15,9 @@ return NULL;
 else if(tmp->prev==NULL){
 			return monster->next;
 	}
-	else if (tmp->next==NULL)
-			free(tmp);
+	else if (tmp->next==NULL){
+			tmp->prev->next=NULL;
+			}
 else{
 	struct monster *tmpp=monster;
 	while(tmpp!=tmp)
@@ -24,7 +25,7 @@ else{
 tmpp->prev->next=tmpp->next;
 free(tmp);
 return tmpp;}
-
+return 0;
 
 }
 
@@ -173,6 +174,18 @@ struct monster* cell_monster_map(struct monster* monster, struct map* map) {
 	return monster;
 }
 
+struct monster* monster_append(struct monster * listmonster,struct monster* monster){
+if(listmonster==NULL)
+listmonster=monster;
+
+	else {
+		struct monster* tmp=listmonster;
+	while(tmp->next!=NULL)
+		tmp=tmp->next;
+	monster->prev=tmp;
+	tmp->next=monster;}
+	return listmonster;
+}
 
 
 

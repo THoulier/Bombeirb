@@ -15,6 +15,7 @@ struct player{
 	enum direction direction;
 	int bombs;
 	int key;
+	int dmg_tmp;
 	int bombrange;
 };
 

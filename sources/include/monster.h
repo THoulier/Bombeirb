@@ -1,3 +1,5 @@
+#ifndef MO_MO
+#define MO_MO
 #include <SDL/SDL_image.h>
 #include <assert.h>
 #include <time.h>
@@ -5,7 +7,7 @@
 #include <constant.h>
 #include <map.h>
 #include <window.h>
-#include <constant.h>
+
 
 struct monster{
 	int x, y, time;
@@ -25,3 +27,5 @@ struct monster* monster_move(struct monster* monster, struct map* map);
 void monster_display(struct monster* monster);
 struct monster* cell_monster_map(struct monster* monster, struct map* map);
 struct monster* kill_monster(struct monster* monster,struct monster* tmp);
+struct monster* monster_append(struct monster * listmonster,struct monster* monster);
+#endif

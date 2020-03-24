@@ -53,7 +53,7 @@ struct map* map_new(int width, int height)
 
 int map_is_inside(struct map* map, int x, int y)
 {
-	
+
 	assert(map);
 	/*if((x<map->width)&(x>=0)&(y<map->height)&(y>=0)){
 		return 1;
@@ -110,6 +110,7 @@ void map_set_cell_type(struct map* map, int x, int y, enum cell_type type)
 
 void display_bonus(struct map* map, int x, int y, unsigned char type)
 {
+	
 	// bonus is encoded with the 4 most significant bits
 	switch (type & 0x0f) {
 	case BONUS_BOMB_RANGE_INC:
@@ -131,7 +132,7 @@ void display_bonus(struct map* map, int x, int y, unsigned char type)
 		window_display_image(sprite_get_bonus(BONUS_LIFE), x,y);
 		break;
 	case BONUS_MONSTER:
-		window_display_image(sprite_get_bonus(BONUS_MONSTER), x,y);
+		window_display_image(sprite_get_monster(SOUTH), x,y);
 		break;
 	}
 }
@@ -174,7 +175,7 @@ void map_display(struct map* map)
 	      display_bonus(map, x, y, type);
 	      break;
 	    case CELL_KEY:
-	      window_display_image(sprite_get_key(), x, y);
+	      window_display_image(sprite_get_banner_key(), x, y);
 	      break;
 	    case CELL_DOOR:
 	      // pas de gestion du type de porte
@@ -191,7 +192,7 @@ void map_display(struct map* map)
 	      break;
 
 		case CELL_EXPLOSION:
-		
+
 			//window_display_image(sprite_get_explo(), x, y);
 			break;
 
@@ -217,7 +218,7 @@ struct map* map_get_static(void)
 	  CELL_EMPTY, CELL_TREE, CELL_BOX, CELL_TREE, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,  CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
 	  CELL_EMPTY, CELL_TREE, CELL_TREE, CELL_TREE, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,  CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
 	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
-	  CELL_BOX, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE,  CELL_BOX_LIFE, CELL_EMPTY,
+	  CELL_BOX, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE,  CELL_BOX, CELL_EMPTY,
 	  CELL_BOX,  CELL_EMPTY, CELL_DOOR, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
 		};
 

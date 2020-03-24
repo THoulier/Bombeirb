@@ -9,7 +9,15 @@
 #include <map.h>
 
 // Abstract data type
-struct game;
+struct game {
+	struct map** maps;       // the game's map
+	short levels;        // nb maps of the game
+	short level;
+	struct player* player;
+	struct monster* monster;
+	struct bomb* bomb;
+	struct listbomb *listbomb;
+};
 
 // Create a new game
 struct game* game_new();

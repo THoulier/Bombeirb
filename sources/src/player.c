@@ -27,6 +27,7 @@ struct player* player_init(int bombs, short lives) {
 	player->lives=lives;
 	player->contact=0;
 	player->key=0;
+	player->dmg_tmp=0;
 	player->bombrange=1;
 	return player;
 }
@@ -212,11 +213,24 @@ int player_move(struct player* player, struct map* map) {
 		break;
 
 }
+
+
+
+
+
 	return move;
 }
 
 void player_display(struct player* player) {
 	assert(player);
+	if (player->dmg_tmp > 0) {
+		player->dmg_tmp--;
+		if (player->dmg_tmp % 2) {
+			window_display_image(sprite_get_player(player->direction),
+			player->x * SIZE_BLOC, player->y * SIZE_BLOC);
+		}
+	}
+	else
 	window_display_image(sprite_get_player(player->direction),
 			player->x * SIZE_BLOC, player->y * SIZE_BLOC);
 }

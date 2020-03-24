@@ -20,7 +20,7 @@ void listbomb_init() {
 
 void bomb_insertion(int x, int y, struct map *map){
   struct bomb *bomb = bomb_init(x,y);
-  //map_set_cell_type(map,x,y,CELL_BOMB);
+  map_set_cell_type(map,x,y,CELL_BOMB);
   if (list == NULL) {
     list = malloc(sizeof(*list));
     list->first = bomb;
@@ -33,30 +33,30 @@ void bomb_insertion(int x, int y, struct map *map){
   list=listbomb;
 }
 
-void bomb_sup(struct bomb*bomb){
-  struct listbomb *prec;
-  struct listbomb *suiv;
-  struct listbomb *listbomb;
-  listbomb=list;
-  if (listbomb->first==bomb){
-    list=listbomb->next;
-  }
-  else{
-    while (listbomb!=NULL){
-      if (listbomb->next->first==bomb){
-        prec=listbomb;
-        listbomb=listbomb->next;
-        suiv=listbomb->next;
-        listbomb=NULL;
-            }
-      else {
-            listbomb=listbomb->next;
-          }
-          }
-          prec->next=suiv;
-        }
-  free(bomb);
-}
+// void bomb_sup(struct bomb*bomb){
+//   struct listbomb *prec;
+//   struct listbomb *suiv;
+//   struct listbomb *listbomb;
+//   listbomb=list;
+//   if (listbomb->first==bomb){
+//     list=listbomb->next;
+//   }
+//   else{
+//     while (listbomb!=NULL){
+//       if (listbomb->next->first==bomb){
+//         prec=listbomb;
+//         listbomb=listbomb->next;
+//         suiv=listbomb->next;
+//         listbomb=NULL;
+//             }
+//       else {
+//             listbomb=listbomb->next;
+//           }
+//           }
+//           prec->next=suiv;
+//         }
+//   free(bomb);
+// }
 
 void listbomb_refresh(struct player *player,struct map* map){
   struct listbomb *listbomb=list;
@@ -65,9 +65,6 @@ void listbomb_refresh(struct player *player,struct map* map){
 			bomb_display(listbomb->first);
 			}
     if (bomb_start(listbomb->first,map,player) && listbomb->first->etat==4){
-
-      //explo_display(listbomb->first,player,map);
-
       box_explo(map,listbomb->first,player);
     }
 
@@ -110,23 +107,23 @@ int bomb_start(struct bomb *bomb,struct map* map,struct player*player){
   }
   else if ((current_time-time)<4500){
     explo_display(bomb,player,map);
-
-    //box_explo(map,bomb);
-
-    //map_set_cell_type(map,bomb->x,bomb->y,CELL_EMPTY);
     bomb->etat=4;
-    
-  }
-  /*
-  else if ((current_time-time)==5000){
-    
-    map_set_cell_type(map,bomb->x+1,bomb->y,CELL_EXPLOSION);
-    map_set_cell_type(map,bomb->x-1,bomb->y,CELL_EXPLOSION);
-    map_set_cell_type(map,bomb->x,bomb->y,CELL_EXPLOSION);
-    map_set_cell_type(map,bomb->x,bomb->y+1,CELL_EXPLOSION);
-    map_set_cell_type(map,bomb->x,bomb->y-1,CELL_EXPLOSION);
 
-  }*/
+  }
+
+  else if ((current_time-time)<4600){
+
+  if(map_get_cell_type(map,bomb->x+1,bomb->y)==CELL_EXPLOSION){
+    map_set_cell_type(map,bomb->x+1,bomb->y,CELL_EMPTY);}
+  if(map_get_cell_type(map,bomb->x-1,bomb->y)==CELL_EXPLOSION){
+    map_set_cell_type(map,bomb->x-1,bomb->y,CELL_EMPTY);}
+    map_set_cell_type(map,bomb->x,bomb->y,CELL_EMPTY);
+  if(map_get_cell_type(map,bomb->x,bomb->y+1)==CELL_EXPLOSION){
+    map_set_cell_type(map,bomb->x,bomb->y+1,CELL_EMPTY);}
+  if(map_get_cell_type(map,bomb->x,bomb->y-1)==CELL_EXPLOSION){
+    map_set_cell_type(map,bomb->x,bomb->y-1,CELL_EMPTY);}
+
+  }
   else{
     return 0;
   }
@@ -144,179 +141,53 @@ void bomb_display(struct bomb*bomb){
 }
 
 void explo_display(struct bomb*bomb,struct player* player,struct map*map){
-  int x=bomb->x*SIZE_BLOC;
-  int y=bomb->y*SIZE_BLOC;
+  int x=bomb->x;
+  int y=bomb->y;
   int range=player->bombrange;
   int i;
 
   for(i=1;i<=range;i++){
-     int a = 1;
-     int b = 1;
-     int c = 1;
-     int d = 1;
-     int e = 1;
+    if(x+i<map_get_width(map)){
 
+      explos(map,x+i,y);}
+    if(x>=0){
+      explos(map,x,y);}
+    if(x-i>=0){
+      explos(map,x-i,y);}
+    if(y+i<map_get_height(map)){
+      explos(map,x,y+i);}
+    if(y-i>=0){
+      explos(map,x,y-i);}
+}
+}
+void explos(struct map* map,int x,int y){
 
+  switch(map_get_cell_type(map,x,y)){
+        case CELL_BOX:
+          map_set_compose_cell_type(map,x*SIZE_BLOC,y*SIZE_BLOC,CELL_EXPLOSION|get_bonus_type(map_get_compose_type(map,x,y)));
+          window_display_image(sprite_get_explo(), x*SIZE_BLOC, y*SIZE_BLOC);
+        break;
+        case CELL_EMPTY:
 
-    
-    if (a == 1){
-      //if (bomb->x+i<map_get_width(map)){
-    switch(map_get_cell_type(map,bomb->x+i,bomb->y)){
-          case CELL_BOX:
-            map_set_compose_cell_type(map,x+i,y,CELL_EXPLOSION|get_bonus_type(map_get_compose_type(map,x+i,y)));
-            window_display_image(sprite_get_explo(), x+i*SIZE_BLOC, y);
+          map_set_cell_type(map,x,y,CELL_EXPLOSION);
+
+        case CELL_MONSTER:
+          map_set_cell_type(map,x,y,CELL_EXPLOSION);
           break;
-
-          case CELL_EMPTY:
-            map_set_cell_type(map,bomb->x+i,bomb->y,CELL_EXPLOSION);
-            //window_display_image(sprite_get_explo(),x+i*SIZE_BLOC, y);
+        break;
+        case CELL_EXPLOSION:
+          window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
           break;
-
-          case CELL_MONSTER:
-            map_set_cell_type(map,bomb->x+i,bomb->y,CELL_EXPLOSION);
-            break;
-
-          case CELL_EXPLOSION:
-            //map_set_cell_type(map,bomb->x+i,bomb->y,CELL_EXPLOSION);
-            window_display_image(sprite_get_explo(),x+i*SIZE_BLOC, y);
-          break;
-
           case CELL_SCENERY:
-            a=0;
-          break;
-          default:
-            a=0;
-            break;
-    }
-      //}
-    }
-    if (b == 1){
-    switch(map_get_cell_type(map,bomb->x-i,bomb->y)){
-          case CELL_BOX:
-            map_set_compose_cell_type(map,x-i,y,CELL_EXPLOSION|get_bonus_type(map_get_compose_type(map,x-i,y)));
-            window_display_image(sprite_get_explo(), x-i*SIZE_BLOC, y);
-          break;
 
-          case CELL_EMPTY:
-            map_set_cell_type(map,bomb->x-i,bomb->y,CELL_EXPLOSION);
-            //window_display_image(sprite_get_explo(),x-i*SIZE_BLOC, y);
-          case CELL_MONSTER:
-            map_set_cell_type(map,bomb->x-i,bomb->y,CELL_EXPLOSION);
-            break;
-
-          break;
-          case CELL_EXPLOSION:
-            //map_set_cell_type(map,bomb->x+i,bomb->y,CELL_EXPLOSION);
-            window_display_image(sprite_get_explo(),x-i*SIZE_BLOC, y);
-
+        break;
+        default:
+        window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
 
           break;
 
-          case CELL_SCENERY:
-            b=0;
-          break;
-          default:
-            b=0;
-            break;
-    }
-    }
-    if (c == 1){
-    switch(map_get_cell_type(map,bomb->x,bomb->y+i)){
-          case CELL_BOX:
-            map_set_compose_cell_type(map,x,y+i,CELL_EXPLOSION|get_bonus_type(map_get_compose_type(map,x,y+i)));
-            window_display_image(sprite_get_explo(), x, y+i*SIZE_BLOC);
-          break;
-
-          case CELL_EMPTY:
-            map_set_cell_type(map,bomb->x,bomb->y+i,CELL_EXPLOSION);
-            //window_display_image(sprite_get_explo(),x, y+i*SIZE_BLOC);
-          case CELL_MONSTER:
-            map_set_cell_type(map,bomb->x,bomb->y+i,CELL_EXPLOSION);
-            break;
-
-          break;
-          case CELL_EXPLOSION:
-            //map_set_cell_type(map,bomb->x+i,bomb->y,CELL_EXPLOSION);
-            window_display_image(sprite_get_explo(),x, y+i*SIZE_BLOC);
+  }
 
 
-          break;
-
-
-          case CELL_SCENERY:
-            c=0;
-          break;
-          default:
-            c=0;
-            break;
-    }
-    }
-    if (d == 1){
-    switch(map_get_cell_type(map,bomb->x,bomb->y-i)){
-          case CELL_BOX:
-            map_set_compose_cell_type(map,x,y-i,CELL_EXPLOSION|get_bonus_type(map_get_compose_type(map,x,y-i)));
-            window_display_image(sprite_get_explo(), x, y-i*SIZE_BLOC);
-          break;
-
-          case CELL_EMPTY:
-            map_set_cell_type(map,bomb->x,bomb->y-i,CELL_EXPLOSION);
-            //window_display_image(sprite_get_explo(),x, y-i*SIZE_BLOC);
-          case CELL_MONSTER:
-            map_set_cell_type(map,bomb->x,bomb->y-i,CELL_EXPLOSION);
-            break;
-
-          break;
-          case CELL_EXPLOSION:
-            //map_set_cell_type(map,bomb->x+i,bomb->y,CELL_EXPLOSION);
-            window_display_image(sprite_get_explo(),x, y-i*SIZE_BLOC);
-
-
-          break;
-
-          case CELL_SCENERY:
-            d=0;
-          break;
-          default:
-            d=0;
-            break;
-    }
-    }
-    if (e == 1){
-    switch(map_get_cell_type(map,bomb->x,bomb->y)){
-          case CELL_BOX:
-            map_set_compose_cell_type(map,x,y,CELL_EXPLOSION|get_bonus_type(map_get_compose_type(map,x,y)));
-            window_display_image(sprite_get_explo(), x, y);
-          break;
-
-          case CELL_EMPTY:
-            map_set_cell_type(map,bomb->x,bomb->y,CELL_EXPLOSION);
-            //window_display_image(sprite_get_explo(),x, y);
-
-          case CELL_MONSTER:
-            map_set_cell_type(map,bomb->x,bomb->y,CELL_EXPLOSION);
-            break;
-          break;
-          case CELL_EXPLOSION:
-            //map_set_cell_type(map,bomb->x+i,bomb->y,CELL_EXPLOSION);
-            window_display_image(sprite_get_explo(),x, y);
-
-
-          break;
-
-          case CELL_SCENERY:
-            e=0;
-          break;
-          default:
-            e=0;
-            break;
-    }
-    }
-  
- }
 
 }
-
-
-  
-
-
