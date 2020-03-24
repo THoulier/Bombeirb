@@ -87,14 +87,13 @@ void game_banner_display(struct game* game) {
 	window_display_image(sprite_get_banner_bomb(), x, y);
 
 	x = 2 * white_bloc + 3 * SIZE_BLOC;
-	window_display_image(
-			sprite_get_number(player_get_nb_bomb(game_get_player(game))), x, y);
+	window_display_image(sprite_get_number(player_get_nb_bomb(game_get_player(game))), x, y);
 
 	x = 3 * white_bloc + 4 * SIZE_BLOC;
 	window_display_image(sprite_get_banner_range(), x, y);
 
 	x = 3 * white_bloc + 5 * SIZE_BLOC;
-	window_display_image(sprite_get_number(3), x, y);
+	window_display_image(sprite_get_number(game_get_player(game)->bombrange), x, y);
 
 	x = 4 * white_bloc + 6 * SIZE_BLOC;
 	window_display_image(sprite_get_banner_key(), x, y);
@@ -146,6 +145,9 @@ void game_display(struct game* game) {
 
 
 	listbomb_refresh(player,map);
+	if(map_get_cell_type(map,player->x,player->y)==CELL_BONUS) {
+		player_get_bonus(player,map);
+	}
 
 	window_refresh();
 }
