@@ -31,4 +31,5 @@ int bomb_start(struct bomb *bomb,struct map* map,struct player * player);
 void bomb_display(struct bomb*bomb);
 void explo_display(struct bomb*bomb,struct player *player,struct map* map);
 void explos(struct map* map,int x ,int y);
+int box_is_blocking(struct map* map,int x,int y);
 #endif

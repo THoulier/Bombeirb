@@ -145,21 +145,34 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
   int y=bomb->y;
   int range=player->bombrange;
   int i;
+  int block_west = 0;
+  int block_east = 0;
+  int block_north = 0;
+  int block_south = 0;
+
 
   for(i=1;i<=range;i++){
     if(x+i<map_get_width(map)){
-
-      explos(map,x+i,y);}
+      if (block_east == 0){
+      block_east = box_is_blocking(map,x+i,y);
+      explos(map,x+i,y);}}
     if(x>=0){
       explos(map,x,y);}
     if(x-i>=0){
-      explos(map,x-i,y);}
+      if (block_west == 0){
+      block_west = box_is_blocking(map,x-i,y);
+      explos(map,x-i,y);}}
     if(y+i<map_get_height(map)){
-      explos(map,x,y+i);}
+      if (block_north == 0){
+      block_north = box_is_blocking(map,x,y+i);
+      explos(map,x,y+i);}}
     if(y-i>=0){
-      explos(map,x,y-i);}
+      if (block_south == 0){
+      block_south = box_is_blocking(map,x,y-i);
+      explos(map,x,y-i);}}
 }
 }
+
 void explos(struct map* map,int x,int y){
 
   switch(map_get_cell_type(map,x,y)){
@@ -170,11 +183,11 @@ void explos(struct map* map,int x,int y){
         case CELL_EMPTY:
 
           map_set_cell_type(map,x,y,CELL_EXPLOSION);
+        break;
 
         case CELL_MONSTER:
           map_set_cell_type(map,x,y,CELL_EXPLOSION);
           break;
-        break;
         case CELL_EXPLOSION:
           window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
           break;
@@ -190,4 +203,20 @@ void explos(struct map* map,int x,int y){
 
 
 
+}
+int box_is_blocking(struct map* map,int x,int y){
+  int is_blocking = 0;
+  switch(map_get_cell_type(map,x,y)){
+        case CELL_BOX:
+        is_blocking = 1;
+        break;
+        case CELL_SCENERY:
+        is_blocking = 1;
+          break;
+        default:
+        is_blocking = 0;
+          break;
+
+  }
+  return is_blocking;
 }
