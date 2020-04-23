@@ -80,7 +80,7 @@ int map_get_height(struct map* map);
 
 // Return the type of a cell
 enum cell_type map_get_cell_type(struct map* map, int x, int y);
-struct map* get_map (char * mapp);
+struct map* get_map (int nummap);
 // Set the type of a cell
 void  map_set_cell_type(struct map* map, int x, int y, enum cell_type type);
 
@@ -94,5 +94,5 @@ struct map* map_get_static();
 void map_display(struct map* map);
 void map_set_compose_cell_type(struct map* map, int x, int y, enum compose_type type);
 enum compose_type map_get_compose_type(struct map* map,int x, int y);
-
+char * map_init(int nummap);
 #endif /* MAP_H_ */

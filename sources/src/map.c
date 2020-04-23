@@ -180,7 +180,12 @@ void map_display(struct map* map)
 	    case CELL_DOOR:
 	      // pas de gestion du type de porte
 		  	window_display_image(sprite_get_door_closed(), x, y);
-
+					if (type & 0x01){
+		      	window_display_image(sprite_get_door_opened(), x, y);
+					}
+					else {
+						window_display_image(sprite_get_door_closed(), x, y);
+					}
 		  	//window_display_image(sprite_get_door_opened(), x, y);
 
 			/*	if(player->key != 0){
@@ -219,7 +224,7 @@ struct map* map_get_static(void)
 	  CELL_EMPTY, CELL_TREE, CELL_TREE, CELL_TREE, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,  CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
 	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
 	  CELL_BOX, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE,  CELL_BOX, CELL_EMPTY,
-	  CELL_BOX,  CELL_EMPTY, CELL_DOOR, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
+	  CELL_BOX,  CELL_EMPTY, 50, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
 		};
 
 	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)
@@ -228,23 +233,45 @@ struct map* map_get_static(void)
 	return map;
 }
 
-struct map* get_map (char * mapp){
- FILE* ptr= fopen(mapp, "r");
- int width;
- int height;
- fscanf(ptr,"%d:%d", &width,&height);
- struct map * map = map_new(width,height);
+
+struct map* get_map (int nummap){
+	char *mapp=map_init(nummap);
+ 	FILE* ptr= fopen(mapp, "r");
+ 	int width;
+ 	int height;
+ 	fscanf(ptr,"%d:%d", &width,&height);
+ 	struct map * map = map_new(width,height);
 	int i, j;
 	int valeur;
- for (i = 0; i < map_get_width(map); i++) {
-	 for (j = 0; j < map_get_height(map); j++) {
-		 //map_set_cell_type(map,i, j,map_get_cell_type(map,i,j));
-		 fscanf(ptr,"%d", &valeur);
-		 map->grid[i+j*width]=valeur;
-
-	 }}
+ 	for (i = 0; i < map_get_width(map); i++) {
+		for (j = 0; j < map_get_height(map); j++) {
+		//map_set_cell_type(map,i, j,map_get_cell_type(map,i,j));
+		fscanf(ptr,"%d", &valeur);
+		map->grid[i+j*width]=valeur;
+	}}
 	return map;
-
-
-
 }
+
+
+char * map_init(int nummap) {
+    char *path;
+      switch (nummap)
+      {
+        case 0: 
+			path="map/map_0"; 
+		break;
+        case 1: 
+			path="map/map_1"; 
+		break;
+        case 2: 
+			path="map/map_2"; 
+		break;
+        case 3: 
+			path="map/map_3"; 
+		break;
+        case 4: 
+			path="map/map_4"; 
+		break;
+      }
+	return path;
+   }

@@ -11,12 +11,13 @@
 struct player{
 	int x, y;
 	short lives;
-  int contact ;
+  	int contact ;
 	enum direction direction;
 	int bombs;
 	int key;
 	int dmg_tmp;
 	int bombrange;
+	int level;
 };
 
 // Creates a new player with a given number of available bombs
@@ -53,5 +54,6 @@ void player_display(struct player* player);
 
 void player_bomb(struct player* player, struct map* map);
 int player_get_key(struct player* player);
+void player_change_level(struct player*player, int level);	
 
 #endif /* PLAYER_H_ */

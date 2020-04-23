@@ -14,6 +14,7 @@
 #include <constant.h>
 #include <bonus.h>
 
+ 
 
 
 
@@ -23,11 +24,14 @@ game_new(void) {
 
 	struct game* game = malloc(sizeof(*game));
 	game->maps = malloc(sizeof(struct game));
-//	game->maps[0] = get_map ("map/map_1");
+	//game->maps[0] = get_map ("map/map_2");
+	game->levels = 5;
 	game->maps[0] = map_get_static();
+	for (int nummap=1; nummap<game->levels; nummap++){
+		game->maps[nummap] = get_map(nummap);
+	}
+	//game->maps[1] = get_map ("map/map_1");
 
-
-	game->levels = 1;
 	//struct listbomb *list=NULL;
 //	listbomb_init();
 
@@ -75,7 +79,7 @@ void game_banner_display(struct game* game) {
 	for (int i = 0; i < map_get_width(map); i++)
 		window_display_image(sprite_get_banner_line(), i * SIZE_BLOC, y);
 
-	int white_bloc = ((map_get_width(map) * SIZE_BLOC) - 8 * SIZE_BLOC) / 6;
+	int white_bloc = ((map_get_width(map) * SIZE_BLOC) - 10 * SIZE_BLOC) / 6;
 	int x = white_bloc;
 	y = (map_get_height(map) * SIZE_BLOC) + LINE_HEIGHT;
 	window_display_image(sprite_get_banner_life(), x, y);
@@ -100,6 +104,12 @@ void game_banner_display(struct game* game) {
 
 	x = 4 * white_bloc + 7 * SIZE_BLOC;
 	window_display_image(sprite_get_number(player_get_key(game->player)), x, y);
+
+	x = 5 * white_bloc + 8 * SIZE_BLOC;
+	window_display_image(sprite_get_banner_flag(), x, y);
+
+	x = 5 * white_bloc + 9 * SIZE_BLOC;
+	window_display_image(sprite_get_number((game->level)+1), x, y);
 }
 
 void game_display(struct game* game) {
@@ -165,6 +175,9 @@ static short input_keyboard(struct game* game) {
 			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
 				return 1;
+			case SDLK_e:
+				game_door(game);
+			break;
 
 			case SDLK_UP:
 				player_set_current_way(player, NORTH);
@@ -203,4 +216,57 @@ int game_update(struct game* game) {
 		return 1; // exit game
 
 	return 0;
+}
+
+
+void game_change_map(struct game* game,int nummap) { 
+	game->level = nummap;
+	int x=0;
+	int y=0;
+	game_pos_init_for_player(nummap, &x, &y);
+	player_set_position(game->player, x, y);
+	player_change_level(game->player,nummap);
+}
+
+void game_door(struct game* game) {
+	assert(game);
+	int type=map_get_compose_type(game->maps[game->level],player_get_x(game->player),player_get_y(game->player));
+	if ((type & 0xf0)==CELL_DOOR){
+			if ((type & 0x01)){
+				game_change_map(game, (type>>1) & 0x07);
+			}
+			else {
+				if (player_get_key(game->player)){
+						player_dec_key(game->player);
+						map_set_cell_type(game->maps[game->level], player_get_x(game->player), player_get_y(game->player),type | 0x01 );
+						game_change_map(game,(type>>1) & 0x07);
+				}
+			}
+		}
+}
+
+void game_pos_init_for_player(int lvl, int *x, int *y){
+	*x=0;
+	*y=0;
+	switch (lvl)
+	{
+		case 0:
+			*x=2;
+			*y=11;
+			break;
+		case 1:
+			*x=0;
+			*y=2;
+		case 2:
+			*x=4;
+			*y=4;
+			break;
+		case 3:
+			*y=10;
+			break;
+		case 5:
+			*x=2;
+			*y=5;
+			break;
+	}
 }

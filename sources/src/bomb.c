@@ -210,11 +210,8 @@ int box_is_blocking(struct map* map,int x,int y){
         case CELL_BOX:
         is_blocking = 1;
         break;
-        case CELL_SCENERY:
-        is_blocking = 1;
-          break;
+        
         default:
-        is_blocking = 0;
           break;
 
   }

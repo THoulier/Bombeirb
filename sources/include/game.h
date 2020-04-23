@@ -37,6 +37,8 @@ void game_display(struct game* game);
 // update
 int game_update(struct game* game);
 
-
+void game_door(struct game* game);
+void game_change_map(struct game* game,int newMap);
+void game_pos_init_for_player(int lvl, int *x, int *y);
 
 #endif /* GAME_H_ */

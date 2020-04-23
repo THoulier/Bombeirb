@@ -31,6 +31,7 @@ struct player* player_init(int bombs, short lives) {
 	player->key=0;
 	player->dmg_tmp=0;
 	player->bombrange=1;
+	player->level=0;
 	return player;
 }
 
@@ -308,4 +309,7 @@ void player_get_bonus(struct player*player, struct map*map){
 
 }
 
-
+void player_change_level(struct player*player, int level){
+	assert(player);
+	player->level=level;
+}
