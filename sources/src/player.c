@@ -135,7 +135,7 @@ static int player_move_aux(struct player* player, struct map* map, int x, int y)
 
 	case CELL_KEY:
 	map_set_cell_type(map, x, y,CELL_EMPTY);
-	player->key=1;
+	player->key+=1;
 		break;
 
 

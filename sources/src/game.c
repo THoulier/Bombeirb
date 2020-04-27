@@ -226,6 +226,7 @@ void game_change_map(struct game* game,int nummap) {
 	game_pos_init_for_player(nummap, &x, &y);
 	player_set_position(game->player, x, y);
 	player_change_level(game->player,nummap);
+	window_resize(SIZE_BLOC * map_get_width(game_get_current_map(game)),SIZE_BLOC * map_get_height(game_get_current_map(game)) + LINE_HEIGHT + BANNER_HEIGHT);
 }
 
 void game_door(struct game* game) {
@@ -251,18 +252,19 @@ void game_pos_init_for_player(int lvl, int *x, int *y){
 	switch (lvl)
 	{
 		case 0:
-			*x=2;
-			*y=11;
+			*x=1;
+			*y=1;
 			break;
 		case 1:
-			*x=0;
+			*x=10;
 			*y=2;
 		case 2:
 			*x=4;
 			*y=4;
 			break;
 		case 3:
-			*y=10;
+			*y=3;
+			*x=13;
 			break;
 		case 5:
 			*x=2;

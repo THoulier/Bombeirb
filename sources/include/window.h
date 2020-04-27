@@ -17,5 +17,5 @@ void window_display_image(SDL_Surface* surface, int x, int y);
 
 // set every pixel of the window to white
 void window_clear();
-
+void window_resize(int weight, int height);
 #endif /* WINDOW_H_ */

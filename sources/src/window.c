@@ -43,3 +43,9 @@ void window_refresh() {
 	assert(window);
 	SDL_Flip(window);
 }
+
+
+
+void window_resize(int weight, int height){
+	window = SDL_SetVideoMode(weight, height, 0, SDL_HWSURFACE);
+}
