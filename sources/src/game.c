@@ -219,11 +219,8 @@ int game_update(struct game* game) {
 }
 
 
-void game_change_map(struct game* game,int nummap) { 
+void game_change_map(struct game* game,int nummap, int x, int y) { 
 	game->level = nummap;
-	int x=0;
-	int y=0;
-	game_pos_init_for_player(nummap, &x, &y);
 	player_set_position(game->player, x, y);
 	player_change_level(game->player,nummap);
 	window_resize(SIZE_BLOC * map_get_width(game_get_current_map(game)),SIZE_BLOC * map_get_height(game_get_current_map(game)) + LINE_HEIGHT + BANNER_HEIGHT);
@@ -233,42 +230,70 @@ void game_door(struct game* game) {
 	assert(game);
 	int type=map_get_compose_type(game->maps[game->level],player_get_x(game->player),player_get_y(game->player));
 	if ((type & 0xf0)==CELL_DOOR){
-			if ((type & 0x01)){
-				game_change_map(game, (type>>1) & 0x07);
-			}
-			else {
-				if (player_get_key(game->player)){
-						player_dec_key(game->player);
-						map_set_cell_type(game->maps[game->level], player_get_x(game->player), player_get_y(game->player),type | 0x01 );
-						game_change_map(game,(type>>1) & 0x07);
-				}
+		int x=0;
+		int y=0;
+		int nummap=(type>>1) & 0x07;
+		if (nummap > game->level){
+			switch (nummap){
+				case 1:
+					x=1;
+					y=1;
+				break;
+				case 2:
+					x=10;
+					y=2;
+				break;
+				case 3:
+					x=4;
+					y=0;
+				break;
+				case 4:
+					x=13;
+					y=3;
+				break;
+				case 5:
+					x=13;
+					y=5;
+				break;
+			}}
+		if (nummap < game->level){
+			switch (nummap){
+				case 1:
+					x=11;
+					y=11;
+				break;
+				case 2:
+					x=2;
+					y=12;
+				break;
+				case 3:
+					x=13;
+					y=9;
+				break;
+				case 4:
+					x=13;
+					y=3;
+				break;
+				case 5:
+					x=13;
+					y=5;
+				break;
+				default:
+					x=2;
+					y=11;
+				break;
+			}}
+
+		if ((type & 0x01)){
+			game_change_map(game, nummap, x, y);
+		}
+		else {
+			if (player_get_key(game->player)){
+					player_dec_key(game->player);
+					map_set_cell_type(game->maps[game->level], player_get_x(game->player), player_get_y(game->player),type | 0x01 );
+					game_change_map(game,nummap,x,y);
 			}
 		}
-}
-
-void game_pos_init_for_player(int lvl, int *x, int *y){
-	*x=0;
-	*y=0;
-	switch (lvl)
-	{
-		case 0:
-			*x=1;
-			*y=1;
-			break;
-		case 1:
-			*x=10;
-			*y=2;
-		case 2:
-			*x=4;
-			*y=4;
-			break;
-		case 3:
-			*y=3;
-			*x=13;
-			break;
-		case 5:
-			*x=2;
-			*y=5;
-			break;
 	}
 }
+
