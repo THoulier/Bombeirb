@@ -175,7 +175,7 @@ static short input_keyboard(struct game* game) {
 			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
 				return 1;
-			case SDLK_e:
+			case SDLK_x:
 				game_door(game);
 			break;
 
@@ -196,8 +196,9 @@ static short input_keyboard(struct game* game) {
 				player_move(player, map);
 				break;
 			case SDLK_SPACE:
-
-			  	player_bomb(player, map);
+				if (map_get_cell_type(map,player->x,player->y)!=CELL_DOOR){
+			  		player_bomb(player, map);
+				}
 
 
 				break;

@@ -122,7 +122,7 @@ void display_bonus(struct map* map, int x, int y, unsigned char type)
 		break;
 
 	case BONUS_BOMB_NB_DEC:
-		window_display_image(sprite_get_bonus(BONUS_BOMB_RANGE_DEC), x, y);
+		window_display_image(sprite_get_bonus(BONUS_BOMB_NB_DEC), x, y);
 		break;
 
 	case BONUS_BOMB_NB_INC:
@@ -172,33 +172,22 @@ void map_display(struct map* map)
 				window_display_image(sprite_get_box(), x, y);
 			break;
 	    case CELL_BONUS:
-	      display_bonus(map, x, y, type);
-	      break;
+	        display_bonus(map, x, y, type);
+	        break;
 	    case CELL_KEY:
-	      window_display_image(sprite_get_banner_key(), x, y);
-	      break;
+	        window_display_image(sprite_get_banner_key(), x, y);
+	        break;
 	    case CELL_DOOR:
-	      // pas de gestion du type de porte
-		  	window_display_image(sprite_get_door_closed(), x, y);
-					if (type & 0x01){
+			if (type & 0x01){
 		      	window_display_image(sprite_get_door_opened(), x, y);
-					}
-					else {
-						window_display_image(sprite_get_door_closed(), x, y);
-					}
-		  	//window_display_image(sprite_get_door_opened(), x, y);
-
-			/*	if(player->key != 0){
-					window_display_image(sprite_get_door_opened(), x, y);
-				}
-				else{
-					window_display_image(sprite_get_door_closed(), x, y);
-				}*/
-	      break;
+			}
+			else {
+				window_display_image(sprite_get_door_closed(), x, y);
+			}
+	        break;
 
 		case CELL_EXPLOSION:
 
-			//window_display_image(sprite_get_explo(), x, y);
 			break;
 
 

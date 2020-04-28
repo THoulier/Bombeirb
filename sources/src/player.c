@@ -276,33 +276,31 @@ void player_get_bonus(struct player*player, struct map*map){
 
 	switch(map_get_compose_type(map,x,y)&15){
 		case BONUS_BOMB_NB_DEC:
-			if (player->bombs>1){
+			if (player->bombs>0){
 				player_dec_nb_bomb(player);
-}
-				
-				break;
+			}	
+			break;
 		case BONUS_BOMB_NB_INC:
 			if (player->bombs<9){
-			player_inc_nb_bomb(player);
-}
+				player_inc_nb_bomb(player);
+			}
 			break;
 		case BONUS_BOMB_RANGE_DEC:
-		if (player->bombrange>1){
-			player_dec_range(player);
-}
+			if (player->bombrange>1){
+				player_dec_range(player);
+			}
 			break;
 		case BONUS_BOMB_RANGE_INC:
 			if (player->bombrange<9){
-			player_inc_range(player);
-}
+				player_inc_range(player);
+			}
 			break;
 		case BONUS_LIFE:
 			if (player->lives<9){
-			player_inc_nb_lives(player);
-}
+				player_inc_nb_lives(player);
+			}
 			break;
 		default:
-
 			break;
 	}
 	map_set_cell_type(map,x,y,CELL_EMPTY);

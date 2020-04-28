@@ -91,8 +91,7 @@ SDL_Surface* explo;
 
 
 // bonus
-#define NB_BONUS 4
-SDL_Surface* bonus[NB_BONUS + 1];
+SDL_Surface* bonus[7];
 //bombs
 SDL_Surface* bomb_img[4];
 // player
@@ -160,7 +159,7 @@ static void map_unload() {
 }
 
 static void bonus_load() {
-	bonus[0] = NULL;
+	bonus[0]=NULL;
 	bonus[BONUS_BOMB_RANGE_INC] = image_load(IMG_BONUS_BOMB_RANGE_INC);
 	bonus[BONUS_BOMB_RANGE_DEC] = image_load(IMG_BONUS_BOMB_RANGE_DEC);
 	bonus[BONUS_BOMB_NB_INC] = image_load(IMG_BONUS_BOMB_NB_INC);
@@ -171,7 +170,7 @@ static void bonus_load() {
 }
 
 static void bonus_unload() {
-	for (int i = 0; i < NB_BONUS; i++)
+	for (int i = 0; i < 7; i++)
 		if(bonus[i])
 			SDL_FreeSurface(bonus[i]);
 }

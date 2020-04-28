@@ -36,23 +36,21 @@ enum bonus_type get_bonus_type(enum compose_type box){
 }
 
 
-void box_explo(struct map*map,struct bomb*bomb,struct player * player){ //uses for change the cell type when the box had a bonus at the end of the explo
+void box_explo(struct map * map,struct bomb * bomb,struct player * player){ 
 
   int x= bomb->x;
   int y= bomb->y;
   int range = player->bombrange;
 
-
-
   for (int i=1;i<range+1;i++){
 
-        if (map_get_cell_type(map,x+i,y) == CELL_BOX && x+i<map_get_width(map)){
-            bonus_config(map,x+i,y);
-            display_bonus_explo(map,x+i,y);
+        if (map_get_cell_type(map,x+i,y) == CELL_BOX){
+          bonus_config(map,x+i,y);
+          display_bonus_explo(map,x+i,y);
         }
         if (map_get_cell_type(map,x-i,y) == CELL_BOX){
-            bonus_config(map,x-i,y);
-            display_bonus_explo(map,x-i,y);
+          bonus_config(map,x-i,y);
+          display_bonus_explo(map,x-i,y);
         }
         if (map_get_cell_type(map,x,y+i) == CELL_BOX ){
           bonus_config(map,x,y+i);
