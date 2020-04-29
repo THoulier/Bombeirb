@@ -68,7 +68,30 @@ void listbomb_refresh(struct player *player,struct map* map){
       box_explo(map,listbomb->first,player);
       explo_display(listbomb->first,player,map);
 
+    }else {
+    int range = player->bombrange;
+    for(int i=1;i<=range;i++){
+      if(listbomb->first->x+i<=map_get_width(map)){
+        if(map_get_cell_type(map,listbomb->first->x+1,listbomb->first->y)==CELL_EXPLOSION){
+          map_set_cell_type(map,listbomb->first->x+1,listbomb->first->y,CELL_EMPTY);}
+      }      
+      if(listbomb->first->x-i>=0){
+        if(map_get_cell_type(map,listbomb->first->x-1,listbomb->first->y)==CELL_EXPLOSION){
+          map_set_cell_type(map,listbomb->first->x-1,listbomb->first->y,CELL_EMPTY);}
+      }
+      if(listbomb->first->y+i<=map_get_height(map)){
+        if(map_get_cell_type(map,listbomb->first->x,listbomb->first->y+1)==CELL_EXPLOSION){
+          map_set_cell_type(map,listbomb->first->x,listbomb->first->y+1,CELL_EMPTY);}
+      }
+      if(listbomb->first->y-i>=0){
+        if(map_get_cell_type(map,listbomb->first->x,listbomb->first->y-1)==CELL_EXPLOSION){
+          map_set_cell_type(map,listbomb->first->x,listbomb->first->y-1,CELL_EMPTY);}
+      }
     }
+    map_set_cell_type(map,listbomb->first->x,listbomb->first->y,CELL_EMPTY);
+  }
+    
+
 
     listbomb=listbomb->next;
 
@@ -76,7 +99,8 @@ void listbomb_refresh(struct player *player,struct map* map){
 
 
   }
-}
+  }
+
 
 struct bomb * bomb_init(int x, int y){ //fct to create a new bomb
   struct bomb * bomb=malloc(sizeof(*bomb));
@@ -111,8 +135,8 @@ int bomb_start(struct bomb *bomb,struct map* map,struct player*player){
     bomb->etat=4;
 
   }
-
-  /*else if ((current_time-time)<4600){
+/*
+  else if ((current_time-time)<4600){
     int range = player->bombrange;
     for(int i=1;i<=range;i++){
       if(bomb->x+i<map_get_width(map)){
@@ -155,26 +179,18 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
   int y=bomb->y;
   int range=player->bombrange;
   int i;
-  int block_west = 0;
-  int block_east = 0;
-  int block_north = 0;
-  int block_south = 0;
 
   explos(map,x,y);
 
   for(i=1;i<=range;i++){
-    if(x+i<map_get_width(map)){
-      if (block_east == 0){
-      explos(map,x+i,y);}}
+    if(x+i<=map_get_width(map)){
+      explos(map,x+i,y);}
     if(x-i>=0){
-      if (block_west == 0){
-      explos(map,x-i,y);}}
-    if(y+i<map_get_height(map)){
-      if (block_north == 0){
-      explos(map,x,y+i);}}
+      explos(map,x-i,y);}
+    if(y+i<=map_get_height(map)){
+      explos(map,x,y+i);}
     if(y-i>=0){
-      if (block_south == 0){
-      explos(map,x,y-i);}}
+      explos(map,x,y-i);}
 }
 }
 
@@ -193,7 +209,7 @@ void explos(struct map* map,int x,int y){
           map_set_cell_type(map,x,y,CELL_EXPLOSION);
           break;
         case CELL_EXPLOSION:
-          window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
+          //window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
           break;
 
         default:

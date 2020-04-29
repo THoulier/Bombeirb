@@ -155,7 +155,6 @@ void map_display(struct map* map)
 {
 	assert(map != NULL);
 	assert(map->height > 0 && map->width > 0);
-
 	int x, y;
 	for (int i = 0; i < map->width; i++) {
 	  for (int j = 0; j < map->height; j++) {
@@ -187,6 +186,9 @@ void map_display(struct map* map)
 	        break;
 
 		case CELL_EXPLOSION:
+          	window_display_image(sprite_get_explo(),x, y);
+
+
 
 			break;
 
