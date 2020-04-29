@@ -16,16 +16,12 @@
 
 
 void bonus_config(struct map *map,int x, int y){
-    enum compose_type box=bonus_set_type();
+    srand(time(NULL));
+    int ale=rand()%7;
+    enum bonus_type box=ale;
     map_set_cell_type(map,x,y,get_compose_type(box));
 }
 
-
-enum bonus_type bonus_set_type(){
-    srand(time(NULL));
-    int ale=rand()%7;
-    return ale;
-}
 
 enum compose_type get_compose_type(enum bonus_type bonus){
     return CELL_BOX|bonus;
@@ -41,7 +37,10 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
   int x= bomb->x;
   int y= bomb->y;
   int range = player->bombrange;
-
+  if (map_get_cell_type(map,x,y) == CELL_BOX){
+    bonus_config(map,x,y);
+    display_bonus_explo(map,x,y);
+  }
   for (int i=1;i<range+1;i++){
 
         if (map_get_cell_type(map,x+i,y) == CELL_BOX){

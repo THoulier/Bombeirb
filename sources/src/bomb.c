@@ -20,7 +20,7 @@ void listbomb_init() {
 
 void bomb_insertion(int x, int y, struct map *map){
   struct bomb *bomb = bomb_init(x,y);
-  map_set_cell_type(map,x,y,CELL_BOMB);
+  //map_set_cell_type(map,x,y,CELL_BOMB);
   if (list == NULL) {
     list = malloc(sizeof(*list));
     list->first = bomb;
@@ -66,6 +66,8 @@ void listbomb_refresh(struct player *player,struct map* map){
 			}
     if (bomb_start(listbomb->first,map,player) && listbomb->first->etat==4){
       box_explo(map,listbomb->first,player);
+      explo_display(listbomb->first,player,map);
+
     }
 
     listbomb=listbomb->next;
@@ -106,24 +108,32 @@ int bomb_start(struct bomb *bomb,struct map* map,struct player*player){
 
   }
   else if ((current_time-time)<4500){
-    explo_display(bomb,player,map);
     bomb->etat=4;
 
   }
 
-  else if ((current_time-time)<4600){
-
-  if(map_get_cell_type(map,bomb->x+1,bomb->y)==CELL_EXPLOSION){
-    map_set_cell_type(map,bomb->x+1,bomb->y,CELL_EMPTY);}
-  if(map_get_cell_type(map,bomb->x-1,bomb->y)==CELL_EXPLOSION){
-    map_set_cell_type(map,bomb->x-1,bomb->y,CELL_EMPTY);}
+  /*else if ((current_time-time)<4600){
+    int range = player->bombrange;
+    for(int i=1;i<=range;i++){
+      if(bomb->x+i<map_get_width(map)){
+        if(map_get_cell_type(map,bomb->x+1,bomb->y)==CELL_EXPLOSION){
+          map_set_cell_type(map,bomb->x+1,bomb->y,CELL_EMPTY);}
+      }      
+      if(bomb->x-i>=0){
+        if(map_get_cell_type(map,bomb->x-1,bomb->y)==CELL_EXPLOSION){
+          map_set_cell_type(map,bomb->x-1,bomb->y,CELL_EMPTY);}
+      }
+      if(bomb->y+i<map_get_height(map)){
+        if(map_get_cell_type(map,bomb->x,bomb->y+1)==CELL_EXPLOSION){
+          map_set_cell_type(map,bomb->x,bomb->y+1,CELL_EMPTY);}
+      }
+      if(bomb->y-i>=0){
+        if(map_get_cell_type(map,bomb->x,bomb->y-1)==CELL_EXPLOSION){
+          map_set_cell_type(map,bomb->x,bomb->y-1,CELL_EMPTY);}
+      }
+    }
     map_set_cell_type(map,bomb->x,bomb->y,CELL_EMPTY);
-  if(map_get_cell_type(map,bomb->x,bomb->y+1)==CELL_EXPLOSION){
-    map_set_cell_type(map,bomb->x,bomb->y+1,CELL_EMPTY);}
-  if(map_get_cell_type(map,bomb->x,bomb->y-1)==CELL_EXPLOSION){
-    map_set_cell_type(map,bomb->x,bomb->y-1,CELL_EMPTY);}
-
-  }
+  }*/
   else{
     return 0;
   }
@@ -150,25 +160,20 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
   int block_north = 0;
   int block_south = 0;
 
+  explos(map,x,y);
 
   for(i=1;i<=range;i++){
     if(x+i<map_get_width(map)){
       if (block_east == 0){
-      block_east = box_is_blocking(map,x+i,y);
       explos(map,x+i,y);}}
-    if(x>=0){
-      explos(map,x,y);}
     if(x-i>=0){
       if (block_west == 0){
-      block_west = box_is_blocking(map,x-i,y);
       explos(map,x-i,y);}}
     if(y+i<map_get_height(map)){
       if (block_north == 0){
-      block_north = box_is_blocking(map,x,y+i);
       explos(map,x,y+i);}}
     if(y-i>=0){
       if (block_south == 0){
-      block_south = box_is_blocking(map,x,y-i);
       explos(map,x,y-i);}}
 }
 }
@@ -176,12 +181,11 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
 void explos(struct map* map,int x,int y){
 
   switch(map_get_cell_type(map,x,y)){
-        case CELL_BOX:
-          map_set_compose_cell_type(map,x*SIZE_BLOC,y*SIZE_BLOC,CELL_EXPLOSION|get_bonus_type(map_get_compose_type(map,x,y)));
-          window_display_image(sprite_get_explo(), x*SIZE_BLOC, y*SIZE_BLOC);
+        case CELL_BONUS:
+          window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
+          //map_set_compose_cell_type(map,x*SIZE_BLOC,y*SIZE_BLOC,CELL_BONUS|get_bonus_type(map_get_compose_type(map,x,y)));
         break;
         case CELL_EMPTY:
-
           map_set_cell_type(map,x,y,CELL_EXPLOSION);
         break;
 
@@ -191,11 +195,9 @@ void explos(struct map* map,int x,int y){
         case CELL_EXPLOSION:
           window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
           break;
-          case CELL_SCENERY:
 
-        break;
         default:
-        window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
+          //window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
 
           break;
 
@@ -204,16 +206,4 @@ void explos(struct map* map,int x,int y){
 
 
 }
-int box_is_blocking(struct map* map,int x,int y){
-  int is_blocking = 0;
-  switch(map_get_cell_type(map,x,y)){
-        case CELL_BOX:
-        is_blocking = 1;
-        break;
-        
-        default:
-          break;
 
-  }
-  return is_blocking;
-}

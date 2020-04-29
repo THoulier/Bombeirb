@@ -149,9 +149,11 @@ void game_display(struct game* game) {
 		int current_time = SDL_GetTicks();
 		if(map_get_cell_type(map,player->x,player->y)==CELL_EXPLOSION && player->lives>0){
 			if ((current_time - game->player->contact) > 1000){
-		player_dec_nb_lives(player);
-		game->player->dmg_tmp=29;
-	 	game->player->contact= SDL_GetTicks();}}
+				player_dec_nb_lives(player);
+				game->player->dmg_tmp=29;
+		 	}
+			game->player->contact= SDL_GetTicks();
+		}
 
 
 	listbomb_refresh(player,map);

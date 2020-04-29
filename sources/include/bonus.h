@@ -2,7 +2,6 @@
 #include <bomb.h>
 
 
-enum bonus_type bonus_set_type();
 enum compose_type get_compose_type();
 void box_explo(struct map * map, struct bomb * bomb, struct player * player);
 
