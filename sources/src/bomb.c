@@ -68,29 +68,8 @@ void listbomb_refresh(struct player *player,struct map* map){
       box_explo(map,listbomb->first,player);
       explo_display(listbomb->first,player,map);
 
-    }else {
-    int range = player->bombrange;
-    for(int i=1;i<=range;i++){
-      if(listbomb->first->x+i<=map_get_width(map)){
-        if(map_get_cell_type(map,listbomb->first->x+1,listbomb->first->y)==CELL_EXPLOSION){
-          map_set_cell_type(map,listbomb->first->x+1,listbomb->first->y,CELL_EMPTY);}
-      }      
-      if(listbomb->first->x-i>=0){
-        if(map_get_cell_type(map,listbomb->first->x-1,listbomb->first->y)==CELL_EXPLOSION){
-          map_set_cell_type(map,listbomb->first->x-1,listbomb->first->y,CELL_EMPTY);}
-      }
-      if(listbomb->first->y+i<=map_get_height(map)){
-        if(map_get_cell_type(map,listbomb->first->x,listbomb->first->y+1)==CELL_EXPLOSION){
-          map_set_cell_type(map,listbomb->first->x,listbomb->first->y+1,CELL_EMPTY);}
-      }
-      if(listbomb->first->y-i>=0){
-        if(map_get_cell_type(map,listbomb->first->x,listbomb->first->y-1)==CELL_EXPLOSION){
-          map_set_cell_type(map,listbomb->first->x,listbomb->first->y-1,CELL_EMPTY);}
-      }
     }
-    map_set_cell_type(map,listbomb->first->x,listbomb->first->y,CELL_EMPTY);
-  }
-    
+
 
 
     listbomb=listbomb->next;
@@ -139,21 +118,21 @@ int bomb_start(struct bomb *bomb,struct map* map,struct player*player){
   else if ((current_time-time)<4600){
     int range = player->bombrange;
     for(int i=1;i<=range;i++){
-      if(bomb->x+i<map_get_width(map)){
-        if(map_get_cell_type(map,bomb->x+1,bomb->y)==CELL_EXPLOSION){
-          map_set_cell_type(map,bomb->x+1,bomb->y,CELL_EMPTY);}
+      if(bomb->x+i<=map_get_width(map)){
+        if(map_get_cell_type(map,bomb->x+i,bomb->y)==CELL_EXPLOSION){
+          map_set_cell_type(map,bomb->x+i,bomb->y,CELL_EMPTY);}
       }      
       if(bomb->x-i>=0){
-        if(map_get_cell_type(map,bomb->x-1,bomb->y)==CELL_EXPLOSION){
-          map_set_cell_type(map,bomb->x-1,bomb->y,CELL_EMPTY);}
+        if(map_get_cell_type(map,bomb->x-i,bomb->y)==CELL_EXPLOSION){
+          map_set_cell_type(map,bomb->x-i,bomb->y,CELL_EMPTY);}
       }
-      if(bomb->y+i<map_get_height(map)){
-        if(map_get_cell_type(map,bomb->x,bomb->y+1)==CELL_EXPLOSION){
-          map_set_cell_type(map,bomb->x,bomb->y+1,CELL_EMPTY);}
+      if(bomb->y+i<=map_get_height(map)){
+        if(map_get_cell_type(map,bomb->x,bomb->y+i)==CELL_EXPLOSION){
+          map_set_cell_type(map,bomb->x,bomb->y+i,CELL_EMPTY);}
       }
       if(bomb->y-i>=0){
-        if(map_get_cell_type(map,bomb->x,bomb->y-1)==CELL_EXPLOSION){
-          map_set_cell_type(map,bomb->x,bomb->y-1,CELL_EMPTY);}
+        if(map_get_cell_type(map,bomb->x,bomb->y-i)==CELL_EXPLOSION){
+          map_set_cell_type(map,bomb->x,bomb->y-i,CELL_EMPTY);}
       }
     }
     map_set_cell_type(map,bomb->x,bomb->y,CELL_EMPTY);
@@ -223,3 +202,13 @@ void explos(struct map* map,int x,int y){
 
 }
 
+
+void listbomb_pause(int time_pause){
+  struct listbomb *listbomb=list;
+
+  while (listbomb!=NULL){
+    listbomb->first->time=listbomb->first->time+time_pause;
+    listbomb=listbomb->next;
+  }
+
+}

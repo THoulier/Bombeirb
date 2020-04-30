@@ -30,4 +30,5 @@ SDL_Surface* sprite_get_bomb(enum etats);
 SDL_Surface* sprite_get_explo();
 SDL_Surface* sprite_get_banner_key();
 SDL_Surface* sprite_get_banner_flag();
+SDL_Surface* sprite_get_gameover();
 #endif /* SPRITE_H_ */

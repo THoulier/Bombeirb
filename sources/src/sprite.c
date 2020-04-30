@@ -208,6 +208,10 @@ static void monster_unload() {
 static void explo_load() {
 	explo = image_load(explosion);
 }
+static void game_over_load() {
+	gameover = image_load(GAMEOVER);
+}
+
 
 void sprite_load() {
 	map_load();
@@ -218,6 +222,7 @@ void sprite_load() {
 	bomb_load();
 	gameover_load();
 	explo_load();
+	game_over_load();
 }
 
 void sprite_free() {
@@ -315,3 +320,5 @@ SDL_Surface* sprite_get_explo() {
 	assert(explo);
 	return explo;
 }
+
+

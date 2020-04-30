@@ -160,7 +160,9 @@ void game_display(struct game* game) {
 	if(map_get_cell_type(map,player->x,player->y)==CELL_BONUS) {
 		player_get_bonus(player,map);
 	}
-
+	if (game->player->lives<1){ 
+		window_display_image(sprite_get_gameover(),map_get_width(map),map_get_height(map));
+	}
 	window_refresh();
 }
 
@@ -177,10 +179,12 @@ static short input_keyboard(struct game* game) {
 			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
 				return 1;
-			case SDLK_x:
+			case SDLK_o:
 				game_door(game);
 			break;
-
+			case SDLK_p: 
+				return (game_pause(game));
+				break;
 			case SDLK_UP:
 				player_set_current_way(player, NORTH);
 				player_move(player, map);
@@ -214,12 +218,7 @@ static short input_keyboard(struct game* game) {
 	return 0;
 }
 
-int game_update(struct game* game) {
-	if (input_keyboard(game))
-		return 1; // exit game
 
-	return 0;
-}
 
 
 void game_change_map(struct game* game,int nummap, int x, int y) { 
@@ -299,4 +298,45 @@ void game_door(struct game* game) {
 		}
 	}
 }
+
+
+int game_update(struct game* game) {
+	if (input_keyboard(game))
+		return 1; // exit game
+	if (game->player->lives<1){ 
+			return 1; // exit game
+	}
+/*
+	if (game->player->level==4){ 
+			printf("you win");
+
+			return 1;} */
+	return 0;
+}
+
+int game_pause(struct game *game ){
+	int pause=1;
+	int time= SDL_GetTicks();
+	SDL_Event event;
+	while (pause){
+		SDL_WaitEvent(&event);
+		switch (event.type){
+
+			case SDL_KEYDOWN:
+				switch (event.key.keysym.sym){
+					case SDLK_p:
+						listbomb_pause(SDL_GetTicks()-time);
+						pause=0;
+						return 0;
+						break;
+					default:
+						break;
+				}
+			default:
+			break;
+		}
+	}
+	return 0;
+}
+
 
