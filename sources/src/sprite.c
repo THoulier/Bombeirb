@@ -56,12 +56,15 @@
 #define PLAYER_RIGHT    "sprite/player_right.png"
 #define PLAYER_DOWN     "sprite/player_down.png"
 
+
 // Sprites of Monsters
 #define MONSTER_LEFT	"sprite/monster_left.png"
 #define MONSTER_UP		"sprite/monster_up.png"
 #define MONSTER_RIGHT	"sprite/monster_right.png"
 #define MONSTER_DOWN	"sprite/monster_down.png"
 
+#define PRINCESS "sprite/bomberwoman.png"
+#define YOUWIN "sprite/youwin.png"
 #define GAMEOVER "sprite/gameover.png"
 // banner
 SDL_Surface* numbers[10];
@@ -87,6 +90,9 @@ SDL_Surface* bomb3;
 SDL_Surface* bomb4;
 SDL_Surface* gameover;
 SDL_Surface* explo;
+SDL_Surface* bomberwoman;
+SDL_Surface* youwin;
+
 
 
 
@@ -145,7 +151,7 @@ static void map_load() {
 	stone = image_load(MAP_STONE);
 	door_opened = image_load(MAP_DOOR_OPENED);
 	door_closed = image_load(MAP_DOOR_CLOSED);
-
+	bomberwoman = image_load(PRINCESS);
 
 }
 
@@ -156,6 +162,7 @@ static void map_unload() {
 	SDL_FreeSurface(stone);
 	SDL_FreeSurface(door_opened);
 	SDL_FreeSurface(door_closed);
+	SDL_FreeSurface(bomberwoman);
 }
 
 static void bonus_load() {
@@ -189,6 +196,9 @@ static void player_load() {
 static void gameover_load() {
 	gameover = image_load(GAMEOVER);
 }
+static void youwin_load() {
+	youwin = image_load(YOUWIN);
+}
 
 static void monster_load() {
 	monster_img[WEST] = image_load(MONSTER_LEFT);
@@ -208,9 +218,7 @@ static void monster_unload() {
 static void explo_load() {
 	explo = image_load(explosion);
 }
-static void game_over_load() {
-	gameover = image_load(GAMEOVER);
-}
+
 
 
 void sprite_load() {
@@ -222,7 +230,7 @@ void sprite_load() {
 	bomb_load();
 	gameover_load();
 	explo_load();
-	game_over_load();
+	youwin_load();
 }
 
 void sprite_free() {
@@ -319,6 +327,16 @@ SDL_Surface* sprite_get_door_closed() {
 SDL_Surface* sprite_get_explo() {
 	assert(explo);
 	return explo;
+}
+
+SDL_Surface* sprite_get_princess() {
+	assert(bomberwoman);
+	return bomberwoman;
+}
+
+SDL_Surface* sprite_get_youwin() {
+	assert(youwin);
+	return youwin;
 }
 
 

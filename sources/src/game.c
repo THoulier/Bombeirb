@@ -161,7 +161,13 @@ void game_display(struct game* game) {
 		player_get_bonus(player,map);
 	}
 	if (game->player->lives<1){ 
-		window_display_image(sprite_get_gameover(),map_get_width(map),map_get_height(map));
+		//window_resize(12*SIZE_BLOC,12*SIZE_BLOC);
+		window_display_image(sprite_get_gameover(),0,0);
+
+	}
+	if (map_get_compose_type(map,player->x,player->y)==CELL_PRINCESS){
+		//window_resize(512,473);
+		window_display_image(sprite_get_youwin(),0,0);
 	}
 	window_refresh();
 }
@@ -303,14 +309,10 @@ void game_door(struct game* game) {
 int game_update(struct game* game) {
 	if (input_keyboard(game))
 		return 1; // exit game
-	if (game->player->lives<1){ 
-			return 1; // exit game
-	}
-/*
-	if (game->player->level==4){ 
-			printf("you win");
+	if (map_get_compose_type(game->maps[game->level],game->player->x,game->player->y)==CELL_PRINCESS){
+		//return 1;
 
-			return 1;} */
+	}
 	return 0;
 }
 
@@ -338,5 +340,7 @@ int game_pause(struct game *game ){
 	}
 	return 0;
 }
+
+
 
 

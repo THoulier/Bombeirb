@@ -123,7 +123,11 @@ static int player_move_aux(struct player* player, struct map* map, int x, int y)
 
 	switch (map_get_cell_type(map, x, y)) {
 	case CELL_SCENERY:
-		return 0;
+		if (map_get_compose_type(map,x,y)==CELL_PRINCESS){
+			return 1;
+		}else{
+			return 0;
+		}
 		break;
 
 	case CELL_BOX:
