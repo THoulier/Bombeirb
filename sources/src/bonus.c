@@ -65,13 +65,14 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
 
 void display_bonus_explo(struct map *map,int x,int y){
   enum bonus_type bonus=get_bonus_type(map_get_compose_type(map,x,y));
-
-
   if (bonus==0){
     map_set_cell_type(map,x,y,CELL_EMPTY);
-   }
-   else {
-
+  }
+  else if (bonus==5){
+    map_set_cell_type(map,x,y,CELL_BONUS|bonus);
+    //monster_append(game->monster,)
+  }
+  else {
     map_set_cell_type(map,x,y,CELL_BONUS|bonus);
   }
 

@@ -24,13 +24,11 @@ game_new(void) {
 
 	struct game* game = malloc(sizeof(*game));
 	game->maps = malloc(sizeof(struct game));
-	//game->maps[0] = get_map ("map/map_2");
 	game->levels = 5;
 	game->maps[0] = map_get_static();
 	for (int nummap=1; nummap<game->levels; nummap++){
 		game->maps[nummap] = get_map(nummap);
 	}
-	//game->maps[1] = get_map ("map/map_1");
 
 	//struct listbomb *list=NULL;
 //	listbomb_init();
@@ -309,8 +307,11 @@ void game_door(struct game* game) {
 int game_update(struct game* game) {
 	if (input_keyboard(game))
 		return 1; // exit game
+	if (game->player->lives<1){
+		return game_end(game);
+	}
 	if (map_get_compose_type(game->maps[game->level],game->player->x,game->player->y)==CELL_PRINCESS){
-		//return 1;
+		return game_end(game);
 
 	}
 	return 0;
@@ -334,6 +335,7 @@ int game_pause(struct game *game ){
 					default:
 						break;
 				}
+			break;
 			default:
 			break;
 		}
@@ -341,6 +343,27 @@ int game_pause(struct game *game ){
 	return 0;
 }
 
+
+
+
+int game_end(struct game *game ){
+	SDL_Event event;
+	SDL_WaitEvent(&event);
+		switch (event.type){
+
+			case SDL_KEYDOWN:
+				if ( event.key.keysym.sym == SDLK_ESCAPE ){
+						return 1;
+				}
+			break;
+			default:
+			
+			break;
+		}
+	
+	
+	return 0;
+}
 
 
 
