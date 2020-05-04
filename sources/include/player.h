@@ -44,7 +44,7 @@ void player_inc_range(struct player*player);
 void player_dec_range(struct player*player);
 void player_get_bonus(struct player*player, struct map*map);
 int player_get_bombrange(struct player*player);
-
+int player_get_level(struct player*player);
 // Move the player according to the current direction
 int player_move(struct player* player, struct map* map);
 void player_inc_nb_lives(struct player* player);

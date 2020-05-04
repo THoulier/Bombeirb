@@ -116,6 +116,11 @@ void player_dec_range(struct player*player){
 	player->bombrange-=1;
 }
 
+int player_get_level(struct player*player){
+	assert(player);
+	return player->level;
+}
+
 static int player_move_aux(struct player* player, struct map* map, int x, int y) {
 
 	if (!map_is_inside(map, x, y))

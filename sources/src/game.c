@@ -26,18 +26,20 @@ game_new(void) {
 	game->maps = malloc(sizeof(struct game));
 	game->levels = 5;
 	game->maps[0] = map_get_static();
+	//listmonster_init(game_get_current_map(game),0);
+
 	for (int nummap=1; nummap<game->levels; nummap++){
 		game->maps[nummap] = get_map(nummap);
+		//listmonster_init(game_get_current_map(game),nummap);
+
 	}
 
 	//struct listbomb *list=NULL;
 //	listbomb_init();
-
 	game->level = 0;
-	game->monster=NULL;
-
+	//game->monster=NULL;
 	game->player = player_init(5,6);
-	game->monster=cell_monster_map(game->monster, game_get_current_map(game));
+	//game->monster=cell_monster_map(game->monster, game_get_current_map(game));
 	// Set default location of the player
 	player_set_position(game->player, 1, 0);
 	//map_bonus_init(game->maps[game->level]);
@@ -121,7 +123,7 @@ void game_display(struct game* game) {
 	map_display(game_get_current_map(game));
 
 	player_display(game->player);
-
+/*
 	struct monster*tmp=game->monster;
 	while (tmp!=NULL){
 		if(map_get_cell_type(game_get_current_map(game),tmp->x,tmp->y)==CELL_EXPLOSION)
@@ -144,6 +146,7 @@ void game_display(struct game* game) {
 
 		tmp=tmp->next;}
 		free(tmp);
+		*/
 		int current_time = SDL_GetTicks();
 		if(map_get_cell_type(map,player->x,player->y)==CELL_EXPLOSION && player->lives>0){
 			if ((current_time - game->player->contact) > 1000){
@@ -153,7 +156,7 @@ void game_display(struct game* game) {
 			game->player->contact= SDL_GetTicks();
 		}
 
-
+	listmonster_refresh(game,player);
 	listbomb_refresh(player,map);
 	if(map_get_cell_type(map,player->x,player->y)==CELL_BONUS) {
 		player_get_bonus(player,map);
@@ -365,5 +368,15 @@ int game_end(struct game *game ){
 	return 0;
 }
 
+struct map* game_get_nummap(struct game* game,int nummap){
+	assert(game);
+	return game->maps[nummap];
+}
+
+
+int game_get_level(struct game* game) {
+	assert(game);
+	return game->level;
+}
 
 

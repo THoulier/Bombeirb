@@ -12,4 +12,4 @@ void bonus_config(struct map *map,int x, int y);
 
 
 
-void display_bonus_explo(struct map *map, int x, int y);
+void display_bonus_explo(struct map *map, int x, int y,int nummap);

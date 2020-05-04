@@ -223,6 +223,7 @@ struct map* map_get_static(void)
 
 	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)
 		map->grid[i] = themap[i];
+	listmonster_init(map,0);
 
 	return map;
 }
@@ -243,6 +244,8 @@ struct map* get_map (int nummap){
 		fscanf(ptr,"%d", &valeur);
 		map->grid[i+j*width]=valeur;
 	}}
+	listmonster_init(map,nummap);
+
 	return map;
 }
 
@@ -251,9 +254,7 @@ char * map_init(int nummap) {
     char *path;
       switch (nummap)
       {
-        case 0: 
-			path="map/map_0"; 
-		break;
+
         case 1: 
 			path="map/map_1"; 
 		break;
