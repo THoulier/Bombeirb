@@ -13,11 +13,10 @@
 
 
 
-void fileMonsterSave(int x,int y,enum direction direction,int nummap) //fct to add one bomb to the .txt, needs the number of bomb
-{
+void fileMonsterSave(int x,int y,enum direction direction,int nummap){
   char *path="save/listmonster";
   FILE* fichierTmp = NULL;
-  fichierTmp = fopen(path, "a"); // ouverture en mode ajout
+  fichierTmp = fopen(path, "a"); 
 
   if (fichierTmp != NULL){
     fprintf(fichierTmp,"%u %u %u %u ",x,y,direction,nummap);
@@ -26,11 +25,10 @@ void fileMonsterSave(int x,int y,enum direction direction,int nummap) //fct to a
   }
 }
 
-void fileNbMonsterSave(int nbMonster)
-{
+void fileNbMonsterSave(int nbMonster){
   char *path="save/listmonster";
   FILE* fichierTmp = NULL;
-  fichierTmp = fopen(path, "w+"); // ouverture en mode ajout
+  fichierTmp = fopen(path, "w+"); 
 
   if (fichierTmp != NULL){
     fprintf(fichierTmp,"%u ",nbMonster);
