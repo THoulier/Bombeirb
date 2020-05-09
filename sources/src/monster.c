@@ -8,6 +8,8 @@
 #include <sprite.h>
 #include <monster.h>
 #include <game.h>
+#include <save.h>
+
 
 struct listmonster{
   struct monster *monster;
@@ -287,6 +289,36 @@ void monster_display(struct game*game,struct monster* monster) {
 			window_display_image(sprite_get_monster(monster->direction),monster->x * SIZE_BLOC, monster->y * SIZE_BLOC);
 		}
 	}
+}
+
+
+
+
+void listmonster_save(){
+  int nbMonster=0;
+  struct listmonster *listmonster=first;
+  while(listmonster){
+    nbMonster=nbMonster+1;
+    listmonster=listmonster->next;
+  }
+
+  fileNbMonsterSave(nbMonster);
+  listmonster=first;
+  struct monster*monster;
+  int nummap;
+  int x;
+  int y;
+  enum direction direction;
+
+  while(listmonster){
+    monster=listmonster->monster;
+    nummap=monster->nummap;
+    x=monster->x;
+    y=monster->y;
+    direction=monster->direction;
+    fileMonsterSave(x,y,direction,nummap);
+    listmonster=listmonster->next;
+  }
 }
 
 

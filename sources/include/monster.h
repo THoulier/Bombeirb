@@ -32,4 +32,5 @@ void monster_display(struct game * game,struct monster* monster);
 struct monster* cell_monster_map(struct monster* monster, struct map* map);
 //struct monster* kill_monster(struct monster* monster,struct monster* tmp);
 void monster_kill(struct monster *monster);
+void listmonster_save();
 #endif

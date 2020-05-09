@@ -13,6 +13,8 @@
 #include <bomb.h>
 #include <constant.h>
 #include <bonus.h>
+#include <save.h>
+
 
  
 
@@ -185,6 +187,7 @@ static short input_keyboard(struct game* game) {
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
+				listmonster_save();
 				return 1;
 			case SDLK_o:
 				game_door(game);
