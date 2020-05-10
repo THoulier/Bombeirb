@@ -16,6 +16,10 @@ struct monster{
 	//struct monster* next;
 	//struct monster* prev;
 };
+struct listmonster{
+  struct monster *monster;
+  struct listmonster *next;
+};
 void listmonster_refresh(struct game*game,struct player*player);
 
 void listmonster_init(struct map*map,int nummap);
@@ -33,4 +37,5 @@ struct monster* cell_monster_map(struct monster* monster, struct map* map);
 //struct monster* kill_monster(struct monster* monster,struct monster* tmp);
 void monster_kill(struct monster *monster);
 void listmonster_save();
+int listmonster_get_length(struct listmonster * listmonster);
 #endif

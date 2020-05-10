@@ -11,10 +11,7 @@
 #include <save.h>
 
 
-struct listmonster{
-  struct monster *monster;
-  struct listmonster *next;
-};
+
 
 
 struct listmonster *first=NULL;
@@ -291,34 +288,26 @@ void monster_display(struct game*game,struct monster* monster) {
 	}
 }
 
-
+int listmonster_get_length(struct listmonster * listmonster){
+	int nummonster=0;
+	listmonster=first;
+	while(listmonster->next != NULL){
+		nummonster +=1;
+		listmonster=listmonster->next;
+	}
+	return nummonster;
+}
 
 
 void listmonster_save(){
-  int nbMonster=0;
-  struct listmonster *listmonster=first;
-  while(listmonster){
-    nbMonster=nbMonster+1;
-    listmonster=listmonster->next;
-  }
+	struct listmonster *listmonster=first;
+	save_nummonster(listmonster_get_length(listmonster));
 
-  fileNbMonsterSave(nbMonster);
-  listmonster=first;
-  struct monster*monster;
-  int nummap;
-  int x;
-  int y;
-  enum direction direction;
+	while(listmonster->next != NULL){
+		save_monster(listmonster->monster->x,listmonster->monster->y,listmonster->monster->direction,listmonster->monster->nummap);
+		listmonster=listmonster->next;
+	}
 
-  while(listmonster){
-    monster=listmonster->monster;
-    nummap=monster->nummap;
-    x=monster->x;
-    y=monster->y;
-    direction=monster->direction;
-    fileMonsterSave(x,y,direction,nummap);
-    listmonster=listmonster->next;
-  }
 }
 
 

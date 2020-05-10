@@ -13,26 +13,26 @@
 
 
 
-void fileMonsterSave(int x,int y,enum direction direction,int nummap){
+void save_monster(int x,int y,enum direction direction,int nummap){
   char *path="save/listmonster";
-  FILE* fichierTmp = NULL;
-  fichierTmp = fopen(path, "a"); 
+  FILE* file = NULL;
+  file = fopen(path, "a"); 
 
-  if (fichierTmp != NULL){
-    fprintf(fichierTmp,"%u %u %u %u ",x,y,direction,nummap);
-    fprintf(fichierTmp,"\n");
-    fclose(fichierTmp);
+  if (file != NULL){
+    fprintf(file,"%u %u %u %u ",x,y,direction,nummap);
+    fprintf(file,"\n");
+    fclose(file);
   }
 }
 
-void fileNbMonsterSave(int nbMonster){
+void save_nummonster(int nummonster){
   char *path="save/listmonster";
-  FILE* fichierTmp = NULL;
-  fichierTmp = fopen(path, "w+"); 
+  FILE* file = NULL;
+  file = fopen(path, "w+"); 
 
-  if (fichierTmp != NULL){
-    fprintf(fichierTmp,"%u ",nbMonster);
-    fprintf(fichierTmp,"\n");
-    fclose(fichierTmp);
+  if (file != NULL){
+    fprintf(file,"%u ",nummonster);
+    fprintf(file,"\n");
+    fclose(file);
   }
 }

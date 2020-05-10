@@ -2,7 +2,7 @@
 
 
 
-void fileMonsterSave(int x,int y,enum direction direction,int nummap);
+void save_monster(int x,int y,enum direction direction,int nummap);
 
-void fileNbMonsterSave(int nbMonster);
+void save_nummonster(int nummonster);
 
