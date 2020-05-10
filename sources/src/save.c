@@ -11,13 +11,13 @@
 
 
 
-void save_bomb(int x,int y,enum etats etat/*,int nummap*/){
+void save_bomb(int x,int y,enum etats etat,int nummap, int range){
   char *path="save/listbomb";
   FILE* file = NULL;
   file = fopen(path, "a"); 
 
   if (file != NULL){
-    fprintf(file,"%u %u %u ",x,y,etat);
+    fprintf(file,"%u %u %u %u %u",x,y,etat,nummap,range);
     fprintf(file,"\n");
     fclose(file);
   }

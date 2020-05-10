@@ -274,7 +274,7 @@ void player_display(struct player* player) {
 void player_bomb(struct player* player, struct map* map) {
 
 	if (player->bombs!=0){
-				bomb_insertion(player->x,player->y,map);
+				bomb_insertion(player->x,player->y,player->bombrange,player->level);
 				player_dec_nb_bomb(player);
 			}
 		}

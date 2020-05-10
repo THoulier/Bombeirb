@@ -159,7 +159,7 @@ void game_display(struct game* game) {
 		}
 
 	listmonster_refresh(game,player);
-	listbomb_refresh(player,map);
+	listbomb_refresh(player,map,game);
 	if(map_get_cell_type(map,player->x,player->y)==CELL_BONUS) {
 		player_get_bonus(player,map);
 	}

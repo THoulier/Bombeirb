@@ -8,4 +8,4 @@ void save_nummonster(int nummonster);
 
 void save_numbomb(int numbomb);
 
-void save_bomb(int x,int y,enum etats etat/*,int nummap*/);
+void save_bomb(int x,int y,enum etats etat,int nummap, int range);

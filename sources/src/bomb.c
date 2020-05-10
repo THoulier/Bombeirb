@@ -14,80 +14,51 @@
 
 
 
-struct listbomb *list=NULL;
+struct listbomb *firstbomb=NULL;
 
 void listbomb_init() {
-  list = NULL;
+  firstbomb = NULL;
 }
 
-void bomb_insertion(int x, int y, struct map *map){
-  struct bomb *bomb = bomb_init(x,y);
-  //map_set_cell_type(map,x,y,CELL_BOMB);
-  if (list == NULL) {
-    list = malloc(sizeof(*list));
-    list->first = bomb;
-    list->next = NULL;
+void bomb_insertion(int x, int y, int range, int nummap){
+  struct bomb *bomb = bomb_init(x, y, range, nummap);
+  if (firstbomb == NULL) {
+    firstbomb = malloc(sizeof(*firstbomb));
+    firstbomb->bomb = bomb;
+    firstbomb->next = NULL;
     return;
   }
   struct listbomb *listbomb = malloc(sizeof(*listbomb));
-  listbomb->first=bomb;
-  listbomb->next=list;
-  list=listbomb;
+  listbomb->bomb=bomb;
+  listbomb->next=firstbomb;
+  firstbomb=listbomb;
 }
 
-// void bomb_sup(struct bomb*bomb){
-//   struct listbomb *prec;
-//   struct listbomb *suiv;
-//   struct listbomb *listbomb;
-//   listbomb=list;
-//   if (listbomb->first==bomb){
-//     list=listbomb->next;
-//   }
-//   else{
-//     while (listbomb!=NULL){
-//       if (listbomb->next->first==bomb){
-//         prec=listbomb;
-//         listbomb=listbomb->next;
-//         suiv=listbomb->next;
-//         listbomb=NULL;
-//             }
-//       else {
-//             listbomb=listbomb->next;
-//           }
-//           }
-//           prec->next=suiv;
-//         }
-//   free(bomb);
-// }
 
-void listbomb_refresh(struct player *player,struct map* map){
-  struct listbomb *listbomb=list;
+void listbomb_refresh(struct player *player,struct map* map, struct game * game){
+  struct listbomb *listbomb=firstbomb;
   while (listbomb!=NULL){
-    if (bomb_start(listbomb->first,map,player) && listbomb->first->etat!=4){
-			bomb_display(listbomb->first);
+    if (bomb_start(listbomb->bomb,map,player) && listbomb->bomb->etat!=4){
+			bomb_display(listbomb->bomb,game);
 			}
-    if (bomb_start(listbomb->first,map,player) && listbomb->first->etat==4){
-      box_explo(map,listbomb->first,player);
-      explo_display(listbomb->first,player,map);
+    if (bomb_start(listbomb->bomb,map,player) && listbomb->bomb->etat==4){
+      box_explo(map,listbomb->bomb,player);
+      explo_display(listbomb->bomb,player,map);
 
     }
-
-
-
     listbomb=listbomb->next;
 
-
-
-
   }
   }
 
 
-struct bomb * bomb_init(int x, int y){ //fct to create a new bomb
+struct bomb * bomb_init(int x, int y, int range, int nummap){ //fct to create a new bomb
   struct bomb * bomb=malloc(sizeof(*bomb));
   bomb->x=x;
   bomb->y=y;
   bomb->time=SDL_GetTicks();
+  bomb->range=range;
+  bomb->nummap=nummap;
   bomb->etat=3;
   return(bomb);
 }
@@ -147,11 +118,12 @@ int bomb_start(struct bomb *bomb,struct map* map,struct player*player){
 
 
 
-void bomb_display(struct bomb*bomb){
+void bomb_display(struct bomb*bomb, struct game *game){
   int x=bomb->x*SIZE_BLOC;
   int y=bomb->y*SIZE_BLOC;
-  window_display_image(sprite_get_bomb(bomb->etat), x, y);
-
+  if (bomb->nummap==game_get_level(game)){ 
+    window_display_image(sprite_get_bomb(bomb->etat), x, y);
+  }
 
 }
 
@@ -206,10 +178,10 @@ void explos(struct map* map,int x,int y){
 
 
 void listbomb_pause(int time_pause){
-  struct listbomb *listbomb=list;
+  struct listbomb *listbomb=firstbomb;
 
   while (listbomb!=NULL){
-    listbomb->first->time=listbomb->first->time+time_pause;
+    listbomb->bomb->time=listbomb->bomb->time+time_pause;
     listbomb=listbomb->next;
   }
 
@@ -217,7 +189,7 @@ void listbomb_pause(int time_pause){
 
 int listbomb_get_length(struct listbomb * listbomb){
 	int numbomb=0;
-	listbomb=list;
+	listbomb=firstbomb;
 	while(listbomb){
 		numbomb +=1;
 		listbomb=listbomb->next;
@@ -227,11 +199,11 @@ int listbomb_get_length(struct listbomb * listbomb){
 
 
 void listbomb_save(){
-  struct listbomb *listbomb=list;
+  struct listbomb *listbomb=firstbomb;
 	save_numbomb(listbomb_get_length(listbomb));
 
 	while(listbomb){
-		save_bomb(listbomb->first->x,listbomb->first->y,listbomb->first->etat/*,listbomb->first->nummap*/);
+		save_bomb(listbomb->bomb->x,listbomb->bomb->y,listbomb->bomb->etat,listbomb->bomb->nummap, listbomb->bomb->range);
 		listbomb=listbomb->next;
 	}
 

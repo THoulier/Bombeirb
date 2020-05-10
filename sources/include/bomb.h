@@ -13,23 +13,21 @@
 
 
 struct bomb{
-	int x, y, time ;
+	int x, y, time , nummap, range;
 	enum etats etat;
- 	//struct bomb * next;
 };
 
 struct listbomb {
-  struct bomb * first;
+  struct bomb * bomb;
   struct listbomb * next;
 };
 
-struct bomb * bomb_init(int x, int y);
+struct bomb * bomb_init(int x, int y, int range, int nummap);
 void listbomb_init();
-void bomb_insertion(int x, int y,struct map* map);
-void bomb_sup(struct bomb*bomb);
-void listbomb_refresh(struct player * player , struct map* map);
+void bomb_insertion(int x, int y, int range, int nummap);
+void listbomb_refresh(struct player * player , struct map* map, struct game * game);
 int bomb_start(struct bomb *bomb,struct map* map,struct player * player);
-void bomb_display(struct bomb*bomb);
+void bomb_display(struct bomb*bomb, struct game *game);
 void explo_display(struct bomb*bomb,struct player *player,struct map* map);
 void explos(struct map* map,int x ,int y);
 #endif
