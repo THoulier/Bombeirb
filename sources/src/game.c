@@ -188,6 +188,7 @@ static short input_keyboard(struct game* game) {
 			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
 				listmonster_save();
+				listbomb_save();
 				return 1;
 			case SDLK_o:
 				game_door(game);

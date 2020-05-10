@@ -11,6 +11,30 @@
 
 
 
+void save_bomb(int x,int y,enum etats etat/*,int nummap*/){
+  char *path="save/listbomb";
+  FILE* file = NULL;
+  file = fopen(path, "a"); 
+
+  if (file != NULL){
+    fprintf(file,"%u %u %u ",x,y,etat);
+    fprintf(file,"\n");
+    fclose(file);
+  }
+}
+
+void save_numbomb(int numbomb){
+  char *path="save/listbomb";
+  FILE* file = NULL;
+  file = fopen(path, "w+"); 
+
+  if (file != NULL){
+    fprintf(file,"%u ",numbomb);
+    fprintf(file,"\n");
+    fclose(file);
+  }
+}
+
 
 
 void save_monster(int x,int y,enum direction direction,int nummap){

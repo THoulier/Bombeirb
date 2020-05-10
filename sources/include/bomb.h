@@ -34,3 +34,5 @@ void explo_display(struct bomb*bomb,struct player *player,struct map* map);
 void explos(struct map* map,int x ,int y);
 #endif
 void listbomb_pause(int time_pause);
+void listbomb_save();
+int listbomb_get_length(struct listbomb * listbomb);

@@ -9,6 +9,8 @@
 #include <monster.h>
 #include <bomb.h>
 #include <bonus.h>
+#include <save.h>
+
 
 
 
@@ -212,3 +214,26 @@ void listbomb_pause(int time_pause){
   }
 
 }
+
+int listbomb_get_length(struct listbomb * listbomb){
+	int numbomb=0;
+	listbomb=list;
+	while(listbomb){
+		numbomb +=1;
+		listbomb=listbomb->next;
+	}
+	return numbomb;
+}
+
+
+void listbomb_save(){
+  struct listbomb *listbomb=list;
+	save_numbomb(listbomb_get_length(listbomb));
+
+	while(listbomb){
+		save_bomb(listbomb->first->x,listbomb->first->y,listbomb->first->etat/*,listbomb->first->nummap*/);
+		listbomb=listbomb->next;
+	}
+
+}
+
