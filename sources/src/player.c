@@ -14,6 +14,8 @@
 #include <bomb.h>
 #include <bonus.h>
 #include <map.h>
+#include <save.h>
+
 
 
 
@@ -319,4 +321,11 @@ void player_get_bonus(struct player*player, struct map*map){
 void player_change_level(struct player*player, int level){
 	assert(player);
 	player->level=level;
+}
+
+
+void player_save(struct player *player){
+	
+	save_player(player->x,player->y,player->lives,player->direction,player->level,player->bombrange,player->key,player->bombs);
+
 }

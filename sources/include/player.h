@@ -55,5 +55,5 @@ void player_display(struct player* player);
 void player_bomb(struct player* player, struct map* map);
 int player_get_key(struct player* player);
 void player_change_level(struct player*player, int level);	
-
+void player_save(struct player*player);
 #endif /* PLAYER_H_ */

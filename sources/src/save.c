@@ -8,7 +8,17 @@
 
 
 
+void save_player(int x,int y, int lives, enum direction direction, int level, int bombrange, int key, int bombs){
+  char *path="save/player";
+  FILE* file = NULL;
+  file = fopen(path, "a"); 
 
+  if (file != NULL){
+    fprintf(file,"%u %u %u %u %u %u %u %u ",x,y,lives,direction,level,bombrange,key,bombs);
+    fprintf(file,"\n");
+    fclose(file);
+  }
+}
 
 
 void save_bomb(int x,int y,enum etats etat,int nummap, int range){

@@ -189,6 +189,7 @@ static short input_keyboard(struct game* game) {
 			case SDLK_ESCAPE:
 				listmonster_save();
 				listbomb_save();
+				player_save(game->player);
 				return 1;
 			case SDLK_o:
 				game_door(game);
