@@ -309,5 +309,8 @@ void listmonster_save(){
 	}
 
 }
+void listmonster_null(){
+  first=NULL;
+}
 
 

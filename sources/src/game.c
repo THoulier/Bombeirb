@@ -49,6 +49,28 @@ game_new(void) {
 	return game;
 }
 
+struct game* game_load(void) {
+	sprite_load(); // load sprites into process memory
+	struct game* game = malloc(sizeof(*game));
+
+	game->maps = malloc(sizeof(struct game));
+	game->levels = 5;
+	game->maps[0] = map_get_static();
+
+	for (int nummap=1; nummap<game->levels; nummap++){
+		game->maps[nummap] = get_map(nummap);
+
+	}
+
+	struct player* player = malloc(sizeof(*player));
+	game->player=player;
+	load_player(game->player);
+	game->level=game->player->level;
+	load_listbomb();
+	load_listmonster();
+	return game;
+}
+
 void game_free(struct game* game) {
 	assert(game);
 

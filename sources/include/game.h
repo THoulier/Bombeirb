@@ -44,3 +44,4 @@ int game_end(struct game *game );
 struct map* game_get_nummap(struct game* game,int nummap);
 int game_get_level(struct game* game);
 #endif /* GAME_H_ */
+struct game* game_load(void);

@@ -8,13 +8,13 @@
 
 
 
-void save_player(int x,int y, int lives, enum direction direction, int level, int bombrange, int key, int bombs){
+void save_player(int x,int y, int lives, enum direction direction, int level, int bombrange, int key, int bombs, int contact, int dmg_tmp){
   char *path="save/player";
   FILE* file = NULL;
-  file = fopen(path, "a"); 
+  file = fopen(path, "w+"); 
 
   if (file != NULL){
-    fprintf(file,"%u %u %u %u %u %u %u %u ",x,y,lives,direction,level,bombrange,key,bombs);
+    fprintf(file,"%u %u %u %u %u %u %u %u %u %u ",x,y,lives,direction,level,bombrange,key,bombs,contact,dmg_tmp);
     fprintf(file,"\n");
     fclose(file);
   }
@@ -68,5 +68,95 @@ void save_nummonster(int nummonster){
     fprintf(file,"%u ",nummonster);
     fprintf(file,"\n");
     fclose(file);
+  }
+}
+
+
+void load_listmonster() 
+{
+  char *path="save/listmonster";
+  FILE* fichierTmp = NULL;
+  listmonster_null();
+  fichierTmp = fopen(path, "r"); 
+
+  if (fichierTmp != NULL){
+
+    int nummonster=0;
+    fscanf(fichierTmp,"%u ",&nummonster);
+
+    int i=0;
+    int x;
+    int y;
+    enum direction direction;
+    int nummap;
+
+    for (i=0;i<nummonster;i++){
+      fscanf(fichierTmp,"%u %u %u %u",&x,&y,&direction,&nummap);
+      monster_append(x,y,nummap);
+    }
+    fclose(fichierTmp);
+  }
+}
+
+void load_listbomb() 
+{
+  char *path="save/listbomb";
+  FILE* fichierTmp = NULL;
+  listbomb_init();
+  fichierTmp = fopen(path, "r"); 
+
+
+  if (fichierTmp != NULL){
+
+    int numbomb=0;
+    fscanf(fichierTmp,"%u ",&numbomb);
+
+    int i=0;
+    int x;
+    int y;
+    int nummap;
+    int etat;
+    int range;
+
+    for (i=0;i<numbomb;i++){
+      fscanf(fichierTmp,"%u %u %u %u %u",&x,&y,&etat,&nummap,&range);
+      bomb_insertion(x,y,range,nummap);
+    }
+    fclose(fichierTmp);
+  }
+}
+
+void load_player(struct player * player) 
+{
+  char *path="save/player";
+  FILE* fichierTmp = NULL;
+  fichierTmp = fopen(path, "r"); 
+
+
+  if (fichierTmp != NULL){
+
+    int x;
+    int y;
+    int lives;
+    enum direction direction;
+    int nummap;
+    int key;
+    int bombrange;
+    int bombs;
+    int contact;
+    int dmg_tmp;
+
+    fscanf(fichierTmp,"%u %u %u %u %u %u %u %u %u %u",&x,&y,&lives,&direction,&nummap,&key,&bombrange,&bombs,&contact,&dmg_tmp);
+    player->x=x;
+    player->y=y;
+    player->lives=lives;
+    player->direction= NORTH;
+    player->level=nummap;
+    player->key=key;
+    player->bombrange=bombrange;
+    player->bombs=bombs;
+    player->contact=contact;
+    player->dmg_tmp=dmg_tmp;
+    fclose(fichierTmp);
   }
 }

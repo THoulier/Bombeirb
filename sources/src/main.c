@@ -8,6 +8,8 @@
 #include <game.h>
 #include <window.h>
 #include <misc.h>
+#include <map.h>
+
 
 
 
@@ -18,7 +20,15 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
-	struct game* game = game_new();
+	struct game* game;
+	if (argc-1){
+		game =game_new();
+	}
+	else {
+		game = game_load();
+
+	}
+	
 
 	window_create(SIZE_BLOC * STATIC_MAP_WIDTH,
 	SIZE_BLOC * STATIC_MAP_HEIGHT + BANNER_HEIGHT + LINE_HEIGHT);

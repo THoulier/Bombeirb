@@ -38,4 +38,5 @@ struct monster* cell_monster_map(struct monster* monster, struct map* map);
 void monster_kill(struct monster *monster);
 void listmonster_save();
 int listmonster_get_length(struct listmonster * listmonster);
+void listmonster_null();
 #endif
