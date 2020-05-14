@@ -30,8 +30,9 @@ int main(int argc, char *argv[]) {
 	}
 	
 
-	window_create(SIZE_BLOC * STATIC_MAP_WIDTH,
-	SIZE_BLOC * STATIC_MAP_HEIGHT + BANNER_HEIGHT + LINE_HEIGHT);
+	window_create(SIZE_BLOC * map_get_width(game->maps[game->level])
+,
+	SIZE_BLOC * map_get_height(game->maps[game->level]) + BANNER_HEIGHT + LINE_HEIGHT);
 
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 

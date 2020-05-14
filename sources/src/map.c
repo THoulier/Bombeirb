@@ -202,6 +202,7 @@ void map_display(struct map* map)
 	}
 }
 
+/*
 struct map* map_get_static(void)
 {
 	struct map* map = map_new(STATIC_MAP_WIDTH, STATIC_MAP_HEIGHT);
@@ -226,7 +227,7 @@ struct map* map_get_static(void)
 	listmonster_init(map,0);
 
 	return map;
-}
+}*/
 
 
 struct map* get_map (int nummap){
@@ -253,7 +254,9 @@ char * map_init(int nummap) {
     char *path;
       switch (nummap)
       {
-
+		case 0:
+			path="map/map_0"; 
+		break;
         case 1: 
 			path="map/map_1"; 
 		break;
@@ -300,7 +303,9 @@ char * map_init_save(int nummap) {
     char *path;
       switch (nummap)
       {
-
+		case 0:
+			path="save/map_0"; 
+		break;
         case 1: 
 			path="save/map_1"; 
 		break;

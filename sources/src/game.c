@@ -27,10 +27,10 @@ game_new(void) {
 	struct game* game = malloc(sizeof(*game));
 	game->maps = malloc(sizeof(struct game));
 	game->levels = 5;
-	game->maps[0] = map_get_static();
+	//game->maps[0] = map_get_static();
 	//listmonster_init(game_get_current_map(game),0);
 
-	for (int nummap=1; nummap<game->levels; nummap++){
+	for (int nummap=0; nummap<game->levels; nummap++){
 		game->maps[nummap] = get_map(nummap);
 		//listmonster_init(game_get_current_map(game),nummap);
 
@@ -55,9 +55,9 @@ struct game* game_load(void) {
 
 	game->maps = malloc(sizeof(struct game));
 	game->levels = 5;
-	game->maps[0] = map_get_static();
+	//game->maps[0] = map_get_static();
 
-	for (int nummap=1; nummap<game->levels; nummap++){
+	for (int nummap=0; nummap<game->levels; nummap++){
 		game->maps[nummap] = get_map_saved(nummap);
 
 	}
@@ -68,13 +68,15 @@ struct game* game_load(void) {
 	game->level=game->player->level;
 	load_listbomb();
 	load_listmonster();
+
+	window_resize(SIZE_BLOC * map_get_width(game_get_current_map(game)),SIZE_BLOC * map_get_height(game_get_current_map(game)) + LINE_HEIGHT + BANNER_HEIGHT);
+
 	return game;
 }
 
 void game_free(struct game* game) {
 	assert(game);
-
-player_free(game->player);
+	player_free(game->player);
 	for (int i = 0; i < game->levels; i++)
 		map_free(game->maps[i]);
 }
@@ -194,6 +196,7 @@ void game_display(struct game* game) {
 		//window_resize(512,473);
 		window_display_image(sprite_get_youwin(),0,0);
 	}
+
 	window_refresh();
 }
 
@@ -212,7 +215,7 @@ static short input_keyboard(struct game* game) {
 				listmonster_save();
 				listbomb_save();
 				player_save(game->player);
-				for (int nummap=1; nummap<game->levels; nummap++){
+				for (int nummap=0; nummap<game->levels; nummap++){
 					map_save(game->maps[nummap],nummap);
 				}
 				return 1;
@@ -279,16 +282,16 @@ void game_door(struct game* game) {
 					y=1;
 				break;
 				case 2:
-					x=10;
-					y=2;
+					x=2;
+					y=10;
 				break;
 				case 3:
-					x=4;
-					y=0;
+					x=0;
+					y=4;
 				break;
 				case 4:
-					x=13;
-					y=3;
+					x=3;
+					y=13;
 				break;
 				case 5:
 					x=13;
@@ -302,12 +305,12 @@ void game_door(struct game* game) {
 					y=11;
 				break;
 				case 2:
-					x=2;
-					y=12;
+					x=12;
+					y=2;
 				break;
 				case 3:
-					x=13;
-					y=9;
+					x=9;
+					y=13;
 				break;
 				case 4:
 					x=13;
