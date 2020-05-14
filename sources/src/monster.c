@@ -23,14 +23,14 @@ void listmonster_init(struct map*map,int nummap){
   for(i=0;i<map_get_width(map);i++){
     for(j=0;j<map_get_height(map);j++){
       if(map_get_cell_type(map,i,j)==CELL_MONSTER){
-          monster_append(i,j,nummap);
+          monster_append(i,j,nummap,SOUTH);
       }
     }
   }
 }
 
-void monster_append(int x, int y, int nummap){
-    struct monster * monster = monster_init(x,y,nummap);
+void monster_append(int x, int y, int nummap,enum direction direction){
+    struct monster * monster = monster_init(x,y,nummap,direction);
 	if (first==NULL){
     first=malloc(sizeof(*first));
     first->monster=monster;
@@ -128,9 +128,9 @@ void monster_set_current_way(struct monster* monster, enum direction way) {
 }
 
 
-struct monster* monster_init(int x, int y, int nummap) {
+struct monster* monster_init(int x, int y, int nummap,enum direction direction) {
 	struct monster* monster = malloc(sizeof(*monster));
-	monster->direction = NORTH;
+	monster->direction = direction;
 	monster->time=SDL_GetTicks();
   	monster->x=x;
   	monster->y=y;

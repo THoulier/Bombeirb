@@ -20,8 +20,8 @@ void listbomb_init() {
   firstbomb = NULL;
 }
 
-void bomb_insertion(int x, int y, int range, int nummap){
-  struct bomb *bomb = bomb_init(x, y, range, nummap);
+void bomb_insertion(int x, int y, int range, int nummap,int etat){
+  struct bomb *bomb = bomb_init(x, y, range, nummap,etat);
   if (firstbomb == NULL) {
     firstbomb = malloc(sizeof(*firstbomb));
     firstbomb->bomb = bomb;
@@ -52,14 +52,14 @@ void listbomb_refresh(struct player *player,struct map* map, struct game * game)
   }
 
 
-struct bomb * bomb_init(int x, int y, int range, int nummap){ //fct to create a new bomb
+struct bomb * bomb_init(int x, int y, int range, int nummap, int etat){ 
   struct bomb * bomb=malloc(sizeof(*bomb));
   bomb->x=x;
   bomb->y=y;
   bomb->time=SDL_GetTicks();
   bomb->range=range;
   bomb->nummap=nummap;
-  bomb->etat=3;
+  bomb->etat=etat;
   return(bomb);
 }
 
@@ -208,4 +208,7 @@ void listbomb_save(){
 	}
 
 }
+
+
+
 

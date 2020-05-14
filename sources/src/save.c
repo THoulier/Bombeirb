@@ -92,7 +92,7 @@ void load_listmonster()
 
     for (i=0;i<nummonster;i++){
       fscanf(fichierTmp,"%u %u %u %u",&x,&y,&direction,&nummap);
-      monster_append(x,y,nummap);
+      monster_append(x,y,nummap,direction);
     }
     fclose(fichierTmp);
   }
@@ -120,8 +120,8 @@ void load_listbomb()
 
     for (i=0;i<numbomb;i++){
       fscanf(fichierTmp,"%u %u %u %u %u",&x,&y,&etat,&nummap,&range);
-      bomb_insertion(x,y,range,nummap);
-    }
+      bomb_insertion(x,y,range,nummap,etat);
+      }
     fclose(fichierTmp);
   }
 }

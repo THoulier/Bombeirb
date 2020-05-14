@@ -71,7 +71,7 @@ void display_bonus_explo(struct map *map,int x,int y, int nummap){
   }
   else if (bonus==5){
     map_set_cell_type(map,x,y,CELL_BONUS|bonus);
-    monster_append(x,y,nummap);
+    monster_append(x,y,nummap,SOUTH);
   }
   else {
     map_set_cell_type(map,x,y,CELL_BONUS|bonus);
