@@ -43,7 +43,7 @@ void listbomb_refresh(struct player *player,struct map* map, struct game * game)
 			}
     if (bomb_start(listbomb->bomb,map,player) && listbomb->bomb->etat==4){
       box_explo(map,listbomb->bomb,player);
-      explo_display(listbomb->bomb,player,map);
+      //explo_display(listbomb->bomb,player,map);
 
     }
     listbomb=listbomb->next;

@@ -11,3 +11,5 @@ void save_player(int x,int y, int lives, enum direction direction, int level, in
 void load_listmonster();
 void load_listbomb();
 void load_player(struct player * player);
+
+void save_map(char *path);

@@ -58,7 +58,7 @@ struct game* game_load(void) {
 	game->maps[0] = map_get_static();
 
 	for (int nummap=1; nummap<game->levels; nummap++){
-		game->maps[nummap] = get_map(nummap);
+		game->maps[nummap] = get_map_saved(nummap);
 
 	}
 
@@ -212,6 +212,9 @@ static short input_keyboard(struct game* game) {
 				listmonster_save();
 				listbomb_save();
 				player_save(game->player);
+				for (int nummap=1; nummap<game->levels; nummap++){
+					map_save(game->maps[nummap],nummap);
+				}
 				return 1;
 			case SDLK_o:
 				game_door(game);
@@ -325,9 +328,9 @@ void game_door(struct game* game) {
 		}
 		else {
 			if (player_get_key(game->player)){
-					player_dec_key(game->player);
-					map_set_cell_type(game->maps[game->level], player_get_x(game->player), player_get_y(game->player),type | 0x01 );
-					game_change_map(game,nummap,x,y);
+				player_dec_key(game->player);
+				map_set_cell_type(game->maps[game->level], player_get_x(game->player), player_get_y(game->player),type | 0x01 );
+				game_change_map(game,nummap,x,y);
 			}
 		}
 	}

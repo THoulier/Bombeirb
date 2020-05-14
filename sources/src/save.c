@@ -160,3 +160,35 @@ void load_player(struct player * player)
     fclose(fichierTmp);
   }
 }
+
+
+
+
+void save_map(char *path)// fct pour maj de carte contenu de path copié dans npath
+{
+  int height;
+  int width;
+  // Transfet des données initial vers .txt tmp
+  FILE* fichierI = NULL;
+  FILE* fichierTmp = NULL;
+  char * npath = "save/map";
+  fichierI = fopen(path, "r");
+  fichierTmp = fopen(npath, "w+"); // ouverture en mode r+w et suppr avant
+
+  if (fichierI != NULL){
+    fscanf(fichierI,"%u:%u ", &width, &height);
+    fprintf(fichierTmp,"%u:%u ", width, height);
+    unsigned int caseTmp=0;
+    int i=0;
+    for (i=0;i<height;i++){
+      fprintf(fichierTmp,"\n");
+      int j=0;
+      for (j=0;j<width;j++){
+        fscanf(fichierI,"%u ", &caseTmp);
+        fprintf(fichierTmp,"%u ", caseTmp);
+      }
+    }
+    fclose(fichierI);
+    fclose(fichierTmp);
+  }
+}

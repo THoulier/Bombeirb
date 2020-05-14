@@ -96,3 +96,6 @@ void map_set_compose_cell_type(struct map* map, int x, int y, enum compose_type 
 enum compose_type map_get_compose_type(struct map* map,int x, int y);
 char * map_init(int nummap);
 #endif /* MAP_H_ */
+void map_save(struct map* map,int nummap);
+char * map_init_save(int nummap);
+struct map* get_map_saved(int nummap);

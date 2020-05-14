@@ -238,11 +238,10 @@ struct map* get_map (int nummap){
  	struct map * map = map_new(width,height);
 	int i, j;
 	int valeur;
- 	for (i = 0; i < map_get_width(map); i++) {
-		for (j = 0; j < map_get_height(map); j++) {
-		//map_set_cell_type(map,i, j,map_get_cell_type(map,i,j));
+ 	for (i = 0; i < map_get_height(map); i++) {
+		for (j = 0; j < map_get_width(map); j++) {
 		fscanf(ptr,"%d", &valeur);
-		map->grid[i+j*width]=valeur;
+		map->grid[j+i*width]=valeur;
 	}}
 	listmonster_init(map,nummap);
 
@@ -270,3 +269,69 @@ char * map_init(int nummap) {
       }
 	return path;
    }
+
+void map_save(struct map* map,int nummap)
+{
+  	int height=map->height;
+  	int width=map->width;
+	char *path=map_init_save(nummap);
+	FILE* fichier = NULL;
+	fichier = fopen(path, "w+");
+
+	if (fichier != NULL){
+		int cTmp=0;
+		int i=0;
+		fprintf(fichier,"%i:%i ", width, height);
+		for (i=0;i<height;i++){
+			int j=0;
+			fprintf(fichier,"\n");
+			for (j=0;j<width;j++){
+				cTmp=map->grid[i*width+j];
+				fprintf(fichier,"%i ", cTmp);
+			}
+		}
+		fclose(fichier);
+	}
+}
+
+
+
+char * map_init_save(int nummap) {
+    char *path;
+      switch (nummap)
+      {
+
+        case 1: 
+			path="save/map_1"; 
+		break;
+        case 2: 
+			path="save/map_2"; 
+		break;
+        case 3: 
+			path="save/map_3"; 
+		break;
+        case 4: 
+			path="save/map_4"; 
+		break;
+      }
+	return path;
+   }
+
+struct map* get_map_saved (int nummap){
+	char *mapp=map_init_save(nummap);
+ 	FILE* ptr= fopen(mapp, "r");
+ 	int width;
+ 	int height;
+ 	fscanf(ptr,"%d:%d", &width,&height);
+ 	struct map * map = map_new(width,height);
+	int i, j;
+	int valeur;
+ 	for (i = 0; i < map_get_height(map); i++) {
+		for (j = 0; j < map_get_width(map); j++) {
+		fscanf(ptr,"%d", &valeur);
+		map->grid[j+i*width]=valeur;
+	}}
+	listmonster_init(map,nummap);
+
+	return map;
+}

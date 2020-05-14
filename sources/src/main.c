@@ -22,10 +22,10 @@ int main(int argc, char *argv[]) {
 
 	struct game* game;
 	if (argc-1){
-		game =game_new();
+		game =game_load();
 	}
 	else {
-		game = game_load();
+		game = game_new();
 
 	}
 	
