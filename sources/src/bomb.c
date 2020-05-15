@@ -21,7 +21,7 @@ void listbomb_init() {
 }
 
 void bomb_insertion(int x, int y, int range, int nummap,int etat){
-  struct bomb *bomb = bomb_init(x, y, range, nummap,etat);
+  struct bomb *bomb = bomb_init(x, y, range, nummap, etat);
   if (firstbomb == NULL) {
     firstbomb = malloc(sizeof(*firstbomb));
     firstbomb->bomb = bomb;
@@ -34,16 +34,41 @@ void bomb_insertion(int x, int y, int range, int nummap,int etat){
   firstbomb=listbomb;
 }
 
+void bomb_sup(struct bomb*bomb){
+  struct listbomb *prev;
+  struct listbomb *next;
+  struct listbomb *listbomb=firstbomb;
+  if (listbomb->bomb==bomb){
+    firstbomb=listbomb->next;
+  }
+  else{
+    while (listbomb!=NULL){
+      if (listbomb->next->bomb==bomb){
+        prev=listbomb;
+        listbomb=listbomb->next;
+        next=listbomb->next;
+        listbomb=NULL;
+            }
+      else {
+            listbomb=listbomb->next;
+          }
+          }
+          prev->next=next;
+        }
+  free(bomb);
+}
+
 
 void listbomb_refresh(struct player *player,struct map* map, struct game * game){
   struct listbomb *listbomb=firstbomb;
   while (listbomb!=NULL){
-    if (bomb_start(listbomb->bomb,map,player) && listbomb->bomb->etat!=4){
+    if (bomb_start(listbomb->bomb,map,player,listbomb->bomb->etat) && listbomb->bomb->etat!=4){
 			bomb_display(listbomb->bomb,game);
 			}
-    if (bomb_start(listbomb->bomb,map,player) && listbomb->bomb->etat==4){
+    if (bomb_start(listbomb->bomb,map,player,listbomb->bomb->etat) && listbomb->bomb->etat==4){
       box_explo(map,listbomb->bomb,player);
-      //explo_display(listbomb->bomb,player,map);
+      explo_display(listbomb->bomb,player,map);
+      bomb_sup(listbomb->bomb);
 
     }
     listbomb=listbomb->next;
@@ -63,11 +88,20 @@ struct bomb * bomb_init(int x, int y, int range, int nummap, int etat){
   return(bomb);
 }
 
-int bomb_start(struct bomb *bomb,struct map* map,struct player*player){
-  int time=bomb->time;
+int bomb_start(struct bomb *bomb,struct map* map,struct player*player, int etat){
 	int current_time=SDL_GetTicks();
 
+  if ((current_time - bomb->time) > 1000 && bomb->etat>0 ){
 
+  	bomb->etat --;
+  	bomb->time=SDL_GetTicks();
+ 
+  }
+  else if ((current_time - bomb->time) > 1000 && bomb->etat==0 ){
+    bomb->etat=4;
+    bomb->time=SDL_GetTicks();
+  }
+/*
 	if ((current_time-time)<1000){
 		bomb->etat=3;
   }
@@ -87,32 +121,10 @@ int bomb_start(struct bomb *bomb,struct map* map,struct player*player){
     bomb->etat=4;
 
   }
-/*
-  else if ((current_time-time)<4600){
-    int range = player->bombrange;
-    for(int i=1;i<=range;i++){
-      if(bomb->x+i<=map_get_width(map)){
-        if(map_get_cell_type(map,bomb->x+i,bomb->y)==CELL_EXPLOSION){
-          map_set_cell_type(map,bomb->x+i,bomb->y,CELL_EMPTY);}
-      }      
-      if(bomb->x-i>=0){
-        if(map_get_cell_type(map,bomb->x-i,bomb->y)==CELL_EXPLOSION){
-          map_set_cell_type(map,bomb->x-i,bomb->y,CELL_EMPTY);}
-      }
-      if(bomb->y+i<=map_get_height(map)){
-        if(map_get_cell_type(map,bomb->x,bomb->y+i)==CELL_EXPLOSION){
-          map_set_cell_type(map,bomb->x,bomb->y+i,CELL_EMPTY);}
-      }
-      if(bomb->y-i>=0){
-        if(map_get_cell_type(map,bomb->x,bomb->y-i)==CELL_EXPLOSION){
-          map_set_cell_type(map,bomb->x,bomb->y-i,CELL_EMPTY);}
-      }
-    }
-    map_set_cell_type(map,bomb->x,bomb->y,CELL_EMPTY);
-  }*/
+
   else{
     return 0;
-  }
+  }*/
   return 1;
 }
 

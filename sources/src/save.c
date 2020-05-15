@@ -146,7 +146,7 @@ void load_player(struct player * player)
     int contact;
     int dmg_tmp;
 
-    fscanf(fichierTmp,"%u %u %u %u %u %u %u %u %u %u",&x,&y,&lives,&direction,&nummap,&key,&bombrange,&bombs,&contact,&dmg_tmp);
+    fscanf(fichierTmp,"%u %u %u %u %u %u %u %u %u %u",&x,&y,&lives,&direction,&nummap,&bombrange,&key,&bombs,&contact,&dmg_tmp);
     player->x=x;
     player->y=y;
     player->lives=lives;
