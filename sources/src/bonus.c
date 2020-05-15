@@ -43,7 +43,6 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
     display_bonus_explo(map,x,y,player_get_level(player));
   }
   for (int i=1;i<range+1;i++){
-
         if (map_get_cell_type(map,x+i,y) == CELL_BOX){
           bonus_config(map,x+i,y);
           display_bonus_explo(map,x+i,y,player_get_level(player));

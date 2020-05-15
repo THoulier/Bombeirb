@@ -29,15 +29,15 @@ struct map {
 struct map* map_new(int width, int height)
 {
 	assert(width > 0 && height > 0);
-
 	struct map* map = malloc(sizeof *map);
+
 	if (map == NULL )
 		error("map_new : malloc map failed");
 
 	map->width = width;
 	map->height = height;
-
 	map->grid = malloc(height * width);
+
 	if (map->grid == NULL) {
 		error("map_new : malloc grid failed");
 	}
@@ -113,43 +113,43 @@ void display_bonus(struct map* map, int x, int y, unsigned char type)
 	
 	// bonus is encoded with the 4 most significant bits
 	switch (type & 0x0f) {
-	case BONUS_BOMB_RANGE_INC:
-		window_display_image(sprite_get_bonus(BONUS_BOMB_RANGE_INC), x, y);
-		break;
+		case BONUS_BOMB_RANGE_INC:
+			window_display_image(sprite_get_bonus(BONUS_BOMB_RANGE_INC), x, y);
+			break;
 
-	case BONUS_BOMB_RANGE_DEC:
-		window_display_image(sprite_get_bonus(BONUS_BOMB_RANGE_DEC), x, y);
-		break;
+		case BONUS_BOMB_RANGE_DEC:
+			window_display_image(sprite_get_bonus(BONUS_BOMB_RANGE_DEC), x, y);
+			break;
 
-	case BONUS_BOMB_NB_DEC:
-		window_display_image(sprite_get_bonus(BONUS_BOMB_NB_DEC), x, y);
-		break;
+		case BONUS_BOMB_NB_DEC:
+			window_display_image(sprite_get_bonus(BONUS_BOMB_NB_DEC), x, y);
+			break;
 
-	case BONUS_BOMB_NB_INC:
-		window_display_image(sprite_get_bonus(BONUS_BOMB_NB_INC), x, y);
-		break;
-	case BONUS_LIFE:
-		window_display_image(sprite_get_bonus(BONUS_LIFE), x,y);
-		break;
-	case BONUS_MONSTER:
-		window_display_image(sprite_get_monster(SOUTH), x,y);
-		break;
+		case BONUS_BOMB_NB_INC:
+			window_display_image(sprite_get_bonus(BONUS_BOMB_NB_INC), x, y);
+			break;
+		case BONUS_LIFE:
+			window_display_image(sprite_get_bonus(BONUS_LIFE), x,y);
+			break;
+		case BONUS_MONSTER:
+			window_display_image(sprite_get_monster(SOUTH), x,y);
+			break;
 	}
 }
 
 void display_scenery(struct map* map, int x, int  y, unsigned char type)
 {
 	switch (type & 0x0f) { // sub-types are encoded with the 4 less significant bits
-	case SCENERY_STONE:
-		window_display_image(sprite_get_stone(), x, y);
-		break;
+		case SCENERY_STONE:
+			window_display_image(sprite_get_stone(), x, y);
+			break;
 
-	case SCENERY_TREE:
-		window_display_image(sprite_get_tree(), x, y);
-		break;
-	case SCENERY_PRINCESS:
-		window_display_image(sprite_get_princess(), x, y);
-		break;
+		case SCENERY_TREE:
+			window_display_image(sprite_get_tree(), x, y);
+			break;
+		case SCENERY_PRINCESS:
+			window_display_image(sprite_get_princess(), x, y);
+			break;
 
 	}
 }
@@ -160,45 +160,38 @@ void map_display(struct map* map)
 	assert(map->height > 0 && map->width > 0);
 	int x, y;
 	for (int i = 0; i < map->width; i++) {
-	  for (int j = 0; j < map->height; j++) {
-	    x = i * SIZE_BLOC;
-	    y = j * SIZE_BLOC;
+	  	for (int j = 0; j < map->height; j++) {
+			x = i * SIZE_BLOC;
+			y = j * SIZE_BLOC;
 
-	    unsigned char type = map->grid[CELL(i,j)];
+			unsigned char type = map->grid[CELL(i,j)];
 
-	    switch (type & 0xf0) {
-			case CELL_SCENERY:
-		  	display_scenery(map, x, y, type);
-		  break;
-			case CELL_BOX:
-				window_display_image(sprite_get_box(), x, y);
-			break;
-	    case CELL_BONUS:
-	        display_bonus(map, x, y, type);
-	        break;
-	    case CELL_KEY:
-	        window_display_image(sprite_get_banner_key(), x, y);
-	        break;
-	    case CELL_DOOR:
-			if (type & 0x01){
-		      	window_display_image(sprite_get_door_opened(), x, y);
+			switch (type & 0xf0) {
+				case CELL_SCENERY:
+					display_scenery(map, x, y, type);
+				break;
+				case CELL_BOX:
+					window_display_image(sprite_get_box(), x, y);
+				break;
+				case CELL_BONUS:
+					display_bonus(map, x, y, type);
+				break;
+				case CELL_KEY:
+					window_display_image(sprite_get_banner_key(), x, y);
+				break;
+				case CELL_DOOR:
+					if (type & 0x01){
+						window_display_image(sprite_get_door_opened(), x, y);
+					}
+					else {
+						window_display_image(sprite_get_door_closed(), x, y);
+					}
+				break;
+				case CELL_EXPLOSION:
+					window_display_image(sprite_get_explo(),x, y);
+				break;
 			}
-			else {
-				window_display_image(sprite_get_door_closed(), x, y);
-			}
-	        break;
-
-		case CELL_EXPLOSION:
-          	window_display_image(sprite_get_explo(),x, y);
-
-
-
-			break;
-
-
-			}
-
-	  }
+	    }
 	}
 }
 
@@ -241,40 +234,38 @@ struct map* get_map (int nummap){
 	int valeur;
  	for (i = 0; i < map_get_height(map); i++) {
 		for (j = 0; j < map_get_width(map); j++) {
-		fscanf(ptr,"%d", &valeur);
-		map->grid[j+i*width]=valeur;
-	}}
+			fscanf(ptr,"%d", &valeur);
+			map->grid[j+i*width]=valeur;
+		}
+	}
 	listmonster_init(map,nummap);
-
 	return map;
 }
 
 
 char * map_init(int nummap) {
     char *path;
-      switch (nummap)
-      {
-		case 0:
-			path="map/map_0"; 
-		break;
-        case 1: 
-			path="map/map_1"; 
-		break;
-        case 2: 
-			path="map/map_2"; 
-		break;
-        case 3: 
-			path="map/map_3"; 
-		break;
-        case 4: 
-			path="map/map_4"; 
-		break;
-      }
+      	switch (nummap){
+			case 0:
+				path="map/map_0"; 
+			break;
+			case 1: 
+				path="map/map_1"; 
+			break;
+			case 2: 
+				path="map/map_2"; 
+			break;
+			case 3: 
+				path="map/map_3"; 
+			break;
+			case 4: 
+				path="map/map_4"; 
+			break;
+      	}
 	return path;
-   }
+}
 
-void map_save(struct map* map,int nummap)
-{
+void map_save(struct map* map,int nummap){
   	int height=map->height;
   	int width=map->width;
 	char *path=map_init_save(nummap);
@@ -282,15 +273,13 @@ void map_save(struct map* map,int nummap)
 	fichier = fopen(path, "w+");
 
 	if (fichier != NULL){
-		int cTmp=0;
-		int i=0;
+		int casenum=0;
 		fprintf(fichier,"%i:%i ", width, height);
-		for (i=0;i<height;i++){
-			int j=0;
+		for (int i=0;i<height;i++){
 			fprintf(fichier,"\n");
-			for (j=0;j<width;j++){
-				cTmp=map->grid[i*width+j];
-				fprintf(fichier,"%i ", cTmp);
+			for (int j=0;j<width;j++){
+				casenum=map->grid[i*width+j];
+				fprintf(fichier,"%i ", casenum);
 			}
 		}
 		fclose(fichier);
@@ -301,26 +290,25 @@ void map_save(struct map* map,int nummap)
 
 char * map_init_save(int nummap) {
     char *path;
-      switch (nummap)
-      {
-		case 0:
-			path="save/map_0"; 
-		break;
-        case 1: 
-			path="save/map_1"; 
-		break;
-        case 2: 
-			path="save/map_2"; 
-		break;
-        case 3: 
-			path="save/map_3"; 
-		break;
-        case 4: 
-			path="save/map_4"; 
-		break;
-      }
+      	switch (nummap){
+			case 0:
+				path="save/map_0"; 
+			break;
+			case 1: 
+				path="save/map_1"; 
+			break;
+			case 2: 
+				path="save/map_2"; 
+			break;
+			case 3: 
+				path="save/map_3"; 
+			break;
+			case 4: 
+				path="save/map_4"; 
+			break;
+		}
 	return path;
-   }
+}
 
 struct map* get_map_saved (int nummap){
 	char *mapp=map_init_save(nummap);

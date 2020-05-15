@@ -48,13 +48,13 @@ void bomb_sup(struct bomb*bomb){
         listbomb=listbomb->next;
         next=listbomb->next;
         listbomb=NULL;
-            }
+      }
       else {
             listbomb=listbomb->next;
-          }
-          }
-          prev->next=next;
-        }
+      }
+    }
+    prev->next=next;
+  }
   free(bomb);
 }
 
@@ -69,12 +69,10 @@ void listbomb_refresh(struct player *player,struct map* map, struct game * game)
       box_explo(map,listbomb->bomb,player);
       explo_display(listbomb->bomb,player,map);
       bomb_sup(listbomb->bomb);
-
     }
     listbomb=listbomb->next;
-
   }
-  }
+}
 
 
 struct bomb * bomb_init(int x, int y, int range, int nummap, int etat){ 
@@ -136,7 +134,6 @@ void bomb_display(struct bomb*bomb, struct game *game){
   if (bomb->nummap==game_get_level(game)){ 
     window_display_image(sprite_get_bomb(bomb->etat), x, y);
   }
-
 }
 
 void explo_display(struct bomb*bomb,struct player* player,struct map*map){
@@ -196,7 +193,6 @@ void listbomb_pause(int time_pause){
     listbomb->bomb->time=listbomb->bomb->time+time_pause;
     listbomb=listbomb->next;
   }
-
 }
 
 int listbomb_get_length(struct listbomb * listbomb){
@@ -218,7 +214,6 @@ void listbomb_save(){
 		save_bomb(listbomb->bomb->x,listbomb->bomb->y,listbomb->bomb->etat,listbomb->bomb->nummap, listbomb->bomb->range);
 		listbomb=listbomb->next;
 	}
-
 }
 
 

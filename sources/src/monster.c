@@ -32,9 +32,9 @@ void listmonster_init(struct map*map,int nummap){
 void monster_append(int x, int y, int nummap,enum direction direction){
     struct monster * monster = monster_init(x,y,nummap,direction);
 	if (first==NULL){
-    first=malloc(sizeof(*first));
-    first->monster=monster;
-    first->next=NULL;
+		first=malloc(sizeof(*first));
+		first->monster=monster;
+		first->next=NULL;
     }
 	struct listmonster * listmonster=malloc(sizeof(*listmonster));
     listmonster->monster=monster;
@@ -47,26 +47,26 @@ void listmonster_refresh(struct game*game,struct player*player){
   	struct listmonster*listmonster=first;
   	int nummap=game_get_level(game);
   	while(listmonster!=NULL){
-    monster_display(game,listmonster->monster);
-	monster_move(listmonster->monster,game_get_nummap(game,listmonster->monster->nummap),2000-nummap*400);
-  	int current_time=SDL_GetTicks();
+		monster_display(game,listmonster->monster);
+		monster_move(listmonster->monster,game_get_nummap(game,listmonster->monster->nummap),2000-nummap*400);
+		int current_time=SDL_GetTicks();
 
-	if(game->player->x == listmonster->monster->x && game->player->y==listmonster->monster->y){
-		if(listmonster->monster->nummap==game_get_level(game)){
-			if ((current_time - game->player->contact) > 1000){
-				player_dec_nb_lives(game->player);
-				game->player->dmg_tmp=29;
-				game->player->contact= SDL_GetTicks();
-			}
-		}	
+		if(game->player->x == listmonster->monster->x && game->player->y==listmonster->monster->y){
+			if(listmonster->monster->nummap==game_get_level(game)){
+				if ((current_time - game->player->contact) > 1000){
+					player_dec_nb_lives(game->player);
+					game->player->dmg_tmp=29;
+					game->player->contact= SDL_GetTicks();
+				}
+			}	
+		}
+
+		if(map_get_cell_type(game_get_nummap(game,listmonster->monster->nummap),listmonster->monster->x,listmonster->monster->y)==CELL_EXPLOSION){
+			monster_kill(listmonster->monster);
+		}
+
+		listmonster=listmonster->next;
 	}
-
-	if(map_get_cell_type(game_get_nummap(game,listmonster->monster->nummap),listmonster->monster->x,listmonster->monster->y)==CELL_EXPLOSION){
-		monster_kill(listmonster->monster);
-	}
-
-    listmonster=listmonster->next;
-  }
 }
 
 
@@ -164,7 +164,6 @@ int monster_move_aux(struct monster* monster, struct map* map, int x, int y) {
 		break;
 
 		default:
-
 		break;
 	}
 

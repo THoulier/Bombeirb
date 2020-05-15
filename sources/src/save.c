@@ -84,13 +84,10 @@ void load_listmonster()
     int nummonster=0;
     fscanf(fichierTmp,"%u ",&nummonster);
 
-    int i=0;
-    int x;
-    int y;
+    int x,y,nummap;
     enum direction direction;
-    int nummap;
 
-    for (i=0;i<nummonster;i++){
+    for (int i=0;i<nummonster;i++){
       fscanf(fichierTmp,"%u %u %u %u",&x,&y,&direction,&nummap);
       monster_append(x,y,nummap,direction);
     }
@@ -111,14 +108,9 @@ void load_listbomb()
     int numbomb=0;
     fscanf(fichierTmp,"%u ",&numbomb);
 
-    int i=0;
-    int x;
-    int y;
-    int nummap;
-    int etat;
-    int range;
+    int x,y,nummap,etat,range;
 
-    for (i=0;i<numbomb;i++){
+    for (int i=0;i<numbomb;i++){
       fscanf(fichierTmp,"%u %u %u %u %u",&x,&y,&etat,&nummap,&range);
       bomb_insertion(x,y,range,nummap,etat);
       }
@@ -135,16 +127,8 @@ void load_player(struct player * player)
 
   if (fichierTmp != NULL){
 
-    int x;
-    int y;
-    int lives;
+    int x,y,lives,nummap,key,bombrange,bombs,contact,dmg_tmp;
     enum direction direction;
-    int nummap;
-    int key;
-    int bombrange;
-    int bombs;
-    int contact;
-    int dmg_tmp;
 
     fscanf(fichierTmp,"%u %u %u %u %u %u %u %u %u %u",&x,&y,&lives,&direction,&nummap,&bombrange,&key,&bombs,&contact,&dmg_tmp);
     player->x=x;
@@ -164,31 +148,27 @@ void load_player(struct player * player)
 
 
 
-void save_map(char *path)// fct pour maj de carte contenu de path copié dans npath
-{
+void save_map(char *path){
   int height;
   int width;
-  // Transfet des données initial vers .txt tmp
-  FILE* fichierI = NULL;
-  FILE* fichierTmp = NULL;
-  char * npath = "save/map";
-  fichierI = fopen(path, "r");
-  fichierTmp = fopen(npath, "w+"); // ouverture en mode r+w et suppr avant
+  FILE* filetosave = NULL;
+  FILE* file_save = NULL;
+  char * path_save = "save/map";
+  filetosave = fopen(path, "r");
+  file_save = fopen(path_save, "w+"); 
 
-  if (fichierI != NULL){
-    fscanf(fichierI,"%u:%u ", &width, &height);
-    fprintf(fichierTmp,"%u:%u ", width, height);
-    unsigned int caseTmp=0;
-    int i=0;
-    for (i=0;i<height;i++){
-      fprintf(fichierTmp,"\n");
-      int j=0;
-      for (j=0;j<width;j++){
-        fscanf(fichierI,"%u ", &caseTmp);
-        fprintf(fichierTmp,"%u ", caseTmp);
+  if (filetosave != NULL){
+    fscanf(filetosave,"%u:%u ", &width, &height);
+    fprintf(file_save,"%u:%u ", width, height);
+    unsigned int casenum=0;
+    for (int i=0;i<height;i++){
+      fprintf(file_save,"\n");
+      for (int j=0;j<width;j++){
+        fscanf(filetosave,"%u ", &casenum);
+        fprintf(file_save,"%u ", casenum);
       }
     }
-    fclose(fichierI);
-    fclose(fichierTmp);
+    fclose(filetosave);
+    fclose(file_save);
   }
 }

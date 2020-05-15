@@ -129,32 +129,25 @@ static int player_move_aux(struct player* player, struct map* map, int x, int y)
 		return 0;
 
 	switch (map_get_cell_type(map, x, y)) {
-	case CELL_SCENERY:
-		if (map_get_compose_type(map,x,y)==CELL_PRINCESS){
+		case CELL_SCENERY:
+			if (map_get_compose_type(map,x,y)==CELL_PRINCESS){
+				return 1;
+			}else{
+				return 0;
+			}
+			break;
+		case CELL_BOX:
 			return 1;
-		}else{
-			return 0;
-		}
-		break;
-
-	case CELL_BOX:
-		return 1;
-		break;
-
-	case CELL_BONUS:
-		break;
-
-	case CELL_KEY:
-	map_set_cell_type(map, x, y,CELL_EMPTY);
-	player->key+=1;
-		break;
-
-
- default:
-
-		break;
+			break;
+		case CELL_BONUS:
+			break;
+		case CELL_KEY:
+			map_set_cell_type(map, x, y,CELL_EMPTY);
+			player->key+=1;
+			break;
+		default:
+			break;
 	}
-
 	// Player has moved
 	return 1;
 }

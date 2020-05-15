@@ -173,24 +173,25 @@ void game_display(struct game* game) {
 		tmp=tmp->next;}
 		free(tmp);
 		*/
-		int current_time = SDL_GetTicks();
-		if(map_get_cell_type(map,player->x,player->y)==CELL_EXPLOSION && player->lives>0){
-			if ((current_time - game->player->contact) > 1000){
-				player_dec_nb_lives(player);
-				game->player->dmg_tmp=29;
-		 	}
-			game->player->contact= SDL_GetTicks();
-		}
+	int current_time = SDL_GetTicks();
+	if(map_get_cell_type(map,player->x,player->y)==CELL_EXPLOSION && player->lives>0){
+		if ((current_time - game->player->contact) > 1000){
+			player_dec_nb_lives(player);
+			game->player->dmg_tmp=29;
+	 	}
+		game->player->contact= SDL_GetTicks();
+	}
 
 	listmonster_refresh(game,player);
 	listbomb_refresh(player,map,game);
+
 	if(map_get_cell_type(map,player->x,player->y)==CELL_BONUS) {
 		player_get_bonus(player,map);
 	}
+
 	if (game->player->lives<1){ 
 		//window_resize(12*SIZE_BLOC,12*SIZE_BLOC);
 		window_display_image(sprite_get_gameover(),0,0);
-
 	}
 	if (map_get_compose_type(map,player->x,player->y)==CELL_PRINCESS){
 		//window_resize(512,473);
