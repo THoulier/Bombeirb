@@ -32,7 +32,7 @@ struct player* player_init(int bombs, short lives) {
 	player->contact=0;
 	player->key=0;
 	player->dmg_tmp=0;
-	player->bombrange=1;
+	player->bombrange=3;
 	player->level=0;
 	return player;
 }

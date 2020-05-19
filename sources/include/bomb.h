@@ -29,7 +29,6 @@ void listbomb_refresh(struct player * player , struct map* map, struct game * ga
 int bomb_start(struct bomb *bomb,struct map* map,struct player*player, int etat);
 void bomb_display(struct bomb*bomb, struct game *game);
 void explo_display(struct bomb*bomb,struct player *player,struct map* map);
-void explos(struct map* map,int x ,int y);
 #endif
 void listbomb_pause(int time_pause);
 void listbomb_save();

@@ -38,36 +38,53 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
   int x= bomb->x;
   int y= bomb->y;
   int range = player->bombrange;
+  int south_blocked=1;
+  int east_blocked=1;
+  int north_blocked=1;
+  int west_blocked=1;
+
   if (map_get_cell_type(map,x,y) == CELL_BOX){
     bonus_config(map,x,y);
     display_bonus_explo(map,x,y,player_get_level(player));
   }
   for (int i=1;i<range+1;i++){
+    if (east_blocked){
       if(x+i<=map_get_width(map)-1){
         if (map_get_cell_type(map,x+i,y) == CELL_BOX){
+          east_blocked=0;
           bonus_config(map,x+i,y);
           display_bonus_explo(map,x+i,y,player_get_level(player));
         }
       }
+    }
+    if (west_blocked){
       if(x-i>=0){
         if (map_get_cell_type(map,x-i,y) == CELL_BOX){
+          west_blocked=0;
           bonus_config(map,x-i,y);
           display_bonus_explo(map,x-i,y,player_get_level(player));
         }
       }
+    }
+    if (south_blocked){
       if(y+i<=map_get_height(map)-1){
         if (map_get_cell_type(map,x,y+i) == CELL_BOX ){
+          south_blocked=0;
           bonus_config(map,x,y+i);
           display_bonus_explo(map,x,y+i,player_get_level(player));
         }
       }
+    }
+    if (north_blocked){
       if(y-i>=0){
         if (map_get_cell_type(map,x,y-i) == CELL_BOX){
+          north_blocked=0;
           bonus_config(map,x,y-i);
           display_bonus_explo(map,x,y-i,player_get_level(player));
         }
       }
-      }
+    }
+  }
 }
 
 
