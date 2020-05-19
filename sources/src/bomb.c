@@ -183,10 +183,7 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
 
   switch(map_get_cell_type(map,x,y)){
         case CELL_BOX:
-
             window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
-          
-          //map_set_compose_cell_type(map,x*SIZE_BLOC,y*SIZE_BLOC,CELL_BONUS|get_bonus_type(map_get_compose_type(map,x,y)));
         break;
         case CELL_SCENERY:
         break;
@@ -202,17 +199,14 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
           break;
 
         default:
-          //window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
 
           break;
 
   }
-  //explos(map,x,y);
 
   for(int i=1;i<=range;i++){
     if (east_blocked){
       if(x+i<=map_get_width(map)-1){
-        //explos(map,x+i,y);
         switch(map_get_cell_type(map,x+i,y)){
           case CELL_BOX:
             if (east_blocked){
@@ -221,6 +215,9 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
             }
           break;
           case CELL_SCENERY:
+            east_blocked=0;
+          break;
+          case CELL_DOOR:
             east_blocked=0;
           break;
           case CELL_EMPTY:
@@ -235,7 +232,6 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
             break;
 
           default:
-            //window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
 
             break;
         }
@@ -243,7 +239,6 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
     }
     if (west_blocked){
       if(x-i>=0){
-        //explos(map,x-i,y);
         switch(map_get_cell_type(map,x-i,y)){
           case CELL_BOX:
             if (west_blocked){
@@ -252,6 +247,9 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
             }
           break;
           case CELL_SCENERY:
+            west_blocked=0;
+          break;
+          case CELL_DOOR:
             west_blocked=0;
           break;
           case CELL_EMPTY:
@@ -266,7 +264,6 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
             break;
 
           default:
-            //window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
 
             break;
         }
@@ -274,7 +271,6 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
     }
     if (south_blocked){
       if(y+i<=map_get_height(map)-1){
-        //explos(map,x,y+i);
         switch(map_get_cell_type(map,x,y+i)){
           case CELL_BOX:
             if (south_blocked){
@@ -283,6 +279,9 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
             }
           break;
           case CELL_SCENERY:
+            south_blocked=0;
+          break;
+          case CELL_DOOR:
             south_blocked=0;
           break;
           case CELL_EMPTY:
@@ -297,7 +296,6 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
             break;
 
           default:
-            //window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
 
             break;
         }
@@ -305,7 +303,6 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
     }
     if (north_blocked){
       if(y-i>=0){
-        //explos(map,x,y-i);
         switch(map_get_cell_type(map,x,y-i)){
           case CELL_BOX:
             if (east_blocked){
@@ -314,6 +311,9 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
             }
           break;
           case CELL_SCENERY:
+            north_blocked=0;
+          break;
+          case CELL_DOOR:
             north_blocked=0;
           break;
           case CELL_EMPTY:
@@ -328,7 +328,6 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
             break;
 
           default:
-            //window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
 
             break;
         }

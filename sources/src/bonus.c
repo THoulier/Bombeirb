@@ -50,37 +50,93 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
   for (int i=1;i<range+1;i++){
     if (east_blocked){
       if(x+i<=map_get_width(map)-1){
-        if (map_get_cell_type(map,x+i,y) == CELL_BOX){
-          east_blocked=0;
-          bonus_config(map,x+i,y);
-          display_bonus_explo(map,x+i,y,player_get_level(player));
+        switch(map_get_cell_type(map,x+i,y)){
+          case CELL_BOX:
+            if (east_blocked){
+              east_blocked=0;
+              bonus_config(map,x+i,y);
+              display_bonus_explo(map,x+i,y,player_get_level(player));
+            }
+          break;
+          case CELL_SCENERY:
+            east_blocked=0;
+          break;
+          case CELL_DOOR:
+            east_blocked=0;
+          break;
+
+          default:
+
+            break;
         }
       }
     }
     if (west_blocked){
       if(x-i>=0){
-        if (map_get_cell_type(map,x-i,y) == CELL_BOX){
-          west_blocked=0;
-          bonus_config(map,x-i,y);
-          display_bonus_explo(map,x-i,y,player_get_level(player));
+        switch(map_get_cell_type(map,x-i,y)){
+          case CELL_BOX:
+            if (west_blocked){
+              west_blocked=0;
+              bonus_config(map,x-i,y);
+              display_bonus_explo(map,x-i,y,player_get_level(player));
+            }
+          break;
+          case CELL_SCENERY:
+            west_blocked=0;
+          break;
+          case CELL_DOOR:
+            west_blocked=0;
+          break;
+
+          default:
+
+            break;
         }
       }
     }
     if (south_blocked){
       if(y+i<=map_get_height(map)-1){
-        if (map_get_cell_type(map,x,y+i) == CELL_BOX ){
-          south_blocked=0;
-          bonus_config(map,x,y+i);
-          display_bonus_explo(map,x,y+i,player_get_level(player));
+        switch(map_get_cell_type(map,x,y+i)){
+          case CELL_BOX:
+            if (south_blocked){
+              south_blocked=0;
+              bonus_config(map,x,y+i);
+              display_bonus_explo(map,x,y+i,player_get_level(player));
+            }
+          break;
+          case CELL_SCENERY:
+            south_blocked=0;
+          break;
+          case CELL_DOOR:
+            south_blocked=0;
+          break;
+
+          default:
+
+            break;
         }
       }
     }
     if (north_blocked){
       if(y-i>=0){
-        if (map_get_cell_type(map,x,y-i) == CELL_BOX){
-          north_blocked=0;
-          bonus_config(map,x,y-i);
-          display_bonus_explo(map,x,y-i,player_get_level(player));
+        switch(map_get_cell_type(map,x,y-i)){
+          case CELL_BOX:
+            if (north_blocked){
+              north_blocked=0;
+              bonus_config(map,x,y-i);
+              display_bonus_explo(map,x,y-i,player_get_level(player));
+            }
+          break;
+          case CELL_SCENERY:
+            north_blocked=0;
+          break;
+          case CELL_DOOR:
+            north_blocked=0;
+          break;
+
+          default:
+
+            break;
         }
       }
     }
