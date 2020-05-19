@@ -188,7 +188,7 @@ void map_display(struct map* map)
 					}
 				break;
 				case CELL_EXPLOSION:
-					window_display_image(sprite_get_explo(),x, y);
+					//window_display_image(sprite_get_explo(),x, y);
 				break;
 			}
 	    }

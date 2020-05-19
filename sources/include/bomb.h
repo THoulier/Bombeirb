@@ -35,3 +35,4 @@ void listbomb_pause(int time_pause);
 void listbomb_save();
 int listbomb_get_length(struct listbomb * listbomb);
 void bomb_sup(struct bomb*bomb);
+void explo_end(struct map* map,int x,int y);

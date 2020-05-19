@@ -27,19 +27,13 @@ game_new(void) {
 	struct game* game = malloc(sizeof(*game));
 	game->maps = malloc(sizeof(struct game));
 	game->levels = 5;
-	//game->maps[0] = map_get_static();
-	//listmonster_init(game_get_current_map(game),0);
 
 	for (int nummap=0; nummap<game->levels; nummap++){
 		game->maps[nummap] = get_map(nummap);
-		//listmonster_init(game_get_current_map(game),nummap);
-
 	}
 
-	//struct listbomb *list=NULL;
-//	listbomb_init();
+
 	game->level = 0;
-	//game->monster=NULL;
 	game->player = player_init(5,6);
 	//game->monster=cell_monster_map(game->monster, game_get_current_map(game));
 	// Set default location of the player

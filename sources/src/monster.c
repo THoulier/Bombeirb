@@ -36,10 +36,12 @@ void monster_append(int x, int y, int nummap,enum direction direction){
 		first->monster=monster;
 		first->next=NULL;
     }
+	else{
 	struct listmonster * listmonster=malloc(sizeof(*listmonster));
     listmonster->monster=monster;
     listmonster->next=first;
     first=listmonster;
+	}
 }
 
 
@@ -71,9 +73,9 @@ void listmonster_refresh(struct game*game,struct player*player){
 
 
 void monster_kill(struct monster *monster){
-  struct listmonster *prev;
-  struct listmonster *next;
-  struct listmonster  *listmonster = first;
+  struct listmonster * prev;
+  struct listmonster * next;
+  struct listmonster  * listmonster = first;
   if (listmonster->monster==monster){
     first=listmonster->next;
   }
@@ -290,7 +292,7 @@ void monster_display(struct game*game,struct monster* monster) {
 int listmonster_get_length(struct listmonster * listmonster){
 	int nummonster=0;
 	listmonster=first;
-	while(listmonster->next != NULL){
+	while(listmonster){
 		nummonster +=1;
 		listmonster=listmonster->next;
 	}
@@ -302,7 +304,7 @@ void listmonster_save(){
 	struct listmonster *listmonster=first;
 	save_nummonster(listmonster_get_length(listmonster));
 
-	while(listmonster->next != NULL){
+	while(listmonster){
 		save_monster(listmonster->monster->x,listmonster->monster->y,listmonster->monster->direction,listmonster->monster->nummap);
 		listmonster=listmonster->next;
 	}

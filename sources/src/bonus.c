@@ -43,22 +43,30 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
     display_bonus_explo(map,x,y,player_get_level(player));
   }
   for (int i=1;i<range+1;i++){
+      if(x+i<=map_get_width(map)-1){
         if (map_get_cell_type(map,x+i,y) == CELL_BOX){
           bonus_config(map,x+i,y);
           display_bonus_explo(map,x+i,y,player_get_level(player));
         }
+      }
+      if(x-i>=0){
         if (map_get_cell_type(map,x-i,y) == CELL_BOX){
           bonus_config(map,x-i,y);
           display_bonus_explo(map,x-i,y,player_get_level(player));
         }
+      }
+      if(y+i<=map_get_height(map)-1){
         if (map_get_cell_type(map,x,y+i) == CELL_BOX ){
           bonus_config(map,x,y+i);
           display_bonus_explo(map,x,y+i,player_get_level(player));
         }
+      }
+      if(y-i>=0){
         if (map_get_cell_type(map,x,y-i) == CELL_BOX){
           bonus_config(map,x,y-i);
           display_bonus_explo(map,x,y-i,player_get_level(player));
         }
+      }
       }
 }
 
