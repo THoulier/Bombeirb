@@ -28,14 +28,13 @@ game_new(void) {
 	game->maps = malloc(sizeof(struct game));
 	game->levels = 5;
 
-	for (int nummap=0; nummap<game->levels; nummap++){
+	for (int nummap=0; nummap<=game->levels; nummap++){
 		game->maps[nummap] = get_map(nummap);
 	}
 
 
 	game->level = 0;
 	game->player = player_init(5,6);
-	//game->monster=cell_monster_map(game->monster, game_get_current_map(game));
 	// Set default location of the player
 	player_set_position(game->player, 1, 0);
 	//map_bonus_init(game->maps[game->level]);
@@ -51,7 +50,7 @@ struct game* game_load(void) {
 	game->levels = 5;
 	//game->maps[0] = map_get_static();
 
-	for (int nummap=0; nummap<game->levels; nummap++){
+	for (int nummap=0; nummap<=game->levels; nummap++){
 		game->maps[nummap] = get_map_saved(nummap);
 
 	}

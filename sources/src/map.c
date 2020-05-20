@@ -261,6 +261,16 @@ char * map_init(int nummap) {
 			case 4: 
 				path="map/map_4"; 
 			break;
+			case 5:
+				path="map/map_5";
+			break;
+			case 6:
+				path="map/map_6";
+			break;
+			case 7:
+				path="map/map_7";
+			break;
+
       	}
 	return path;
 }
@@ -305,6 +315,15 @@ char * map_init_save(int nummap) {
 			break;
 			case 4: 
 				path="save/map_4"; 
+			break;
+			case 5:
+				path="save/map_5";
+			break;
+			case 6:
+				path="save/map_6";
+			break;
+			case 7:
+				path="save/map_7";
 			break;
 		}
 	return path;
