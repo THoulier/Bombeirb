@@ -33,4 +33,5 @@ SDL_Surface* sprite_get_banner_flag();
 SDL_Surface* sprite_get_gameover();
 SDL_Surface* sprite_get_princess();
 SDL_Surface* sprite_get_youwin();
+SDL_Surface* sprite_get_press_esc();
 #endif /* SPRITE_H_ */

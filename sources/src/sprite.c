@@ -66,6 +66,7 @@
 #define PRINCESS "sprite/bomberwoman.png"
 #define YOUWIN "sprite/youwin.png"
 #define GAMEOVER "sprite/gameover.png"
+#define PRESSESC "sprite/pressesc.png"
 // banner
 SDL_Surface* numbers[10];
 SDL_Surface* banner_life;
@@ -92,6 +93,8 @@ SDL_Surface* gameover;
 SDL_Surface* explo;
 SDL_Surface* bomberwoman;
 SDL_Surface* youwin;
+SDL_Surface* pressesc;
+
 
 
 
@@ -199,6 +202,10 @@ static void gameover_load() {
 static void youwin_load() {
 	youwin = image_load(YOUWIN);
 }
+static void press_load() {
+	pressesc = image_load(PRESSESC);
+}
+
 
 static void monster_load() {
 	monster_img[WEST] = image_load(MONSTER_LEFT);
@@ -231,6 +238,7 @@ void sprite_load() {
 	gameover_load();
 	explo_load();
 	youwin_load();
+	press_load();
 }
 
 void sprite_free() {
@@ -337,6 +345,11 @@ SDL_Surface* sprite_get_princess() {
 SDL_Surface* sprite_get_youwin() {
 	assert(youwin);
 	return youwin;
+}
+
+SDL_Surface* sprite_get_press_esc() {
+	assert(pressesc);
+	return pressesc;
 }
 
 

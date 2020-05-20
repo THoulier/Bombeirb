@@ -184,12 +184,13 @@ void game_display(struct game* game) {
 	}
 
 	if (game->player->lives<1){ 
-		//window_resize(12*SIZE_BLOC,12*SIZE_BLOC);
-		window_display_image(sprite_get_gameover(),0,0);
+		window_display_image(sprite_get_gameover(),((map_get_width(map)*SIZE_BLOC)-480)/2,((map_get_height(map)*SIZE_BLOC)-480)/2);
+		window_display_image(sprite_get_press_esc(),150,(map_get_height(map)*SIZE_BLOC)-30);
 	}
 	if (map_get_compose_type(map,player->x,player->y)==CELL_PRINCESS){
-		//window_resize(512,473);
-		window_display_image(sprite_get_youwin(),0,0);
+		window_display_image(sprite_get_youwin(),((map_get_width(map)*SIZE_BLOC)-480)/2,((map_get_height(map)*SIZE_BLOC)-480)/2);
+		window_display_image(sprite_get_press_esc(),150,(map_get_height(map)*SIZE_BLOC)-30);
+
 	}
 
 	window_refresh();
