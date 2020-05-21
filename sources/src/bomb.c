@@ -126,30 +126,6 @@ int bomb_start(struct bomb *bomb,struct map* map,struct player*player, int etat)
 
   }
 
-/*
-	if ((current_time-time)<1000){
-		bomb->etat=3;
-  }
-	else if ((current_time-time)<2000){
-		bomb->etat=2;
-
-  }
-
-	else if ((current_time-time)<3000){
-		bomb->etat=1;
-  }
-	else if ((current_time-time)<4000){
-	   bomb->etat=0;
-
-  }
-  else if ((current_time-time)<4500){
-    bomb->etat=4;
-
-  }
-
-  else{
-    return 0;
-  }*/
   return 1;
 }
 
@@ -163,7 +139,7 @@ void bomb_display(struct bomb*bomb, struct game *game){
       window_display_image(sprite_get_bomb(bomb->etat), x, y);
     }
     if (bomb->etat==4){
-      explo_display(bomb,game->player,game_get_nummap(game,game_get_level(game)));
+      explo_display(bomb,game_get_nummap(game,game_get_level(game)));
       
     }
   }
@@ -171,10 +147,10 @@ void bomb_display(struct bomb*bomb, struct game *game){
 
 
 
-void explo_display(struct bomb*bomb,struct player* player,struct map*map){
+void explo_display(struct bomb*bomb,struct map*map){
   int x=bomb->x;
   int y=bomb->y;
-  int range=player->bombrange;
+  int range=bomb->range;
 
   int south_blocked=1;
   int east_blocked=1;
@@ -305,7 +281,7 @@ void explo_display(struct bomb*bomb,struct player* player,struct map*map){
       if(y-i>=0){
         switch(map_get_cell_type(map,x,y-i)){
           case CELL_BOX:
-            if (east_blocked){
+            if (north_blocked){
               north_blocked=0;
               window_display_image(sprite_get_explo(),x*SIZE_BLOC, (y-i)*SIZE_BLOC);
             }

@@ -50,7 +50,7 @@ void listmonster_refresh(struct game*game,struct player*player){
   	int nummap=game_get_level(game);
   	while(listmonster!=NULL){
 		monster_display(game,listmonster->monster);
-		monster_move(listmonster->monster,game_get_nummap(game,listmonster->monster->nummap),2000-nummap*400);
+		monster_move(listmonster->monster,game_get_nummap(game,listmonster->monster->nummap),2000-nummap*200);
 		int current_time=SDL_GetTicks();
 
 		if(game->player->x == listmonster->monster->x && game->player->y==listmonster->monster->y){
