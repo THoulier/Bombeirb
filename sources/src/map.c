@@ -128,9 +128,11 @@ void display_bonus(struct map* map, int x, int y, unsigned char type)
 		case BONUS_BOMB_NB_INC:
 			window_display_image(sprite_get_bonus(BONUS_BOMB_NB_INC), x, y);
 			break;
+
 		case BONUS_LIFE:
 			window_display_image(sprite_get_bonus(BONUS_LIFE), x,y);
 			break;
+
 		case BONUS_MONSTER:
 			window_display_image(sprite_get_monster(SOUTH), x,y);
 			break;
@@ -147,10 +149,10 @@ void display_scenery(struct map* map, int x, int  y, unsigned char type)
 		case SCENERY_TREE:
 			window_display_image(sprite_get_tree(), x, y);
 			break;
+
 		case SCENERY_PRINCESS:
 			window_display_image(sprite_get_princess(), x, y);
 			break;
-
 	}
 }
 
@@ -169,16 +171,16 @@ void map_display(struct map* map)
 			switch (type & 0xf0) {
 				case CELL_SCENERY:
 					display_scenery(map, x, y, type);
-				break;
+					break;
 				case CELL_BOX:
 					window_display_image(sprite_get_box(), x, y);
-				break;
+					break;
 				case CELL_BONUS:
 					display_bonus(map, x, y, type);
-				break;
+					break;
 				case CELL_KEY:
 					window_display_image(sprite_get_banner_key(), x, y);
-				break;
+					break;
 				case CELL_DOOR:
 					if (type & 0x01){
 						window_display_image(sprite_get_door_opened(), x, y);
@@ -186,41 +188,13 @@ void map_display(struct map* map)
 					else {
 						window_display_image(sprite_get_door_closed(), x, y);
 					}
-				break;
+					break;
 				case CELL_EXPLOSION:
-					//window_display_image(sprite_get_explo(),x, y);
-				break;
+					break;
 			}
 	    }
 	}
 }
-
-/*
-struct map* map_get_static(void)
-{
-	struct map* map = map_new(STATIC_MAP_WIDTH, STATIC_MAP_HEIGHT);
-
-	unsigned char themap[STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT] = {
-	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_MONSTER, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
-	  CELL_STONE, CELL_STONE, CELL_STONE, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
-	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
-	  CELL_BOX, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
-	  CELL_EMPTY, CELL_EMPTY, CELL_KEY, CELL_EMPTY, CELL_STONE, CELL_BOX, CELL_STONE, CELL_EMPTY, CELL_MONSTER, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
-	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_STONE, CELL_STONE, CELL_EMPTY, CELL_EMPTY, CELL_STONE, CELL_EMPTY, CELL_EMPTY,
-	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY , CELL_EMPTY, CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
-	  CELL_EMPTY, CELL_TREE, CELL_BOX, CELL_TREE, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,  CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
-	  CELL_EMPTY, CELL_TREE, CELL_TREE, CELL_TREE, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,  CELL_STONE,  CELL_MONSTER, CELL_EMPTY,
-	  CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_STONE,  CELL_EMPTY, CELL_EMPTY,
-	  CELL_BOX, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE, CELL_STONE,  CELL_BOX, CELL_EMPTY,
-	  CELL_BOX,  CELL_EMPTY, 50, CELL_KEY, CELL_KEY, CELL_KEY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY, CELL_EMPTY,
-		};
-
-	for (int i = 0; i < STATIC_MAP_WIDTH * STATIC_MAP_HEIGHT; i++)
-		map->grid[i] = themap[i];
-	listmonster_init(map,0);
-
-	return map;
-}*/
 
 
 struct map* get_map (int nummap){
@@ -245,33 +219,32 @@ struct map* get_map (int nummap){
 
 char * map_init(int nummap) {
     char *path;
-      	switch (nummap){
-			case 0:
-				path="map/map_0"; 
+    switch (nummap){
+		case 0:
+			path="map/map_0"; 
 			break;
-			case 1: 
-				path="map/map_1"; 
+		case 1: 
+			path="map/map_1"; 
 			break;
-			case 2: 
-				path="map/map_2"; 
+		case 2: 
+			path="map/map_2"; 
 			break;
-			case 3: 
-				path="map/map_3"; 
+		case 3: 
+			path="map/map_3"; 
 			break;
-			case 4: 
-				path="map/map_4"; 
+		case 4: 
+			path="map/map_4"; 
 			break;
-			case 5:
-				path="map/map_5";
+		case 5:
+			path="map/map_5";
 			break;
-			case 6:
-				path="map/map_6";
+		case 6:
+			path="map/map_6";
 			break;
-			case 7:
-				path="map/map_7";
+		case 7:
+			path="map/map_7";
 			break;
-
-      	}
+  	}
 	return path;
 }
 
@@ -300,32 +273,32 @@ void map_save(struct map* map,int nummap){
 
 char * map_init_save(int nummap) {
     char *path;
-      	switch (nummap){
-			case 0:
-				path="save/map_0"; 
+    switch (nummap){
+		case 0:
+			path="save/map_0"; 
 			break;
-			case 1: 
-				path="save/map_1"; 
+		case 1: 
+			path="save/map_1"; 
 			break;
-			case 2: 
-				path="save/map_2"; 
+		case 2: 
+			path="save/map_2"; 
 			break;
-			case 3: 
-				path="save/map_3"; 
+		case 3: 
+			path="save/map_3"; 
 			break;
-			case 4: 
-				path="save/map_4"; 
+		case 4: 
+			path="save/map_4"; 
 			break;
-			case 5:
-				path="save/map_5";
+		case 5:
+			path="save/map_5";
 			break;
-			case 6:
-				path="save/map_6";
+		case 6:
+			path="save/map_6";
 			break;
-			case 7:
-				path="save/map_7";
+		case 7:
+			path="save/map_7";
 			break;
-		}
+	}
 	return path;
 }
 
@@ -342,8 +315,8 @@ struct map* get_map_saved (int nummap){
 		for (j = 0; j < map_get_width(map); j++) {
 		fscanf(ptr,"%d", &valeur);
 		map->grid[j+i*width]=valeur;
-	}}
+		}
+	}
 	listmonster_init(map,nummap);
-
 	return map;
 }

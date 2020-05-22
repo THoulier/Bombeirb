@@ -132,7 +132,8 @@ static int player_move_aux(struct player* player, struct map* map, int x, int y)
 		case CELL_SCENERY:
 			if (map_get_compose_type(map,x,y)==CELL_PRINCESS){
 				return 1;
-			}else{
+			}
+			else{
 				return 0;
 			}
 			break;
@@ -267,12 +268,11 @@ void player_display(struct player* player) {
 }
 
 void player_bomb(struct player* player, struct map* map) {
-
 	if (player->bombs!=0){
-				bomb_insertion(player->x,player->y,player->bombrange,player->level,3);
-				player_dec_nb_bomb(player);
-			}
-		}
+		bomb_insertion(player->x,player->y,player->bombrange,player->level,3);
+		player_dec_nb_bomb(player);
+	}
+}
 
 void player_get_bonus(struct player*player, struct map*map){
 	int x=player->x;
@@ -308,7 +308,6 @@ void player_get_bonus(struct player*player, struct map*map){
 			break;
 	}
 	map_set_cell_type(map,x,y,CELL_EMPTY);
-
 }
 
 void player_change_level(struct player*player, int level){
@@ -318,7 +317,5 @@ void player_change_level(struct player*player, int level){
 
 
 void player_save(struct player *player){
-	
 	save_player(player->x,player->y,player->lives,player->direction,player->level,player->bombrange,player->key,player->bombs,player->contact,player->dmg_tmp);
-
 }

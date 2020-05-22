@@ -115,20 +115,15 @@ int bomb_start(struct bomb *bomb,struct map* map,struct player*player, int etat)
 	int current_time=SDL_GetTicks();
 
   if ((current_time - bomb->time) > 1000 && bomb->etat>0 && bomb->etat != 4){
-
   	bomb->etat --;
   	bomb->time=SDL_GetTicks();
- 
   }
   else if ((current_time - bomb->time) > 1000 && bomb->etat==0){
     bomb->etat=4;
-    //bomb->time=SDL_GetTicks();
   }
   else if ((current_time - bomb->time) > 1200 && bomb->etat==4 ){
     return 0;
-
   }
-
   return 1;
 }
 
@@ -143,7 +138,6 @@ void bomb_display(struct bomb*bomb, struct game *game){
     }
     if (bomb->etat==4){
       explo_display(bomb,game_get_nummap(game,game_get_level(game)));
-      
     }
   }
 }
@@ -161,26 +155,22 @@ void explo_display(struct bomb*bomb,struct map*map){
   int west_blocked=1;
 
   switch(map_get_cell_type(map,x,y)){
-        case CELL_BOX:
-            window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
-        break;
-        case CELL_SCENERY:
-        break;
-        case CELL_EMPTY:
-          map_set_cell_type(map,x,y,CELL_EXPLOSION);
-        break;
-
-        case CELL_MONSTER:
-          map_set_cell_type(map,x,y,CELL_EXPLOSION);
-          break;
-        case CELL_EXPLOSION:
-          window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
-          break;
-
-        default:
-
-          break;
-
+    case CELL_BOX:
+      window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
+      break;
+    case CELL_SCENERY:
+      break;
+    case CELL_EMPTY:
+      map_set_cell_type(map,x,y,CELL_EXPLOSION);
+      break;
+    case CELL_MONSTER:
+      map_set_cell_type(map,x,y,CELL_EXPLOSION);
+      break;
+    case CELL_EXPLOSION:
+      window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
+      break;
+    default:
+      break;
   }
 
   for(int i=1;i<=range;i++){
@@ -192,26 +182,23 @@ void explo_display(struct bomb*bomb,struct map*map){
               east_blocked=0;
               window_display_image(sprite_get_explo(),(x+i)*SIZE_BLOC, y*SIZE_BLOC);
             }
-          break;
+            break;
           case CELL_SCENERY:
             east_blocked=0;
-          break;
+            break;
           case CELL_DOOR:
             east_blocked=0;
-          break;
+            break;
           case CELL_EMPTY:
             map_set_cell_type(map,x+i,y,CELL_EXPLOSION);
-          break;
-
+            break;
           case CELL_MONSTER:
             map_set_cell_type(map,x+i,y,CELL_EXPLOSION);
             break;
           case CELL_EXPLOSION:
             window_display_image(sprite_get_explo(),(x+i)*SIZE_BLOC, y*SIZE_BLOC);
             break;
-
           default:
-
             break;
         }
       }
@@ -224,26 +211,23 @@ void explo_display(struct bomb*bomb,struct map*map){
               west_blocked=0;
               window_display_image(sprite_get_explo(),(x-i)*SIZE_BLOC, y*SIZE_BLOC);
             }
-          break;
+            break;
           case CELL_SCENERY:
             west_blocked=0;
-          break;
+            break;
           case CELL_DOOR:
             west_blocked=0;
-          break;
+            break;
           case CELL_EMPTY:
             map_set_cell_type(map,x-i,y,CELL_EXPLOSION);
-          break;
-
+            break;
           case CELL_MONSTER:
             map_set_cell_type(map,x-i,y,CELL_EXPLOSION);
             break;
           case CELL_EXPLOSION:
             window_display_image(sprite_get_explo(),(x-i)*SIZE_BLOC, y*SIZE_BLOC);
             break;
-
           default:
-
             break;
         }
       }
@@ -256,26 +240,23 @@ void explo_display(struct bomb*bomb,struct map*map){
               south_blocked=0;
               window_display_image(sprite_get_explo(),x*SIZE_BLOC, (y+i)*SIZE_BLOC);
             }
-          break;
+            break;
           case CELL_SCENERY:
             south_blocked=0;
-          break;
+            break;
           case CELL_DOOR:
             south_blocked=0;
-          break;
+            break;
           case CELL_EMPTY:
             map_set_cell_type(map,x,y+i,CELL_EXPLOSION);
-          break;
-
+            break;
           case CELL_MONSTER:
             map_set_cell_type(map,x,y+i,CELL_EXPLOSION);
             break;
           case CELL_EXPLOSION:
             window_display_image(sprite_get_explo(),x*SIZE_BLOC, (y+i)*SIZE_BLOC);
             break;
-
           default:
-
             break;
         }
       }
@@ -288,26 +269,23 @@ void explo_display(struct bomb*bomb,struct map*map){
               north_blocked=0;
               window_display_image(sprite_get_explo(),x*SIZE_BLOC, (y-i)*SIZE_BLOC);
             }
-          break;
+            break;
           case CELL_SCENERY:
             north_blocked=0;
-          break;
+            break;
           case CELL_DOOR:
             north_blocked=0;
-          break;
+            break;
           case CELL_EMPTY:
             map_set_cell_type(map,x,y-i,CELL_EXPLOSION);
-          break;
-
+            break;
           case CELL_MONSTER:
             map_set_cell_type(map,x,y-i,CELL_EXPLOSION);
             break;
           case CELL_EXPLOSION:
             window_display_image(sprite_get_explo(),x*SIZE_BLOC, (y-i)*SIZE_BLOC);
             break;
-
           default:
-
             break;
         }
       }
@@ -318,20 +296,13 @@ void explo_display(struct bomb*bomb,struct map*map){
 
 
 void explo_end(struct map* map,int x,int y){
-        //printf("%d %d\n",x,y);
-
   switch(map_get_cell_type(map,x,y)){
-
-        case CELL_EXPLOSION:
-          map_set_cell_type(map,x,y,CELL_EMPTY);
-        break;
-
-        default:
-
-        break;
-
+    case CELL_EXPLOSION:
+      map_set_cell_type(map,x,y,CELL_EMPTY);
+      break;
+    default:
+      break;
   }
-
 }
 
 

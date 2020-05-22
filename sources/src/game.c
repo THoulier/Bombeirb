@@ -31,7 +31,7 @@ game_new(void) {
 	for (int nummap=0; nummap<=game->levels; nummap++){
 		game->maps[nummap] = get_map(nummap);
 	}
-
+	
 	game->level = 0;
 	game->player = player_init(5,3);
 	player_set_position(game->player, 1, 0);
@@ -42,17 +42,15 @@ game_new(void) {
 struct game* game_load(void) {
 	sprite_load(); // load sprites into process memory
 	struct game* game = malloc(sizeof(*game));
+	struct player* player = malloc(sizeof(*player));
 
 	game->maps = malloc(sizeof(struct game));
 	game->levels = 7;
-	//game->maps[0] = map_get_static();
 
 	for (int nummap=0; nummap<=game->levels; nummap++){
 		game->maps[nummap] = get_map_saved(nummap);
-
 	}
 
-	struct player* player = malloc(sizeof(*player));
 	game->player=player;
 	load_player(game->player);
 	game->level=game->player->level;
@@ -76,11 +74,11 @@ struct map* game_get_current_map(struct game* game) {
 	return game->maps[game->level];
 }
 
-
 struct monster* game_get_monster(struct game* game) {
 	assert(game);
 	return game->monster;
 }
+
 struct player* game_get_player(struct game* game) {
 	assert(game);
 	return game->player;
@@ -88,7 +86,6 @@ struct player* game_get_player(struct game* game) {
 
 void game_banner_display(struct game* game) {
 	assert(game);
-
 	struct map* map = game_get_current_map(game);
 
 	int y = (map_get_height(map)) * SIZE_BLOC;
@@ -130,39 +127,15 @@ void game_banner_display(struct game* game) {
 
 void game_display(struct game* game) {
 	assert(game);
+
 	struct map* map = game_get_current_map(game);
 	struct player* player = game_get_player(game);
-
 
 	window_clear();
 	game_banner_display(game);
 	map_display(game_get_current_map(game));
-
 	player_display(game->player);
-/*
-	struct monster*tmp=game->monster;
-	while (tmp!=NULL){
-		if(map_get_cell_type(game_get_current_map(game),tmp->x,tmp->y)==CELL_EXPLOSION)
-			game->monster=kill_monster(game->monster,tmp);
-		monster_move(tmp,game_get_current_map(game));
-		monster_display(tmp);
 
-
-		tmp=tmp->next;
-	}
-	tmp=game->monster;
-	while (tmp!=NULL){
-		int current_time = SDL_GetTicks();
-		if(game->player->x == tmp->x && game->player->y==tmp->y ){
-
-			if ((current_time - game->player->contact) > 1000){
-					player_dec_nb_lives(game->player);
-						game->player->dmg_tmp=29;
-					 game->player->contact= SDL_GetTicks();}}
-
-		tmp=tmp->next;}
-		free(tmp);
-		*/
 	int current_time = SDL_GetTicks();
 	if(map_get_cell_type(map,player->x,player->y)==CELL_EXPLOSION && player->lives>0){
 		if ((current_time - game->player->contact) > 1000){
@@ -183,10 +156,10 @@ void game_display(struct game* game) {
 		window_display_image(sprite_get_gameover(),((map_get_width(map)*SIZE_BLOC)-480)/2,((map_get_height(map)*SIZE_BLOC)-480)/2);
 		window_display_image(sprite_get_press_esc(),150,(map_get_height(map)*SIZE_BLOC)-30);
 	}
+
 	if (map_get_compose_type(map,player->x,player->y)==CELL_PRINCESS){
 		window_display_image(sprite_get_youwin(),((map_get_width(map)*SIZE_BLOC)-480)/2,((map_get_height(map)*SIZE_BLOC)-480)/2);
 		window_display_image(sprite_get_press_esc(),150,(map_get_height(map)*SIZE_BLOC)-30);
-
 	}
 
 	window_refresh();
@@ -240,8 +213,6 @@ static short input_keyboard(struct game* game) {
 				if (map_get_cell_type(map,player->x,player->y)!=CELL_DOOR){
 			  		player_bomb(player, map);
 				}
-
-
 				break;
 			default:
 				break;
@@ -300,7 +271,8 @@ void game_door(struct game* game) {
 					x=5;
 					y=15;
 				break;
-			}}
+			}
+		}
 		if (nummap < game->level){
 			switch (nummap){
 				case 0:
@@ -332,8 +304,8 @@ void game_door(struct game* game) {
 					y=6;
 				break;
 
-			}}
-
+			}
+		}
 		if ((type & 0x01)){
 			game_change_map(game, nummap, x, y);
 		}
@@ -356,7 +328,6 @@ int game_update(struct game* game) {
 	}
 	if (map_get_compose_type(game->maps[game->level],game->player->x,game->player->y)==CELL_PRINCESS){
 		return game_end(game);
-
 	}
 	return 0;
 }
@@ -402,19 +373,16 @@ int game_end(struct game *game ){
 		switch (event.type){
 			case SDL_QUIT:
 				return 1;
-			break;
+				break;
 
 			case SDL_KEYDOWN:
 				if ( event.key.keysym.sym == SDLK_ESCAPE ){
 						return 1;
 				}
-			break;
+				break;
 			default:
-			
-			break;
+				break;
 		}
-	
-	
 	return 0;
 }
 

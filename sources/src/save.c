@@ -72,8 +72,7 @@ void save_nummonster(int nummonster){
 }
 
 
-void load_listmonster() 
-{
+void load_listmonster(){
   char *path="save/listmonster";
   FILE* fichierTmp = NULL;
   listmonster_null();
@@ -95,8 +94,7 @@ void load_listmonster()
   }
 }
 
-void load_listbomb() 
-{
+void load_listbomb(){
   char *path="save/listbomb";
   FILE* fichierTmp = NULL;
   listbomb_init();
@@ -118,8 +116,7 @@ void load_listbomb()
   }
 }
 
-void load_player(struct player * player) 
-{
+void load_player(struct player * player){
   char *path="save/player";
   FILE* fichierTmp = NULL;
   fichierTmp = fopen(path, "r"); 
