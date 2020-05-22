@@ -94,6 +94,9 @@ void listbomb_refresh(struct player *player,struct map* map, struct game * game)
 
     listbomb=listbomb->next;
   }
+  if (player->bombs == 0 && firstbomb == NULL){
+    player_inc_nb_bomb(player);
+  }
 }
 
 

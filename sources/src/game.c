@@ -26,18 +26,15 @@ game_new(void) {
 
 	struct game* game = malloc(sizeof(*game));
 	game->maps = malloc(sizeof(struct game));
-	game->levels = 5;
+	game->levels = 7;
 
 	for (int nummap=0; nummap<=game->levels; nummap++){
 		game->maps[nummap] = get_map(nummap);
 	}
 
-
 	game->level = 0;
-	game->player = player_init(5,6);
-	// Set default location of the player
+	game->player = player_init(5,3);
 	player_set_position(game->player, 1, 0);
-	//map_bonus_init(game->maps[game->level]);
 
 	return game;
 }
@@ -47,7 +44,7 @@ struct game* game_load(void) {
 	struct game* game = malloc(sizeof(*game));
 
 	game->maps = malloc(sizeof(struct game));
-	game->levels = 5;
+	game->levels = 7;
 	//game->maps[0] = map_get_static();
 
 	for (int nummap=0; nummap<=game->levels; nummap++){
@@ -207,15 +204,18 @@ static short input_keyboard(struct game* game) {
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
-				listmonster_save();
-				listbomb_save();
-				player_save(game->player);
-				for (int nummap=0; nummap<game->levels; nummap++){
-					map_save(game->maps[nummap],nummap);
-				}
+
 				return 1;
 			case SDLK_o:
 				game_door(game);
+			break;
+			case SDLK_s:
+				listmonster_save();
+				listbomb_save();
+				player_save(game->player);
+				for (int nummap=0; nummap<=game->levels; nummap++){
+					map_save(game->maps[nummap],nummap);
+				}
 			break;
 			case SDLK_p: 
 				return (game_pause(game));
@@ -289,12 +289,24 @@ void game_door(struct game* game) {
 					y=13;
 				break;
 				case 5:
+					x=3;
+					y=2;
+				break;
+				case 6:
 					x=13;
-					y=5;
+					y=6;
+				break;
+				case 7:
+					x=5;
+					y=15;
 				break;
 			}}
 		if (nummap < game->level){
 			switch (nummap){
+				case 0:
+					x=2;
+					y=11;
+				break;
 				case 1:
 					x=11;
 					y=11;
@@ -308,17 +320,18 @@ void game_door(struct game* game) {
 					y=13;
 				break;
 				case 4:
-					x=13;
-					y=3;
-				break;
-				case 5:
-					x=13;
+					x=4;
 					y=5;
 				break;
-				default:
-					x=2;
-					y=11;
+				case 5:
+					x=4;
+					y=5;
 				break;
+				case 6:
+					x=0;
+					y=6;
+				break;
+
 			}}
 
 		if ((type & 0x01)){
@@ -351,17 +364,23 @@ int game_update(struct game* game) {
 int game_pause(struct game *game ){
 	int pause=1;
 	int time= SDL_GetTicks();
+
 	SDL_Event event;
 	while (pause){
 		SDL_WaitEvent(&event);
 		switch (event.type){
-
+			case SDL_QUIT:
+				return 1;
+				break;
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.sym){
 					case SDLK_p:
 						listbomb_pause(SDL_GetTicks()-time);
 						pause=0;
 						return 0;
+						break;
+					case SDLK_ESCAPE:
+						return 1;
 						break;
 					default:
 						break;
@@ -381,6 +400,9 @@ int game_end(struct game *game ){
 	SDL_Event event;
 	SDL_WaitEvent(&event);
 		switch (event.type){
+			case SDL_QUIT:
+				return 1;
+			break;
 
 			case SDL_KEYDOWN:
 				if ( event.key.keysym.sym == SDLK_ESCAPE ){
