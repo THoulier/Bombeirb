@@ -90,12 +90,9 @@ void listbomb_refresh(struct player *player,struct map* map, struct game * game)
         box_explo(map,listbomb->bomb,player);
       }
 			bomb_sup(listbomb->bomb);
+      player_inc_nb_bomb(player);
 		}
-
     listbomb=listbomb->next;
-  }
-  if (player->bombs == 0 && firstbomb == NULL){
-    player_inc_nb_bomb(player);
   }
 }
 
@@ -169,6 +166,8 @@ void explo_display(struct bomb*bomb,struct map*map){
     case CELL_EXPLOSION:
       window_display_image(sprite_get_explo(),x*SIZE_BLOC, y*SIZE_BLOC);
       break;
+    case CELL_BONUS:
+      break;
     default:
       break;
   }
@@ -197,6 +196,9 @@ void explo_display(struct bomb*bomb,struct map*map){
             break;
           case CELL_EXPLOSION:
             window_display_image(sprite_get_explo(),(x+i)*SIZE_BLOC, y*SIZE_BLOC);
+            break;
+          case CELL_BONUS:
+            east_blocked=0;
             break;
           default:
             break;
@@ -227,6 +229,9 @@ void explo_display(struct bomb*bomb,struct map*map){
           case CELL_EXPLOSION:
             window_display_image(sprite_get_explo(),(x-i)*SIZE_BLOC, y*SIZE_BLOC);
             break;
+          case CELL_BONUS:
+            west_blocked=0;
+            break;
           default:
             break;
         }
@@ -256,6 +261,9 @@ void explo_display(struct bomb*bomb,struct map*map){
           case CELL_EXPLOSION:
             window_display_image(sprite_get_explo(),x*SIZE_BLOC, (y+i)*SIZE_BLOC);
             break;
+          case CELL_BONUS:
+            south_blocked=0;
+            break;
           default:
             break;
         }
@@ -284,6 +292,9 @@ void explo_display(struct bomb*bomb,struct map*map){
             break;
           case CELL_EXPLOSION:
             window_display_image(sprite_get_explo(),x*SIZE_BLOC, (y-i)*SIZE_BLOC);
+            break;
+          case CELL_BONUS:
+            north_blocked=0;
             break;
           default:
             break;

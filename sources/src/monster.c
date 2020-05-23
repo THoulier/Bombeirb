@@ -152,6 +152,7 @@ struct monster* monster_move(struct monster* monster, struct map* map,int time_l
 	int y = monster->y;
 	int current_time = SDL_GetTicks();
 	int timer= current_time - monster->time ;
+	srand(time(NULL));
 	if (timer > time_level){
 
 		monster->direction = rand()%4;

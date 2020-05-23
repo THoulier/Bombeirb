@@ -33,7 +33,7 @@ game_new(void) {
 	}
 	
 	game->level = 0;
-	game->player = player_init(5,3);
+	game->player = player_init(1,3);
 	player_set_position(game->player, 1, 0);
 
 	return game;

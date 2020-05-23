@@ -32,7 +32,7 @@ struct player* player_init(int bombs, short lives) {
 	player->contact=0;
 	player->key=0;
 	player->dmg_tmp=0;
-	player->bombrange=3;
+	player->bombrange=1;
 	player->level=0;
 	return player;
 }
@@ -280,7 +280,7 @@ void player_get_bonus(struct player*player, struct map*map){
 
 	switch(map_get_compose_type(map,x,y)&15){
 		case BONUS_BOMB_NB_DEC:
-			if (player->bombs>0){
+			if (player->bombs>1){
 				player_dec_nb_bomb(player);
 			}	
 			break;

@@ -64,7 +64,9 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
           case CELL_DOOR:
             east_blocked=0;
           break;
-
+          case CELL_BONUS:
+            east_blocked=0;
+            break;
           default:
 
             break;
@@ -87,6 +89,9 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
           case CELL_DOOR:
             west_blocked=0;
           break;
+          case CELL_BONUS:
+            west_blocked=0;
+            break;
 
           default:
 
@@ -110,6 +115,9 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
           case CELL_DOOR:
             south_blocked=0;
           break;
+          case CELL_BONUS:
+            south_blocked=0;
+            break;
 
           default:
 
@@ -133,6 +141,9 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
           case CELL_DOOR:
             north_blocked=0;
           break;
+          case CELL_BONUS:
+            north_blocked=0;
+            break;
 
           default:
 
