@@ -17,15 +17,16 @@
 
 
 void bonus_config(struct map *map,int x, int y){
-    srand(time(NULL));
-    int ale=rand()%7;
-    enum bonus_type box=ale;
-    map_set_cell_type(map,x,y,get_compose_type(box));
+  /*assign a random bonus/malus/monster in a box by changing the type of a cell*/
+  srand(time(NULL));
+  int ale=rand()%7;
+  enum bonus_type box=ale;
+  map_set_cell_type(map,x,y,get_compose_type(box));
 }
 
 
 enum compose_type get_compose_type(enum bonus_type bonus){
-    return CELL_BOX|bonus;
+  return CELL_BOX|bonus;
 }
 
 enum bonus_type get_bonus_type(enum compose_type box){
@@ -34,10 +35,12 @@ enum bonus_type get_bonus_type(enum compose_type box){
 
 
 void box_explo(struct map * map,struct bomb * bomb,struct player * player){ 
-
+  /*manage the explosion of a box*/
   int x= bomb->x;
   int y= bomb->y;
   int range = player->bombrange;
+
+  /*used to block the explosion effects in each directions*/
   int south_blocked=1;
   int east_blocked=1;
   int north_blocked=1;
@@ -47,6 +50,7 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
     bonus_config(map,x,y);
     display_bonus_explo(map,x,y,player_get_level(player));
   }
+
   for (int i=1;i<range+1;i++){
     if (east_blocked){
       if(x+i<=map_get_width(map)-1){
@@ -156,6 +160,7 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
 
 
 void display_bonus_explo(struct map *map,int x,int y, int nummap){
+  /*assign the good cell type to a box according to the bonus type configure with bonus_config*/
   enum bonus_type bonus=get_bonus_type(map_get_compose_type(map,x,y));
   if (bonus==0){
     map_set_cell_type(map,x,y,CELL_EMPTY);

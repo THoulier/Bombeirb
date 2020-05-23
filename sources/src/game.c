@@ -20,8 +20,8 @@
 
 
 
-struct game*
-game_new(void) {
+struct game* game_new(void) {
+	/*start a new game*/
 	sprite_load(); // load sprites into process memory
 
 	struct game* game = malloc(sizeof(*game));
@@ -29,7 +29,7 @@ game_new(void) {
 	game->levels = 7;
 
 	for (int nummap=0; nummap<=game->levels; nummap++){
-		game->maps[nummap] = get_map(nummap);
+		game->maps[nummap] = get_map(nummap);//load the initialized maps
 	}
 	
 	game->level = 0;
@@ -39,19 +39,23 @@ game_new(void) {
 	return game;
 }
 
+
 struct game* game_load(void) {
+	/*load a saved game*/
 	sprite_load(); // load sprites into process memory
+
 	struct game* game = malloc(sizeof(*game));
 	struct player* player = malloc(sizeof(*player));
 
+	game->player=player;
 	game->maps = malloc(sizeof(struct game));
 	game->levels = 7;
 
 	for (int nummap=0; nummap<=game->levels; nummap++){
-		game->maps[nummap] = get_map_saved(nummap);
+		game->maps[nummap] = get_map_saved(nummap);//load the saved maps
 	}
 
-	game->player=player;
+	/*load the saved parameters*/
 	load_player(game->player);
 	game->level=game->player->level;
 	load_listbomb();
@@ -61,6 +65,7 @@ struct game* game_load(void) {
 
 	return game;
 }
+
 
 void game_free(struct game* game) {
 	assert(game);
@@ -83,6 +88,17 @@ struct player* game_get_player(struct game* game) {
 	assert(game);
 	return game->player;
 }
+
+struct map* game_get_nummap(struct game* game,int nummap){
+	assert(game);
+	return game->maps[nummap];
+}
+
+int game_get_level(struct game* game) {
+	assert(game);
+	return game->level;
+}
+
 
 void game_banner_display(struct game* game) {
 	assert(game);
@@ -125,7 +141,9 @@ void game_banner_display(struct game* game) {
 	window_display_image(sprite_get_number((game->level)+1), x, y);
 }
 
+
 void game_display(struct game* game) {
+	/*manage the refresh of each objects: monsters, player, bombs...*/
 	assert(game);
 
 	struct map* map = game_get_current_map(game);
@@ -136,6 +154,7 @@ void game_display(struct game* game) {
 	map_display(game_get_current_map(game));
 	player_display(game->player);
 
+	/*a player takes damage from a explosion*/
 	int current_time = SDL_GetTicks();
 	if(map_get_cell_type(map,player->x,player->y)==CELL_EXPLOSION && player->lives>0){
 		if ((current_time - game->player->contact) > 1000){
@@ -145,18 +164,21 @@ void game_display(struct game* game) {
 		game->player->contact= SDL_GetTicks();
 	}
 
+	/*refresh the listmonster/listbomb parameters*/
 	listmonster_refresh(game,player);
 	listbomb_refresh(player,map,game);
 
+	/*a player get a bonus*/
 	if(map_get_cell_type(map,player->x,player->y)==CELL_BONUS) {
 		player_get_bonus(player,map);
 	}
 
+	/*player died=game over*/
 	if (game->player->lives<1){ 
 		window_display_image(sprite_get_gameover(),((map_get_width(map)*SIZE_BLOC)-480)/2,((map_get_height(map)*SIZE_BLOC)-480)/2);
 		window_display_image(sprite_get_press_esc(),150,(map_get_height(map)*SIZE_BLOC)-30);
 	}
-
+	/*player touch the princess=win*/
 	if (map_get_compose_type(map,player->x,player->y)==CELL_PRINCESS){
 		window_display_image(sprite_get_youwin(),((map_get_width(map)*SIZE_BLOC)-480)/2,((map_get_height(map)*SIZE_BLOC)-480)/2);
 		window_display_image(sprite_get_press_esc(),150,(map_get_height(map)*SIZE_BLOC)-30);
@@ -165,7 +187,9 @@ void game_display(struct game* game) {
 	window_refresh();
 }
 
+
 static short input_keyboard(struct game* game) {
+	/*manage the keyboard events*/
 	SDL_Event event;
 	struct player* player = game_get_player(game);
 	struct map* map = game_get_current_map(game);
@@ -174,15 +198,18 @@ static short input_keyboard(struct game* game) {
 		switch (event.type) {
 		case SDL_QUIT:
 			return 1;
+			break;
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
-
 				return 1;
+				break;
 			case SDLK_o:
+			/*open a door to change the map*/
 				game_door(game);
 			break;
 			case SDLK_s:
+			/*save a game*/
 				listmonster_save();
 				listbomb_save();
 				player_save(game->player);
@@ -191,6 +218,7 @@ static short input_keyboard(struct game* game) {
 				}
 			break;
 			case SDLK_p: 
+			/*the game is on pause*/
 				return (game_pause(game));
 				break;
 			case SDLK_UP:
@@ -210,6 +238,7 @@ static short input_keyboard(struct game* game) {
 				player_move(player, map);
 				break;
 			case SDLK_SPACE:
+			/*the player put a bomb on the map*/
 				if (map_get_cell_type(map,player->x,player->y)!=CELL_DOOR){
 			  		player_bomb(player, map);
 				}
@@ -217,7 +246,6 @@ static short input_keyboard(struct game* game) {
 			default:
 				break;
 			}
-
 			break;
 		}
 	}
@@ -225,22 +253,24 @@ static short input_keyboard(struct game* game) {
 }
 
 
-
-
 void game_change_map(struct game* game,int nummap, int x, int y) { 
+	/*manage the map change and resize the size of the window */
 	game->level = nummap;
 	player_set_position(game->player, x, y);
 	player_change_level(game->player,nummap);
 	window_resize(SIZE_BLOC * map_get_width(game_get_current_map(game)),SIZE_BLOC * map_get_height(game_get_current_map(game)) + LINE_HEIGHT + BANNER_HEIGHT);
 }
 
+
 void game_door(struct game* game) {
+	/*manage player position during the map change when the player press O*/
 	assert(game);
 	int type=map_get_compose_type(game->maps[game->level],player_get_x(game->player),player_get_y(game->player));
 	if ((type & 0xf0)==CELL_DOOR){
 		int x=0;
 		int y=0;
 		int nummap=(type>>1) & 0x07;
+		/*if the player go on the next level*/
 		if (nummap > game->level){
 			switch (nummap){
 				case 1:
@@ -273,6 +303,7 @@ void game_door(struct game* game) {
 				break;
 			}
 		}
+		/*if the player go on the previous level*/
 		if (nummap < game->level){
 			switch (nummap){
 				case 0:
@@ -307,9 +338,11 @@ void game_door(struct game* game) {
 			}
 		}
 		if ((type & 0x01)){
+			/*if the door is already opened*/
 			game_change_map(game, nummap, x, y);
 		}
 		else {
+			/*if the door is closed*/
 			if (player_get_key(game->player)){
 				player_dec_key(game->player);
 				map_set_cell_type(game->maps[game->level], player_get_x(game->player), player_get_y(game->player),type | 0x01 );
@@ -323,16 +356,18 @@ void game_door(struct game* game) {
 int game_update(struct game* game) {
 	if (input_keyboard(game))
 		return 1; // exit game
-	if (game->player->lives<1){
+	if (game->player->lives<1){// game over
 		return game_end(game);
 	}
-	if (map_get_compose_type(game->maps[game->level],game->player->x,game->player->y)==CELL_PRINCESS){
+	if (map_get_compose_type(game->maps[game->level],game->player->x,game->player->y)==CELL_PRINCESS){// win
 		return game_end(game);
 	}
 	return 0;
 }
 
+
 int game_pause(struct game *game ){
+	/*the player press p to be on pause*/
 	int pause=1;
 	int time= SDL_GetTicks();
 
@@ -365,9 +400,8 @@ int game_pause(struct game *game ){
 }
 
 
-
-
 int game_end(struct game *game ){
+	/*the game ended because of game over or win*/
 	SDL_Event event;
 	SDL_WaitEvent(&event);
 		switch (event.type){
@@ -384,17 +418,6 @@ int game_end(struct game *game ){
 				break;
 		}
 	return 0;
-}
-
-struct map* game_get_nummap(struct game* game,int nummap){
-	assert(game);
-	return game->maps[nummap];
-}
-
-
-int game_get_level(struct game* game) {
-	assert(game);
-	return game->level;
 }
 
 

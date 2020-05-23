@@ -43,28 +43,6 @@ enum compose_type {
 	CELL_TREE     = CELL_SCENERY | SCENERY_TREE,
 	CELL_STONE    = CELL_SCENERY | SCENERY_STONE,
 	CELL_PRINCESS = CELL_SCENERY | SCENERY_PRINCESS,
-
-//     CELL_BOX_RANGEINC = CELL_BOX | BONUS_BOMB_RANGE_INC,
-//     CELL_BOX_RANGEDEC = CELL_BOX | BONUS_BOMB_RANGE_DEC,
-// 	CELL_BOX_BOMBINC  = CELL_BOX | BONUS_BOMB_NB_INC,
-//     CELL_BOX_BOMBDEC  = CELL_BOX | BONUS_BOMB_NB_DEC,
-//     CELL_BOX_LIFE     = CELL_BOX | BONUS_LIFE,
-//     CELL_BOX_MONSTER  = CELL_BOX | BONUS_MONSTER,
-// 	//for the bonus types
-// 	CELL_BONUS_RANGEINC = CELL_BONUS | BONUS_BOMB_RANGE_INC  ,
-//   CELL_BONUS_RANGEDEC = CELL_BONUS | BONUS_BOMB_RANGE_DEC ,
-// 	CELL_BONUS_BOMBINC  = CELL_BONUS | BONUS_BOMB_NB_INC  ,
-//   CELL_BONUS_BOMBDEC  = CELL_BONUS | BONUS_BOMB_NB_DEC  ,
-//   CELL_BONUS_LIFE     = CELL_BONUS| BONUS_LIFE  ,
-//   CELL_BONUS_MONSTER  = CELL_BONUS | BONUS_MONSTER  ,
-// // //for keep the bonus durinf the explo
-// 	CELL_EXPLO_RANGEINC = CELL_EXPLOSION | BONUS_BOMB_RANGE_INC  ,
-//   CELL_EXPLOSION_RANGEDEC = CELL_EXPLOSION | BONUS_BOMB_RANGE_DEC ,
-// 	CELL_EXPLOSION_BOMBINC  = CELL_EXPLOSION | BONUS_BOMB_NB_INC  ,
-//   CELL_EXPLOSION_BOMBDEC  = CELL_EXPLOSION | BONUS_BOMB_NB_DEC  ,
-//   CELL_EXPLOSION_LIFE     = CELL_EXPLOSION| BONUS_LIFE  ,
-//   CELL_EXPLOSION_MONSTER  = CELL_EXPLOSION | BONUS_MONSTER  ,
-
 };
 
 struct map;
@@ -73,29 +51,34 @@ struct map;
 struct map* map_new(int width, int height);
 void map_free(struct map* map);
 
-
 // Return the height and width of a map
 int map_get_width(struct map* map);
 int map_get_height(struct map* map);
 
 // Return the type of a cell
 enum cell_type map_get_cell_type(struct map* map, int x, int y);
-struct map* get_map (int nummap);
+
 // Set the type of a cell
 void  map_set_cell_type(struct map* map, int x, int y, enum cell_type type);
+void map_set_compose_cell_type(struct map* map, int x, int y, enum compose_type type);
+enum compose_type map_get_compose_type(struct map* map,int x, int y);
 
 // Test if (x,y) is within the map
 int map_is_inside(struct map* map, int x, int y);
 
-// Return a default static map
-struct map* map_get_static();
-
 // Display the map on the screen
 void map_display(struct map* map);
-void map_set_compose_cell_type(struct map* map, int x, int y, enum compose_type type);
-enum compose_type map_get_compose_type(struct map* map,int x, int y);
 char * map_init(int nummap);
-#endif /* MAP_H_ */
+
+//manage the saved maps
 void map_save(struct map* map,int nummap);
 char * map_init_save(int nummap);
 struct map* get_map_saved(int nummap);
+
+//get the map
+struct map* get_map (int nummap);
+
+
+
+#endif /* MAP_H_ */
+

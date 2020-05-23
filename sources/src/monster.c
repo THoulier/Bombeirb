@@ -13,20 +13,27 @@
 
 struct listmonster *first=NULL;
 
-void listmonster_init(struct map*map,int nummap){
-  int i=0;
-  int j=0;
+void listmonster_null(){
+  first=NULL;
+}
 
-  for(i=0;i<map_get_width(map);i++){
-    for(j=0;j<map_get_height(map);j++){
-      if(map_get_cell_type(map,i,j)==CELL_MONSTER){
-          monster_append(i,j,nummap,SOUTH);
-      }
-    }
-  }
+
+void listmonster_init(struct map*map,int nummap){
+	/*initialisation of the monster on the maps*/
+  	int i=0;
+  	int j=0;
+
+  	for(i=0;i<map_get_width(map);i++){
+   		for(j=0;j<map_get_height(map);j++){
+      		if(map_get_cell_type(map,i,j)==CELL_MONSTER){
+          		monster_append(i,j,nummap,SOUTH);
+      		}
+    	}
+  	}
 }
 
 void monster_append(int x, int y, int nummap,enum direction direction){
+	/*add a monster in the list*/
     struct monster * monster = monster_init(x,y,nummap,direction);
 	if (first==NULL){
 		first=malloc(sizeof(*first));
@@ -43,13 +50,18 @@ void monster_append(int x, int y, int nummap,enum direction direction){
 
 
 void listmonster_refresh(struct game*game,struct player*player){
+	/*Refresh the action linked to a monster in game: moves, contact with the player, explosion*/
   	struct listmonster*listmonster=first;
   	int nummap=game_get_level(game);
+
   	while(listmonster!=NULL){
+		  
 		monster_display(game,listmonster->monster);
-		monster_move(listmonster->monster,game_get_nummap(game,listmonster->monster->nummap),2000-nummap*200);
+		monster_move(listmonster->monster,game_get_nummap(game,listmonster->monster->nummap),2000-nummap*200); //the monster's speed increases with the level
+		
 		int current_time=SDL_GetTicks();
 
+		/*Manage the contact between a monster and the player*/
 		if(game->player->x == listmonster->monster->x && game->player->y==listmonster->monster->y){
 			if(listmonster->monster->nummap==game_get_level(game)){
 				if ((current_time - game->player->contact) > 1000){
@@ -70,27 +82,28 @@ void listmonster_refresh(struct game*game,struct player*player){
 
 
 void monster_kill(struct monster *monster){
-  struct listmonster * prev;
-  struct listmonster * next;
-  struct listmonster  * listmonster = first;
-  if (listmonster->monster==monster){
-    first=listmonster->next;
-  }
-  else{
-    while (listmonster!=NULL){
-      	if (listmonster->next->monster==monster){
-			prev=listmonster;
-			listmonster=listmonster->next;
-			next=listmonster->next;
-			listmonster=NULL;
+	/*Drop the monster from the list*/
+	struct listmonster * prev;
+	struct listmonster * next;
+	struct listmonster  * listmonster = first;
+	if (listmonster->monster==monster){
+		first=listmonster->next;
+	}
+	else{
+		while (listmonster!=NULL){
+			if (listmonster->next->monster==monster){
+				prev=listmonster;
+				listmonster=listmonster->next;
+				next=listmonster->next;
+				listmonster=NULL;
+			}
+			else {
+				listmonster=listmonster->next;
+			}
 		}
-		else {
-			listmonster=listmonster->next;
-		}
-    }
-    prev->next=next;
-  }
-  free(monster);
+		prev->next=next;
+	}
+	free(monster);
 }
 
 
@@ -107,6 +120,7 @@ void monster_set_current_way(struct monster* monster, enum direction way) {
 
 
 struct monster* monster_init(int x, int y, int nummap,enum direction direction) {
+	/*initialisation of the parameters for a monster*/
 	struct monster* monster = malloc(sizeof(*monster));
 	monster->direction = direction;
 	monster->time=SDL_GetTicks();
@@ -148,14 +162,14 @@ int monster_move_aux(struct monster* monster, struct map* map, int x, int y) {
 
 
 struct monster* monster_move(struct monster* monster, struct map* map,int time_level) {
+	/*manage the moves of a monster*/
 	int x = monster->x;
 	int y = monster->y;
 	int current_time = SDL_GetTicks();
 	int timer= current_time - monster->time ;
-	srand(time(NULL));
 	if (timer > time_level){
-
-		monster->direction = rand()%4;
+		srand(time(NULL));
+		monster->direction = rand()%4; //random direction
 		switch (monster->direction) {
 			case NORTH:
 				if (monster_move_aux(monster, map, x, y - 1) && y > 0) {
@@ -202,6 +216,7 @@ struct monster* monster_move(struct monster* monster, struct map* map,int time_l
 }
 
 void monster_display(struct game*game,struct monster* monster) {
+	/*display the monsters which are in the same level as the player*/
 	if(monster){
 		if(monster->nummap==game_get_level(game)){
 			window_display_image(sprite_get_monster(monster->direction),monster->x * SIZE_BLOC, monster->y * SIZE_BLOC);
@@ -210,6 +225,7 @@ void monster_display(struct game*game,struct monster* monster) {
 }
 
 int listmonster_get_length(struct listmonster * listmonster){
+	/*to get the length of the list*/
 	int nummonster=0;
 	listmonster=first;
 
@@ -223,6 +239,7 @@ int listmonster_get_length(struct listmonster * listmonster){
 
 
 void listmonster_save(){
+	/*save the monster list parameters*/
 	struct listmonster *listmonster=first;
 	save_nummonster(listmonster_get_length(listmonster));
 
@@ -233,8 +250,5 @@ void listmonster_save(){
 
 }
 
-void listmonster_null(){
-  first=NULL;
-}
 
 

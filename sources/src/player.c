@@ -22,6 +22,7 @@
 
 
 struct player* player_init(int bombs, short lives) {
+	/*initialisation of the player parameters*/
 	struct player* player = malloc(sizeof(*player));
 	if (!player)
 		error("Memory error");
@@ -34,6 +35,7 @@ struct player* player_init(int bombs, short lives) {
 	player->dmg_tmp=0;
 	player->bombrange=1;
 	player->level=0;
+
 	return player;
 }
 
@@ -154,6 +156,7 @@ static int player_move_aux(struct player* player, struct map* map, int x, int y)
 }
 
 int player_move(struct player* player, struct map* map) {
+	/*manage the player moves and the box moves*/
 	int x = player->x;
 	int y = player->y;
 	int move = 0;
@@ -162,18 +165,18 @@ int player_move(struct player* player, struct map* map) {
 	case NORTH:
 		if (player_move_aux(player, map, x, y - 1)) {
 			if (map_get_cell_type(map,x,y-1)==CELL_BOX
-			&& map_get_cell_type(map, x, y-2)==CELL_EMPTY && y-2>=0){
+			&& map_get_cell_type(map, x, y-2)==CELL_EMPTY && y-2>=0){//a box moved north
 				map_set_cell_type(map,x,y-1,CELL_EMPTY);
 				map_set_cell_type(map,x,y-2,CELL_BOX);
 			}
-			if (player->y >0){
+			if (player->y >0){//player moved north
 				player->y--;
 				move = 1;
 			}
 
 			if ((map_get_cell_type(map,x,0)==CELL_BOX && y==1)
 			|| (map_get_cell_type(map,x,y-1)==CELL_BOX
-			&& map_get_cell_type(map,x,y-2)!=CELL_EMPTY)){
+			&& map_get_cell_type(map,x,y-2)!=CELL_EMPTY)){//player didn't moved if a box is on the north limit and the player wanted to go north
 				move=0;
 				player->y++;
 			}
@@ -254,6 +257,7 @@ int player_move(struct player* player, struct map* map) {
 }
 
 void player_display(struct player* player) {
+	/*display the player sprites during the game and when the player takes damages*/
 	assert(player);
 	if (player->dmg_tmp > 0) {
 		player->dmg_tmp--;
@@ -268,13 +272,15 @@ void player_display(struct player* player) {
 }
 
 void player_bomb(struct player* player, struct map* map) {
+	/*the player tap SPACE to put a bomb on the map*/
 	if (player->bombs!=0){
-		bomb_insertion(player->x,player->y,player->bombrange,player->level,3);
-		player_dec_nb_bomb(player);
+		bomb_insertion(player->x,player->y,player->bombrange,player->level,3);// add a bomb in the listbomb
+		player_dec_nb_bomb(player);//decrease the bomb number of the player
 	}
 }
 
 void player_get_bonus(struct player*player, struct map*map){
+	/*refresh the player parameters when the player go on a bonus*/
 	int x=player->x;
 	int y=player->y;
 
@@ -317,5 +323,6 @@ void player_change_level(struct player*player, int level){
 
 
 void player_save(struct player *player){
+	/*save the player parameters*/
 	save_player(player->x,player->y,player->lives,player->direction,player->level,player->bombrange,player->key,player->bombs,player->contact,player->dmg_tmp);
 }

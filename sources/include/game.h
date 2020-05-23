@@ -37,11 +37,21 @@ void game_display(struct game* game);
 // update
 int game_update(struct game* game);
 
+//the player open a door
 void game_door(struct game* game);
 void game_change_map(struct game* game,int newMap, int x, int y);
+
+//the game is on pause
 int game_pause(struct game *game );
+
+//the game is end
 int game_end(struct game *game );
+
+//get the map
 struct map* game_get_nummap(struct game* game,int nummap);
 int game_get_level(struct game* game);
-#endif /* GAME_H_ */
+
+//load a saved game
 struct game* game_load(void);
+
+#endif /* GAME_H_ */

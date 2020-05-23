@@ -7,6 +7,34 @@
 #include <bomb.h>
 
 
+/* Function save: save map/player/list of bombs/list of monsters parameters in a file .txt
+Functions used when the player press S*/
+
+void save_map(char *path){
+  int height;
+  int width;
+  FILE* filetosave = NULL;
+  FILE* file_save = NULL;
+  char * path_save = "save/map";
+  filetosave = fopen(path, "r"); // the file with the map modified 
+  file_save = fopen(path_save, "w+"); // the file where we copy the map modified
+
+  if (filetosave != NULL){
+    fscanf(filetosave,"%u:%u ", &width, &height);
+    fprintf(file_save,"%u:%u ", width, height);
+    unsigned int casenum=0;
+    for (int i=0;i<height;i++){
+      fprintf(file_save,"\n");
+      for (int j=0;j<width;j++){
+        fscanf(filetosave,"%u ", &casenum);
+        fprintf(file_save,"%u ", casenum);
+      }
+    }
+    fclose(filetosave);
+    fclose(file_save);
+  }
+}
+
 
 void save_player(int x,int y, int lives, enum direction direction, int level, int bombrange, int key, int bombs, int contact, int dmg_tmp){
   char *path="save/player";
@@ -71,7 +99,9 @@ void save_nummonster(int nummonster){
   }
 }
 
-
+/*Function load: read the player/list of bombs/list of monsters parameters written in a file with the functions save.
+And assigns those parameters to load the game saved.
+Functions used in the function game_load()*/
 void load_listmonster(){
   char *path="save/listmonster";
   FILE* fichierTmp = NULL;
@@ -145,27 +175,3 @@ void load_player(struct player * player){
 
 
 
-void save_map(char *path){
-  int height;
-  int width;
-  FILE* filetosave = NULL;
-  FILE* file_save = NULL;
-  char * path_save = "save/map";
-  filetosave = fopen(path, "r");
-  file_save = fopen(path_save, "w+"); 
-
-  if (filetosave != NULL){
-    fscanf(filetosave,"%u:%u ", &width, &height);
-    fprintf(file_save,"%u:%u ", width, height);
-    unsigned int casenum=0;
-    for (int i=0;i<height;i++){
-      fprintf(file_save,"\n");
-      for (int j=0;j<width;j++){
-        fscanf(filetosave,"%u ", &casenum);
-        fprintf(file_save,"%u ", casenum);
-      }
-    }
-    fclose(filetosave);
-    fclose(file_save);
-  }
-}

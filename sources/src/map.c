@@ -25,9 +25,8 @@ struct map {
 #define CELL(i,j) ( (i) + (j) * map->width)
 
 
-
-struct map* map_new(int width, int height)
-{
+struct map* map_new(int width, int height){
+	/*create a new map*/
 	assert(width > 0 && height > 0);
 	struct map* map = malloc(sizeof *map);
 
@@ -51,16 +50,15 @@ struct map* map_new(int width, int height)
 	return map;
 }
 
-int map_is_inside(struct map* map, int x, int y)
-{
-
+int map_is_inside(struct map* map, int x, int y){
+	
 	assert(map);
-	/*if((x<map->width)&(x>=0)&(y<map->height)&(y>=0)){
+	if((x<map->width)&(x>=0)&(y<map->height)&(y>=0)){
 		return 1;
 	}
 	else{
 		return 0;
-	}*/
+	}
 	return 1;
 }
 
@@ -108,9 +106,7 @@ void map_set_cell_type(struct map* map, int x, int y, enum cell_type type)
 	map->grid[CELL(x,y)] = type;
 }
 
-void display_bonus(struct map* map, int x, int y, unsigned char type)
-{
-	
+void display_bonus(struct map* map, int x, int y, unsigned char type){
 	// bonus is encoded with the 4 most significant bits
 	switch (type & 0x0f) {
 		case BONUS_BOMB_RANGE_INC:
@@ -139,8 +135,7 @@ void display_bonus(struct map* map, int x, int y, unsigned char type)
 	}
 }
 
-void display_scenery(struct map* map, int x, int  y, unsigned char type)
-{
+void display_scenery(struct map* map, int x, int  y, unsigned char type){
 	switch (type & 0x0f) { // sub-types are encoded with the 4 less significant bits
 		case SCENERY_STONE:
 			window_display_image(sprite_get_stone(), x, y);
@@ -156,8 +151,7 @@ void display_scenery(struct map* map, int x, int  y, unsigned char type)
 	}
 }
 
-void map_display(struct map* map)
-{
+void map_display(struct map* map){
 	assert(map != NULL);
 	assert(map->height > 0 && map->width > 0);
 	int x, y;
@@ -198,6 +192,7 @@ void map_display(struct map* map)
 
 
 struct map* get_map (int nummap){
+	/*get the initialized map with the number nummap*/
 	char *mapp=map_init(nummap);
  	FILE* ptr= fopen(mapp, "r");
  	int width;
@@ -218,6 +213,7 @@ struct map* get_map (int nummap){
 
 
 char * map_init(int nummap) {
+	/*initialisation of the initialized map paths */
     char *path;
     switch (nummap){
 		case 0:
@@ -249,6 +245,7 @@ char * map_init(int nummap) {
 }
 
 void map_save(struct map* map,int nummap){
+	/*save the composition of the map in a .txt file*/
   	int height=map->height;
   	int width=map->width;
 	char *path=map_init_save(nummap);
@@ -272,6 +269,7 @@ void map_save(struct map* map,int nummap){
 
 
 char * map_init_save(int nummap) {
+	/*initialisation of the saved map paths */
     char *path;
     switch (nummap){
 		case 0:
@@ -303,6 +301,7 @@ char * map_init_save(int nummap) {
 }
 
 struct map* get_map_saved (int nummap){
+	/*get the saved map with the numer nummap*/
 	char *mapp=map_init_save(nummap);
  	FILE* ptr= fopen(mapp, "r");
  	int width;

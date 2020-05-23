@@ -14,8 +14,6 @@
 
 
 
-
-
 struct listbomb *firstbomb=NULL;
 
 void listbomb_init() {
@@ -23,6 +21,7 @@ void listbomb_init() {
 }
 
 void bomb_insertion(int x, int y, int range, int nummap,int etat){
+  /*add an initialized bomb in the list of bombs*/
   struct bomb *bomb = bomb_init(x, y, range, nummap, etat);
   if (firstbomb == NULL) {
     firstbomb = malloc(sizeof(*firstbomb));
@@ -37,6 +36,7 @@ void bomb_insertion(int x, int y, int range, int nummap,int etat){
 }
 
 void bomb_sup(struct bomb*bomb){
+  /*supression of a bomb in the list*/
   struct listbomb *prev;
   struct listbomb *next;
   struct listbomb *listbomb=firstbomb;
@@ -62,15 +62,19 @@ void bomb_sup(struct bomb*bomb){
 
 
 void listbomb_refresh(struct player *player,struct map* map, struct game * game){
+  /*Refresh the action linked to a bomb in game: time, box explosion, explosion, the bomb number of the player*/
   struct listbomb *listbomb=firstbomb;
   while (listbomb!=NULL){
+    /*refresh the bomb picture during the 4 seconds*/
     if (bomb_start(listbomb->bomb,map,player,listbomb->bomb->etat) && listbomb->bomb->etat != 4){
       bomb_display(listbomb->bomb,game);
     }
+    /*display the explosion after the 4 seconds*/
     else if (bomb_start(listbomb->bomb,map,player,listbomb->bomb->etat) && listbomb->bomb->etat == 4){
       bomb_display(listbomb->bomb,game);
     }
     else{
+      /*supress the cell type CELL_EXPLOSION from the explosion*/
       explo_end(map,listbomb->bomb->x,listbomb->bomb->y);
       for (int i=1;i<=player->bombrange;i++){
         if(listbomb->bomb->x+i<=map_get_width(map)-1){
@@ -86,9 +90,11 @@ void listbomb_refresh(struct player *player,struct map* map, struct game * game)
           explo_end(map,listbomb->bomb->x,listbomb->bomb->y-i);
         }
       }
+      /*a box blow up if the bomb is in the same level*/
       if (listbomb->bomb->nummap==game_get_level(game)){ 
         box_explo(map,listbomb->bomb,player);
       }
+      /*bomb supressed and bomb number refreshed*/
 			bomb_sup(listbomb->bomb);
       player_inc_nb_bomb(player);
 		}
@@ -98,6 +104,7 @@ void listbomb_refresh(struct player *player,struct map* map, struct game * game)
 
 
 struct bomb * bomb_init(int x, int y, int range, int nummap, int etat){ 
+  /*initialisation of a bomb parameters*/
   struct bomb * bomb=malloc(sizeof(*bomb));
   bomb->x=x;
   bomb->y=y;
@@ -109,16 +116,17 @@ struct bomb * bomb_init(int x, int y, int range, int nummap, int etat){
 }
 
 int bomb_start(struct bomb *bomb,struct map* map,struct player*player, int etat){
+  /*refresh the states of a bomb*/
 	int current_time=SDL_GetTicks();
 
-  if ((current_time - bomb->time) > 1000 && bomb->etat>0 && bomb->etat != 4){
+  if ((current_time - bomb->time) > 1000 && bomb->etat>0 && bomb->etat != 4){//4 seconds countdown
   	bomb->etat --;
   	bomb->time=SDL_GetTicks();
   }
-  else if ((current_time - bomb->time) > 1000 && bomb->etat==0){
+  else if ((current_time - bomb->time) > 1000 && bomb->etat==0){//explosion starts
     bomb->etat=4;
   }
-  else if ((current_time - bomb->time) > 1200 && bomb->etat==4 ){
+  else if ((current_time - bomb->time) > 1200 && bomb->etat==4 ){//explosion ends
     return 0;
   }
   return 1;
@@ -127,6 +135,7 @@ int bomb_start(struct bomb *bomb,struct map* map,struct player*player, int etat)
 
 
 void bomb_display(struct bomb*bomb, struct game *game){
+  /*display the bomb if its in the same level as the player*/
   int x=bomb->x*SIZE_BLOC;
   int y=bomb->y*SIZE_BLOC;
   if (bomb->nummap==game_get_level(game)){ 
@@ -142,10 +151,12 @@ void bomb_display(struct bomb*bomb, struct game *game){
 
 
 void explo_display(struct bomb*bomb,struct map*map){
+  /*manage the propagation of the explosion*/
   int x=bomb->x;
   int y=bomb->y;
   int range=bomb->range;
 
+  /*used to block the explosion effects in each directions*/
   int south_blocked=1;
   int east_blocked=1;
   int north_blocked=1;
@@ -307,6 +318,7 @@ void explo_display(struct bomb*bomb,struct map*map){
 
 
 void explo_end(struct map* map,int x,int y){
+  /*supress CELL_EXPLOSION*/
   switch(map_get_cell_type(map,x,y)){
     case CELL_EXPLOSION:
       map_set_cell_type(map,x,y,CELL_EMPTY);
@@ -318,6 +330,7 @@ void explo_end(struct map* map,int x,int y){
 
 
 void listbomb_pause(int time_pause){
+  /*Refresh the bomb time when the player take a break*/
   struct listbomb *listbomb=firstbomb;
 
   while (listbomb!=NULL){
@@ -338,6 +351,7 @@ int listbomb_get_length(struct listbomb * listbomb){
 
 
 void listbomb_save(){
+  /*save the list bomb parameters*/
   struct listbomb *listbomb=firstbomb;
 	save_numbomb(listbomb_get_length(listbomb));
 

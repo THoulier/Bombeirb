@@ -21,10 +21,10 @@ int main(int argc, char *argv[]) {
 	}
 
 	struct game* game;
-	if (argc-1){
+	if (argc-1){// load the game saved
 		game =game_load();
 	}
-	else {
+	else {// load a new game
 		game = game_new();
 
 	}
