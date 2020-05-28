@@ -91,9 +91,8 @@ void listbomb_refresh(struct player *player,struct map* map, struct game * game)
         }
       }
       /*a box blow up if the bomb is in the same level*/
-      if (listbomb->bomb->nummap==game_get_level(game)){ 
-        box_explo(map,listbomb->bomb,player);
-      }
+      box_explo(game_get_nummap(game,listbomb->bomb->nummap),listbomb->bomb,player);
+      
       /*bomb supressed and bomb number refreshed*/
 			bomb_sup(listbomb->bomb);
       player_inc_nb_bomb(player);

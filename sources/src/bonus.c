@@ -48,7 +48,7 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
 
   if (map_get_cell_type(map,x,y) == CELL_BOX){
     bonus_config(map,x,y);
-    display_bonus_explo(map,x,y,player_get_level(player));
+    display_bonus_explo(map,x,y,bomb->nummap);
   }
 
   for (int i=1;i<range+1;i++){
@@ -59,7 +59,7 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
             if (east_blocked){
               east_blocked=0;
               bonus_config(map,x+i,y);
-              display_bonus_explo(map,x+i,y,player_get_level(player));
+              display_bonus_explo(map,x+i,y,bomb->nummap);
             }
           break;
           case CELL_SCENERY:
@@ -84,15 +84,15 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
             if (west_blocked){
               west_blocked=0;
               bonus_config(map,x-i,y);
-              display_bonus_explo(map,x-i,y,player_get_level(player));
+              display_bonus_explo(map,x-i,y,bomb->nummap);
             }
-          break;
+            break;
           case CELL_SCENERY:
             west_blocked=0;
-          break;
+            break;
           case CELL_DOOR:
             west_blocked=0;
-          break;
+            break;
           case CELL_BONUS:
             west_blocked=0;
             break;
@@ -110,15 +110,15 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
             if (south_blocked){
               south_blocked=0;
               bonus_config(map,x,y+i);
-              display_bonus_explo(map,x,y+i,player_get_level(player));
+              display_bonus_explo(map,x,y+i,bomb->nummap);
             }
-          break;
+            break;
           case CELL_SCENERY:
             south_blocked=0;
-          break;
+            break;
           case CELL_DOOR:
             south_blocked=0;
-          break;
+            break;
           case CELL_BONUS:
             south_blocked=0;
             break;
@@ -136,15 +136,15 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
             if (north_blocked){
               north_blocked=0;
               bonus_config(map,x,y-i);
-              display_bonus_explo(map,x,y-i,player_get_level(player));
+              display_bonus_explo(map,x,y-i,bomb->nummap);
             }
-          break;
+            break;
           case CELL_SCENERY:
             north_blocked=0;
-          break;
+            break;
           case CELL_DOOR:
             north_blocked=0;
-          break;
+            break;
           case CELL_BONUS:
             north_blocked=0;
             break;

@@ -168,7 +168,6 @@ struct monster* monster_move(struct monster* monster, struct map* map,int time_l
 	int current_time = SDL_GetTicks();
 	int timer= current_time - monster->time ;
 	if (timer > time_level){
-		srand(time(NULL));
 		monster->direction = rand()%4; //random direction
 		switch (monster->direction) {
 			case NORTH:
