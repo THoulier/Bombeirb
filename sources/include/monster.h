@@ -35,7 +35,7 @@ void monster_set_position(struct monster *monster, int x, int y);
 void monster_set_current_way(struct monster* monster, enum direction way);
 struct monster* monster_init(int x, int y, int nummap,enum direction direction);
 int monster_move_aux(struct monster* monster, struct map* map, int x, int y);
-struct monster* monster_move(struct monster* monster, struct map* map,int time_level);
+struct monster* monster_move(struct monster* monster, struct map* map,int time_level, int random);
 void monster_display(struct game * game,struct monster* monster);
 
 

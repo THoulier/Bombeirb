@@ -54,10 +54,12 @@ void listmonster_refresh(struct game*game,struct player*player){
   	struct listmonster*listmonster=first;
   	int nummap=game_get_level(game);
 
+  	srand(time(NULL));
+	int random = rand()%4;
+
   	while(listmonster!=NULL){
-		  
 		monster_display(game,listmonster->monster);
-		monster_move(listmonster->monster,game_get_nummap(game,listmonster->monster->nummap),2000-nummap*200); //the monster's speed increases with the level
+		monster_move(listmonster->monster,game_get_nummap(game,listmonster->monster->nummap),2000-nummap*200,random); //the monster's speed increases with the level
 		
 		int current_time=SDL_GetTicks();
 
@@ -71,11 +73,11 @@ void listmonster_refresh(struct game*game,struct player*player){
 				}
 			}	
 		}
-
+		/*kill a monster if it is in a explosion*/
 		if(map_get_cell_type(game_get_nummap(game,listmonster->monster->nummap),listmonster->monster->x,listmonster->monster->y)==CELL_EXPLOSION){
 			monster_kill(listmonster->monster);
 		}
-
+		random = rand()%4; //new initialization of the random number 
 		listmonster=listmonster->next;
 	}
 }
@@ -161,14 +163,14 @@ int monster_move_aux(struct monster* monster, struct map* map, int x, int y) {
 }
 
 
-struct monster* monster_move(struct monster* monster, struct map* map,int time_level) {
+struct monster* monster_move(struct monster* monster, struct map* map,int time_level, int random) {
 	/*manage the moves of a monster*/
 	int x = monster->x;
 	int y = monster->y;
 	int current_time = SDL_GetTicks();
 	int timer= current_time - monster->time ;
 	if (timer > time_level){
-		monster->direction = rand()%4; //random direction
+		monster->direction = random;	 //random direction
 		switch (monster->direction) {
 			case NORTH:
 				if (monster_move_aux(monster, map, x, y - 1) && y > 0) {

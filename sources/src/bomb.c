@@ -339,6 +339,7 @@ void listbomb_pause(int time_pause){
 }
 
 int listbomb_get_length(struct listbomb * listbomb){
+  /*get the number of bombs in listbomb to save it in a .txt file*/
 	int numbomb=0;
 	listbomb=firstbomb;
 	while(listbomb){
