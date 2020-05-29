@@ -15,16 +15,6 @@
 
 
 
-
-void bonus_config(struct map *map,int x, int y){
-  /*assign a random bonus/malus/monster in a box by changing the type of a cell*/
-  srand(time(NULL));
-  int ale=rand()%7;
-  enum bonus_type box=ale;
-  map_set_cell_type(map,x,y,get_compose_type(box));
-}
-
-
 enum compose_type get_compose_type(enum bonus_type bonus){
   return CELL_BOX|bonus;
 }
@@ -47,8 +37,9 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
   int west_blocked=1;
 
   if (map_get_cell_type(map,x,y) == CELL_BOX){
-    bonus_config(map,x,y);
-    display_bonus_explo(map,x,y,bomb->nummap);
+    enum bonus_type box=rand()%7;
+    map_set_cell_type(map,x,y,get_compose_type(box));
+    bonus_assign_box(map,x,y,bomb->nummap);
   }
 
   for (int i=1;i<range+1;i++){
@@ -58,8 +49,10 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
           case CELL_BOX:
             if (east_blocked){
               east_blocked=0;
-              bonus_config(map,x+i,y);
-              display_bonus_explo(map,x+i,y,bomb->nummap);
+
+              enum bonus_type box=rand()%7;
+              map_set_cell_type(map,x+i,y,get_compose_type(box));
+              bonus_assign_box(map,x+i,y,bomb->nummap);
             }
           break;
           case CELL_SCENERY:
@@ -83,8 +76,10 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
           case CELL_BOX:
             if (west_blocked){
               west_blocked=0;
-              bonus_config(map,x-i,y);
-              display_bonus_explo(map,x-i,y,bomb->nummap);
+
+              enum bonus_type box=rand()%7;
+              map_set_cell_type(map,x-i,y,get_compose_type(box));
+              bonus_assign_box(map,x-i,y,bomb->nummap);
             }
             break;
           case CELL_SCENERY:
@@ -109,8 +104,10 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
           case CELL_BOX:
             if (south_blocked){
               south_blocked=0;
-              bonus_config(map,x,y+i);
-              display_bonus_explo(map,x,y+i,bomb->nummap);
+
+              enum bonus_type box=rand()%7;
+              map_set_cell_type(map,x,y+i,get_compose_type(box));
+              bonus_assign_box(map,x,y+i,bomb->nummap);
             }
             break;
           case CELL_SCENERY:
@@ -135,8 +132,10 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
           case CELL_BOX:
             if (north_blocked){
               north_blocked=0;
-              bonus_config(map,x,y-i);
-              display_bonus_explo(map,x,y-i,bomb->nummap);
+
+              enum bonus_type box=rand()%7;
+              map_set_cell_type(map,x,y-i,get_compose_type(box));
+              bonus_assign_box(map,x,y-i,bomb->nummap);
             }
             break;
           case CELL_SCENERY:
@@ -159,8 +158,8 @@ void box_explo(struct map * map,struct bomb * bomb,struct player * player){
 }
 
 
-void display_bonus_explo(struct map *map,int x,int y, int nummap){
-  /*assign the good cell type to a box according to the bonus type configure with bonus_config*/
+void bonus_assign_box(struct map *map,int x,int y, int nummap){
+  /*assign the good cell type to a box according to the bonus type configured before*/
   enum bonus_type bonus=get_bonus_type(map_get_compose_type(map,x,y));
   if (bonus==0){
     map_set_cell_type(map,x,y,CELL_EMPTY);

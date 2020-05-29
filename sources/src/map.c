@@ -130,7 +130,6 @@ void display_bonus(struct map* map, int x, int y, unsigned char type){
 			break;
 
 		case BONUS_MONSTER:
-			window_display_image(sprite_get_monster(SOUTH), x,y);
 			break;
 	}
 }
