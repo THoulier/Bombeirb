@@ -273,6 +273,7 @@ void game_door(struct game* game) {
 		/*if the player go on the next level*/
 		if (nummap > game->level){
 			switch (nummap){
+				/*initialized positions when the player change the map*/
 				case 1:
 					x=1;
 					y=1;

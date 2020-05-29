@@ -324,5 +324,5 @@ void player_change_level(struct player*player, int level){
 
 void player_save(struct player *player){
 	/*save the player parameters*/
-	save_player(player->x,player->y,player->lives,player->direction,player->level,player->bombrange,player->key,player->bombs,player->contact,player->dmg_tmp);
+	save_player(player->x,player->y,player->lives,player->direction,player->level,player->bombrange,player->key,player->bombs,0,player->dmg_tmp);
 }
