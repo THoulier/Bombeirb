@@ -2,6 +2,9 @@
 
 Mini "bomberman" game in 2D, made in C with the SDL library. The goal of the game is to reach the princess surrounded by a bunch of evil monsters in the last level. The monsters will be more terrifying the closer you get to the princess.
 
+![Bombeirb](img/bombeirb.png)
+
+
 Installation
 ------------
 To install the game, you have to clone the repo and compile the files :
@@ -36,6 +39,3 @@ Commands list :
 - O : open a door with a key and move to another map
 - Q : quit the game
 
-Screenshots
-------------
-![Bombeirb](img/bombeirb.png)
