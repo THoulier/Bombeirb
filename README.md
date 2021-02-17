@@ -23,8 +23,7 @@ You control "bomberman" who has 3 main capacities :
 - moving from a map to another map
 
 Save your current game :
-At any time, you can save your game to resume it later
-To launch a saved game, you must launch the game with the next command line :
+At any time, you can save your game to resume it later. To launch a saved game, you must launch the game with the next command line :
 
     $ ./bin/bombeirb save
 
