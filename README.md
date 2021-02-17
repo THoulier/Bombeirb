@@ -6,7 +6,7 @@ Installation
 ------------
 To install the game, you have to clone the repo and compile the files :
 
-    $ git clone https://github.com/THoulier/Bombeirb
+    $ git clone https://github.com/THoulier/Bombeirb.git
     $ cd sources
     $ make
     
